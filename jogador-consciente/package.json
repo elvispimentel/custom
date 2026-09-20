@@ -1,0 +1,19 @@
+{
+  "name": "jogador-consciente",
+  "version": "0.12.3",
+  "private": true,
+  "description": "RPG — O Jogador Consciente · Autorretrato do Jogador",
+  "scripts": {
+    "motor": "python3 build_bundle.py",
+    "build": "python3 build.py",
+    "tudo": "python3 build_bundle.py && python3 build.py",
+    "regressao": "node testes/testdatas.mjs",
+    "teste:jornada": "node testes/tfix.mjs",
+    "teste:etapa7": "node testes/tck.mjs",
+    "teste:admin": "node testes/tadmin.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0",
+    "astronomy-engine": "^2.1.19"
+  }
+}

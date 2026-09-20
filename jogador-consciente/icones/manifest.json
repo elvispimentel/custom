@@ -1,0 +1,17 @@
+{
+  "name": "RPG — O Jogador Consciente",
+  "short_name": "O Jogador",
+  "description": "O jogo da sua vida profissional. Um retrato de quem você é agora.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#141D24",
+  "theme_color": "#141D24",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icone-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
