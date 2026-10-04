@@ -24,7 +24,7 @@ A conexão com o Google Drive passa pelo **Composio**. Os PDFs são **juntados d
 | **Restaurar duplicados / Restaurar temas e autores** | Devolve os arquivos aos locais originais. | Sim (mover de volta) |
 
 **Ordem recomendada** (a ordem importa — veja a seção 6):
-`Verificar → Localizar → Simular organização → Mover duplicados → Simular temas e autores → Aplicar temas e autores → Testar um lote → Processar lotes`.
+`Conectar Google Drive → Verificar → Localizar → Simular organização → Mover duplicados → Simular temas e autores → Aplicar temas e autores → Testar um lote → Processar lotes`.
 
 Os PDFs finais ficam em `Biblioteca Pessoal — PDFs para NotebookLM`, espelhando as subpastas.
 Os originais nunca são alterados nem renomeados.
@@ -36,9 +36,9 @@ Os originais nunca são alterados nem renomeados.
 ### 2.1 Composio
 1. Entre em https://dashboard.composio.dev e use o produto **Platform** (para desenvolvedores). **Este agente usa a chave de projeto do Platform, que começa com `ak_`** — e não a chave `ck_...` do produto "For You", que é para clientes de IA pessoais e não serve aqui. Segundo a skill oficial do Composio: no Platform, abra o seu projeto → **Getting Started** → passo 1 e copie a chave `ak_...`. (Se o painel mostrar só o "For You", crie um projeto Platform.)
 2. Defina um **User ID**: um texto fixo, por exemplo `elvis`. No Platform ele é um identificador seu; as conexões ficam atreladas a ele. Use **o mesmo User ID** em todas as conexões abaixo e no Secret `COMPOSIO_USER_ID`.
-3. No painel do Composio, conecte para esse User ID:
-   - **Google Drive** (autorize a conta dona da Biblioteca Pessoal);
-   - *(só se for usar `pdf.motor: ilovepdf`)* **iLovePDF** — o Composio pedirá as chaves de um projeto da API do iLovePDF. **Com o motor padrão (`local`) isto não é necessário.**
+3. **Conecte o Google Drive a esse User ID pelo próprio GitHub** (depois de criar os Secrets da seção 2.2): aba **Actions → Biblioteca Pessoal → Run workflow → "Conectar Google Drive"**. O resumo da execução mostra um **link**. Abra o link, autorize com a conta dona da Biblioteca Pessoal e **marque todas as permissões do Drive** (se alguma ficar desmarcada, dá erro 403). Em seguida rode **Verificar conexões**, que mostra o e-mail da conta autorizada — confira que é o seu.
+   - *(só se for usar `pdf.motor: ilovepdf`)* **iLovePDF** — o Composio pedirá as chaves de um projeto da API do iLovePDF, direto no painel. **Com o motor padrão (`local`) isto não é necessário.**
+   - O link vale poucos minutos. Se o repositório for **público**, o log da execução também é público: abra o link logo e confira o e-mail na verificação. Em repositório privado não há esse risco.
 4. Anote: `COMPOSIO_API_KEY` e `COMPOSIO_USER_ID`.
 
 > Se você tiver mais de uma conta conectada para o mesmo toolkit, preencha também `composio.contas` em `config.exemplo.yaml` com o `connected_account_id` desejado (não é segredo).
@@ -173,7 +173,8 @@ Cada execução imprime as **chamadas ao Composio por ferramenta** e o estado ac
 | Sintoma | Causa provável | Ação |
 |---|---|---|
 | `COMPOSIO_API_KEY` / `COMPOSIO_USER_ID` ausentes | Secret com nome diferente | Conferir nomes exatos (seção 2.2) |
-| *Verificar* mostra “SEM CONEXÃO ATIVA” | Toolkit não conectado para esse User ID | Reconectar no painel do Composio |
+| *Verificar* mostra “SEM CONEXÃO ATIVA” ou erro 404 `ConnectedAccountNotFound` | O projeto Platform não tem conta do Drive para esse User ID | Rodar **Conectar Google Drive**, abrir o link e depois **Verificar conexões** |
+| *Verificar* avisa “N contas ativas” | Mais de uma conta do Drive para o mesmo User ID | Fixar a correta em `composio.contas.googledrive` ou remover as outras no painel |
 | *Verificar* mostra ferramenta INDISPONÍVEL / HTTP 4xx na versão | `versao_ferramentas: latest` recusada | Trocar pela versão que o painel indicar em `config.exemplo.yaml` |
 | “Há N pastas chamadas…” | Nome ambíguo | Escolher um ID e gravar na variável indicada |
 | “BIBLIOTECA OCUPADA” | Outra execução em andamento ou queda recente | Aguardar; a trava expira sozinha em 6 h |

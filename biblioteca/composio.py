@@ -69,6 +69,30 @@ class Composio:
     def esquema_ferramenta(self, slug):
         return self._req("GET", f"/api/v3.1/tools/{slug}", params={"toolkit_versions": self.versao})
 
+    def auth_config_gerenciada(self, toolkit, id_configurado=""):
+        """Auth config gerenciada pelo Composio para o toolkit (reaproveita a existente; cria se não houver).
+        Retorna (id, criada). Mais de uma gerenciada ativa = ambíguo: não escolhe, pede o ID na configuração."""
+        if id_configurado:
+            return id_configurado, False
+        itens = self._req("GET", "/api/v3.1/auth_configs", params={"toolkit_slug": toolkit, "limit": 100}).get("items", [])
+        ativas = [i for i in itens if i.get("status") == "ENABLED" and i.get("is_composio_managed")]
+        if len(ativas) > 1:
+            raise ComposioError("Há mais de uma auth config gerenciada ativa para %s (%s). Informe o ID em "
+                                "composio.auth_configs.%s." % (toolkit, ", ".join(i["id"] for i in ativas), toolkit))
+        if ativas:
+            return ativas[0]["id"], False
+        novo = self._req("POST", "/api/v3.1/auth_configs", json={
+            "toolkit": {"slug": toolkit}, "auth_config": {"type": "use_composio_managed_auth"}})
+        return novo["auth_config"]["id"], True
+
+    def criar_link(self, auth_config_id):
+        """Connect Link para o user_id configurado. Devolve {redirect_url, connected_account_id, expires_at}."""
+        r = self._req("POST", "/api/v3.1/connected_accounts/link",
+                      json={"auth_config_id": auth_config_id, "user_id": self.user_id})
+        if not r.get("redirect_url"):
+            raise ComposioError("resposta do link sem redirect_url: %s" % list(r))
+        return r
+
     def contas_ativas(self, toolkit):
         r = self._req("GET", "/api/v3.1/connected_accounts",
                       params={"toolkit_slugs": toolkit, "statuses": "ACTIVE", "user_ids": self.user_id})
@@ -90,6 +114,23 @@ class Composio:
         if r.status_code != 200:
             raise ComposioError(f"download falhou: HTTP {r.status_code}")
         return r.content
+
+
+def achar_email(obj) -> str | None:
+    """Procura um e-mail (emailAddress) em qualquer ponto da resposta de uma conta conectada."""
+    if isinstance(obj, dict):
+        if isinstance(obj.get("emailAddress"), str):
+            return obj["emailAddress"]
+        for v in obj.values():
+            r = achar_email(v)
+            if r:
+                return r
+    elif isinstance(obj, list):
+        for v in obj:
+            r = achar_email(v)
+            if r:
+                return r
+    return None
 
 
 def _norm(f: dict) -> dict:

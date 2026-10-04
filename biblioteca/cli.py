@@ -9,7 +9,7 @@ from . import duplicados as dup
 from . import lotes as lt
 from . import organizar as org
 from . import relatorios as rel
-from .composio import Composio, DriveComposio, ILovePDFComposio
+from .composio import Composio, DriveComposio, ILovePDFComposio, achar_email
 from .config import ConfigError, carregar, exigir_credenciais
 from .contexto import Contexto, Orcamento
 from .pdflocal import PdfLocal
@@ -17,7 +17,7 @@ from .controle import BibliotecaOcupada, Controle, PastaAmbigua
 from .inventario import inventariar
 from .util import humano
 
-COMANDOS = ["verificar", "localizar", "simular", "mover-duplicados", "simular-temas", "aplicar-temas",
+COMANDOS = ["verificar", "conectar", "localizar", "simular", "mover-duplicados", "simular-temas", "aplicar-temas",
             "testar-lote", "processar-lotes", "retomar", "restaurar", "status"]
 FERRAMENTAS = ["GOOGLEDRIVE_FIND_FILE", "GOOGLEDRIVE_FIND_FOLDER", "GOOGLEDRIVE_GET_FILE_METADATA",
                "GOOGLEDRIVE_DOWNLOAD_FILE", "GOOGLEDRIVE_CREATE_FOLDER", "GOOGLEDRIVE_MOVE_FILE",
@@ -79,6 +79,26 @@ def cmd_localizar(cfg, drive):
     return 3
 
 
+def cmd_conectar(cfg, c, forcar=False):
+    """Gera o Connect Link do Google Drive para o COMPOSIO_USER_ID (o Composio cuida do OAuth)."""
+    tk = "googledrive"
+    ativas = c.contas_ativas(tk)
+    if ativas and not forcar:
+        emails = [achar_email(a) or a.get("id", "?") for a in ativas]
+        print(f"Já existe conta do Google Drive ativa para este User ID: {', '.join(emails)}. Nada a fazer "
+              "(use --novo para gerar outro link).")
+        return 0
+    auth_id, criada = c.auth_config_gerenciada(tk, cfg["composio"]["auth_configs"].get(tk, ""))
+    link = c.criar_link(auth_id)
+    txt = (f"### Conectar Google Drive\n{'Auth config gerenciada criada. ' if criada else ''}"
+           f"Abra o link e autorize com a conta dona da Biblioteca Pessoal, **marcando todas as permissões do Drive**:\n\n"
+           f"{link['redirect_url']}\n\nValidade: até {link.get('expires_at', '?')} (poucos minutos). "
+           "Depois rode **Verificar conexões**; ele mostra o e-mail da conta autorizada — confirme que é o seu.")
+    print(txt)
+    resumo_actions(txt)
+    return 0
+
+
 def cmd_verificar(cfg, c, drive, pdf):
     ok = True
     toolkits = ("googledrive", "i_love_pdf") if cfg["pdf"]["motor"] == "ilovepdf" else ("googledrive",)
@@ -86,7 +106,14 @@ def cmd_verificar(cfg, c, drive, pdf):
     for tk in toolkits:
         try:
             ativas = c.contas_ativas(tk)
-            log(f"conexão {tk}: {'ATIVA' if ativas else 'SEM CONEXÃO ATIVA'} ({len(ativas)})")
+            emails = [achar_email(a) for a in ativas if achar_email(a)]
+            log(f"conexão {tk}: {'ATIVA' if ativas else 'SEM CONEXÃO ATIVA'} ({len(ativas)})"
+                + (f" contas: {', '.join(emails)}" if emails else ""))
+            if not ativas:
+                log(f"  -> rode a ação 'Conectar Google Drive' para gerar o link de conexão do {tk}"
+                    if tk == "googledrive" else f"  -> conecte {tk} no painel do Composio")
+            if len(ativas) > 1:
+                log(f"  AVISO: {len(ativas)} contas ativas de {tk}; defina composio.contas.{tk} para fixar a correta")
             ok &= bool(ativas)
         except Exception as e:
             log(f"conexão {tk}: falha ao consultar: {e}")
@@ -173,6 +200,8 @@ def executar(args):
     c, drive, pdf = servicos(cfg)
     if args.comando == "localizar":
         return cmd_localizar(cfg, drive)
+    if args.comando == "conectar":
+        return cmd_conectar(cfg, c, args.novo)
     if args.comando == "verificar":
         return cmd_verificar(cfg, c, drive, pdf)
     precisa_saidas = args.comando in ("mover-duplicados", "testar-lote", "processar-lotes", "retomar")
@@ -258,6 +287,7 @@ def main(argv=None):
     ap.add_argument("--config")
     ap.add_argument("--max-lotes", type=int, default=0, help="0 = todos")
     ap.add_argument("--com-lotes", action="store_true", help="em 'simular': analisa PDFs e estima lotes/uso de API")
+    ap.add_argument("--novo", action="store_true", help="em 'conectar': gera link mesmo se já houver conta ativa")
     ap.add_argument("--tipo", choices=["duplicado", "tema"], default="duplicado")
     try:
         return executar(ap.parse_args(argv))

@@ -20,6 +20,8 @@ composio:
   contas:                        # opcional: connected_account_id de cada toolkit
     googledrive: ""
     i_love_pdf: ""
+  auth_configs:                  # opcional: só se 'conectar' avisar que há mais de uma auth config
+    googledrive: ""
 
 arquivos:
   estabilidade_minutos: 30       # ignora arquivos alterados há menos que isso (ainda subindo)

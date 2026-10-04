@@ -11,6 +11,7 @@ on:
         options:
           - "Localizar Biblioteca Pessoal"
           - "Verificar conexões"
+          - "Conectar Google Drive"
           - "Simular organização"
           - "Mover duplicados para revisão"
           - "Simular temas e autores"
@@ -83,6 +84,7 @@ jobs:
           case "$ACAO" in
             "Localizar Biblioteca Pessoal") python -m biblioteca localizar ;;
             "Verificar conexões")           python -m biblioteca verificar ;;
+            "Conectar Google Drive")        python -m biblioteca conectar ;;
             "Simular organização")
               if [ "$INCLUIR_LOTES" = "true" ]; then python -m biblioteca simular --com-lotes; else python -m biblioteca simular; fi ;;
             "Mover duplicados para revisão") exige_confirmacao; python -m biblioteca mover-duplicados ;;

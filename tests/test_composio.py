@@ -5,6 +5,7 @@ import pytest
 from biblioteca import cli
 from biblioteca import organizar as org
 from biblioteca.composio import Composio, ComposioError, DriveComposio, ILovePDFComposio
+from biblioteca.config import carregar
 from biblioteca.controle import PastaAmbigua
 from biblioteca.inventario import inventariar
 from biblioteca.util import md5_bytes
@@ -139,3 +140,58 @@ def test_classificacao_manual_vence_regras(mundo):
     dup.detectar(ctx)
     (p,) = org.planejar_temas(ctx)
     assert (p["tema"], p["autor"], p["fonte"], p["destino"]) == ("Cabala", "Autor Manual", "manual", "Cabala/Autor Manual")
+
+
+# ---------- conectar (Connect Link) ----------
+def cli_conectar(h, forcar=False):
+    cfg = carregar("nao-existe.yaml")
+    c = cliente(h)
+    return cli.cmd_conectar(cfg, c, forcar), c
+
+
+def resposta_contas(itens):
+    return Resp(200, {"items": itens})
+
+
+def test_conectar_cria_auth_config_gerenciada_e_gera_link(capsys):
+    h = HttpFalso()
+    h.fila["/api/v3.1/connected_accounts"] = resposta_contas([])
+    h.fila["/api/v3.1/auth_configs"] = [Resp(200, {"items": []}), Resp(200, {"auth_config": {"id": "ac_novo"}})]
+    h.fila["/api/v3.1/connected_accounts/link"] = Resp(200, {
+        "redirect_url": "https://connect.composio.dev/link/lk_x", "connected_account_id": "ca_1", "expires_at": "2026-10-04T19:00:00Z"})
+    rc, _ = cli_conectar(h)
+    assert rc == 0 and "https://connect.composio.dev/link/lk_x" in capsys.readouterr().out
+    posts = [r for r in h.reqs if r[0] == "POST"]
+    assert posts[0][3] == {"toolkit": {"slug": "googledrive"}, "auth_config": {"type": "use_composio_managed_auth"}}
+    assert posts[1][3] == {"auth_config_id": "ac_novo", "user_id": "usuario1"}
+
+
+def test_conectar_reaproveita_auth_config_existente():
+    h = HttpFalso()
+    h.fila["/api/v3.1/connected_accounts"] = resposta_contas([])
+    h.fila["/api/v3.1/auth_configs"] = Resp(200, {"items": [
+        {"id": "ac_1", "status": "ENABLED", "is_composio_managed": True},
+        {"id": "ac_off", "status": "DISABLED", "is_composio_managed": True},
+        {"id": "ac_meu", "status": "ENABLED", "is_composio_managed": False}]})
+    h.fila["/api/v3.1/connected_accounts/link"] = Resp(200, {"redirect_url": "https://x/y", "connected_account_id": "c", "expires_at": "e"})
+    cli_conectar(h)
+    assert [r for r in h.reqs if r[0] == "POST"][0][3]["auth_config_id"] == "ac_1"      # nenhuma criada
+
+
+def test_conectar_ambiguo_nao_escolhe():
+    h = HttpFalso()
+    h.fila["/api/v3.1/connected_accounts"] = resposta_contas([])
+    h.fila["/api/v3.1/auth_configs"] = Resp(200, {"items": [
+        {"id": "ac_1", "status": "ENABLED", "is_composio_managed": True},
+        {"id": "ac_2", "status": "ENABLED", "is_composio_managed": True}]})
+    with pytest.raises(ComposioError, match="mais de uma auth config"):
+        cli_conectar(h)
+    assert not [r for r in h.reqs if r[0] == "POST"]
+
+
+def test_conectar_nao_gera_link_se_ja_ha_conta_ativa(capsys):
+    h = HttpFalso()
+    h.fila["/api/v3.1/connected_accounts"] = resposta_contas([{"id": "ca_9", "user_info": {"user": {"emailAddress": "eu@exemplo.com"}}}])
+    rc, _ = cli_conectar(h)
+    assert rc == 0 and "eu@exemplo.com" in capsys.readouterr().out
+    assert [r for r in h.reqs if r[0] == "POST"] == []
