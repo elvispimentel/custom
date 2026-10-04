@@ -1,0 +1,10 @@
+# Segredos e estado local nunca vão para o GitHub
+.env
+.env.*
+config.yaml
+*.db
+*.db-journal
+trabalho/
+__pycache__/
+.pytest_cache/
+*.pyc
