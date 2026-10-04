@@ -44,6 +44,11 @@ def detectar(ctx) -> list[dict]:
     for f in arqs:
         (por_md5[f["md5"]] if f["md5"] else sem_md5[f["tamanho"]]).append(f)
     candidatos = [g for g in list(por_md5.values()) + list(sem_md5.values()) if len(g) > 1]
+    faltam = sum(1 for g in candidatos for f in g if not est.q(
+        "SELECT 1 FROM hashes WHERE file_id=? AND md5=?", f["id"], f["md5"] or ""))
+    ctx.log(f"duplicados: {len(candidatos)} grupo(s) candidato(s) pelo checksum do Drive; "
+            f"{faltam} arquivo(s) a baixar para confirmar por SHA-256")
+    feitos = 0
     grupos = []
     for g in candidatos:
         por_sha = defaultdict(list)
@@ -51,7 +56,14 @@ def detectar(ctx) -> list[dict]:
             if ctx.orcamento.esgotado():
                 ctx.salvar()
                 raise TimeoutError("tempo esgotado durante a verificação SHA-256; execute 'retomar'")
+            ja = est.q("SELECT 1 FROM hashes WHERE file_id=? AND md5=?", f["id"], f["md5"] or "")
             por_sha[_sha(ctx, f)].append(f)
+            if not ja:
+                feitos += 1
+                if feitos % 10 == 0:
+                    ctx.log(f"  SHA-256: {feitos}/{faltam} arquivos conferidos")
+                if feitos % 25 == 0:
+                    ctx.salvar()          # o que já foi baixado não se perde se a execução cair
         for sha, membros in por_sha.items():
             if len(membros) > 1:
                 ex, motivo = escolher_exemplar(membros, cfg["arquivos"]["pastas_de_copias"])
