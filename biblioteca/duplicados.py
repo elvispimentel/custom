@@ -3,28 +3,36 @@ arquivos baixados para confirmar. Nome igual, tamanho igual ou título parecido 
 from collections import defaultdict
 
 from .controle import achar_ou_criar_pasta
-from .util import agora, natural_key, sha256_bytes
+from .util import agora, natural_key, parse_data, sha256_bytes
 
 
 def em_pasta_de_copias(caminho: str, padroes) -> bool:
     return any(p.lower() in seg for seg in caminho.lower().split("/") for p in padroes)
 
 
+def data_mais_antiga(m) -> str:
+    """Menor data entre criação e modificação. A criação no Drive é a do upload (igual para um lote inteiro);
+    a modificação preserva a data original do arquivo, então a menor das duas representa melhor 'o mais antigo'."""
+    datas = [d for d in (m["criado"], m["modificado"]) if d]
+    return min(datas, key=lambda d: parse_data(d)) if datas else "9999-12-31T00:00:00+00:00"
+
+
 def escolher_exemplar(membros, padroes):
-    """Regra determinística: (1) fora de pastas de cópias; (2) mais antigo (criação); (3) caminho; (4) id."""
+    """Regra determinística: (1) fora de pastas de cópias; (2) data mais antiga (criação ou modificação);
+    (3) caminho; (4) id."""
     def chave(m):
-        return (em_pasta_de_copias(m["caminho"], padroes), m["criado"] or "",
+        return (em_pasta_de_copias(m["caminho"], padroes), parse_data(data_mais_antiga(m)),
                 natural_key(m["caminho"] + "/" + m["nome"]), m["id"])
     ex = sorted(membros, key=chave)[0]
     fora = [m for m in membros if not em_pasta_de_copias(m["caminho"], padroes)]
     if not fora:
-        motivo = "mais antigo (criação); todos os candidatos estão em pastas de cópias"
+        motivo = "data mais antiga (criação/modificação); todos os candidatos estão em pastas de cópias"
     elif len(fora) == len(membros):
-        motivo = "mais antigo (criação) entre os candidatos"
+        motivo = "data mais antiga (criação/modificação) entre os candidatos"
     elif len(fora) == 1:
         motivo = "único candidato fora de pastas de cópias"
     else:
-        motivo = "mais antigo (criação) entre os que estão fora de pastas de cópias"
+        motivo = "data mais antiga (criação/modificação) entre os que estão fora de pastas de cópias"
     return ex, motivo
 
 

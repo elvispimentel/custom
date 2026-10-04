@@ -111,7 +111,7 @@ Não apague `estado.db`: sem ele o agente esquece o que já fez (ainda é seguro
 ## 5. Regras de duplicidade (exatas)
 - Candidatos: mesmo **checksum do Drive**. Confirmação: **SHA-256 dos arquivos baixados**. Só o SHA-256 igual vale como duplicado.
 - **Nome igual, tamanho igual ou título parecido não provam nada.** Edições diferentes, versões anotadas e digitalizações diferentes têm conteúdo diferente → **são preservadas**.
-- **Exemplar mantido** (regra fixa): 1º um arquivo **fora** de pastas de cópias (nomes de pasta contendo `cópia`, `copias`, `backup`, `duplicad`, `old` — ajustável em `arquivos.pastas_de_copias`); no empate, o de **criação mais antiga**; depois caminho e ID. O motivo fica registrado.
+- **Exemplar mantido** (regra fixa): 1º um arquivo **fora** de pastas de cópias (nomes de pasta contendo `cópia`, `copias`, `backup`, `duplicad`, `old` — ajustável em `arquivos.pastas_de_copias`); no empate, o de **data mais antiga** — a menor entre criação e modificação, porque a criação no Drive é a data do upload (igual para um lote inteiro) e a modificação preserva a data original do arquivo; depois caminho e ID. O motivo fica registrado.
 - Duplicados vão para subpastas `conteudo-<hash>` dentro de `Biblioteca Pessoal — Duplicados para Revisão`.
 - Sem permissão para mover algum arquivo → vira **pendência** e o resto continua.
 - Atalhos do Drive **não** são tratados como cópias e **não** são seguidos. Arquivos nativos do Google (Docs/Sheets) não entram na duplicidade.

@@ -416,3 +416,24 @@ def test_trava_sem_como_confirmar_usa_o_prazo(mundo):
     c = Controle(mundo.drive, mundo.ctrl.pasta, mundo.tmp / "t4", "rNOVA", run_ativa=lambda r: None)
     with pytest.raises(BibliotecaOcupada):      # trava recente e sem confirmação: respeita o prazo
         c.adquirir_trava()
+
+
+def test_exemplar_usa_a_data_original_quando_a_criacao_e_a_do_upload(mundo):
+    d = mundo.drive
+    a, b = d.pasta("A", mundo.lib), d.pasta("B", mundo.lib)
+    x = b"MESMO-CONTEUDO" * 20
+    upload = "2026-10-04T15:51:00+00:00"          # criação = upload em lote (igual para todos)
+    d.arquivo("69e4d9be-codigo.pdf", x, a, criado=upload, modificado="2026-09-01T10:00:00+00:00")
+    d.arquivo("Autor - Titulo Original.pdf", x, b, criado=upload, modificado="2025-01-15T10:00:00+00:00")
+    ctx = mundo.abrir(saidas=False)
+    inventariar(ctx)
+    (g,) = dup.detectar(ctx)
+    assert g["exemplar"]["nome"] == "Autor - Titulo Original.pdf"        # a data original mais antiga vence
+    assert "data mais antiga" in g["motivo"]
+
+
+def test_exemplar_sem_datas_nao_vira_o_mais_antigo():
+    from biblioteca.duplicados import escolher_exemplar
+    sem = dict(id="z", nome="sem-data.pdf", caminho="", criado=None, modificado=None)
+    com = dict(id="a", nome="com-data.pdf", caminho="", criado="2024-01-01T00:00:00+00:00", modificado=None)
+    assert escolher_exemplar([sem, com], [])[0]["id"] == "a"
