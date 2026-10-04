@@ -71,6 +71,8 @@ Na mesma tela, aba ***Variables* → New repository variable**:
 ---
 
 ## 3. Iniciar uma execução pela interface do GitHub
+
+> **Pré-requisito: o workflow precisa estar na branch principal (`master`).** O GitHub só lista workflows de acionamento manual (`workflow_dispatch`) quando o arquivo `.github/workflows/biblioteca.yml` existe na branch padrão. Antes de tudo, faça o merge da branch `claude/cool-babbage-3d109z` no `master` (aba **Pull requests → New pull request → base `master`, compare `claude/cool-babbage-3d109z` → Create → Merge**). Depois disso o workflow **Biblioteca Pessoal** aparece na aba **Actions**.
 1. Repositório → aba **Actions**.
 2. No menu da esquerda, **Biblioteca Pessoal**.
 3. **Run workflow** (botão à direita) → escolha a **branch** onde o código está.
