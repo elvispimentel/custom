@@ -1,0 +1,66 @@
+# Copie para config.yaml (arquivo ignorado pelo git) ou use apenas variáveis de ambiente.
+# NENHUM segredo vai aqui: COMPOSIO_API_KEY e COMPOSIO_USER_ID vêm de GitHub Secrets.
+
+biblioteca:
+  nome: "Biblioteca Pessoal"
+  id: ""                      # preencha com o ID confirmado por 'localizar'
+
+pastas_saida:                 # criadas FORA da biblioteca (no mesmo pai dela, salvo pai_id)
+  pai_id: ""
+  pdfs_nome: "Biblioteca Pessoal — PDFs para NotebookLM"
+  pdfs_id: ""
+  duplicados_nome: "Biblioteca Pessoal — Duplicados para Revisão"
+  duplicados_id: ""
+  controle_nome: "Biblioteca Pessoal — Controle do Agente"
+  controle_id: ""
+
+composio:
+  base_url: "https://backend.composio.dev"
+  versao_ferramentas: "latest"   # se a API recusar, fixe a versão exibida em 'verificar'
+  contas:                        # opcional: connected_account_id de cada toolkit
+    googledrive: ""
+    i_love_pdf: ""
+
+arquivos:
+  estabilidade_minutos: 30       # ignora arquivos alterados há menos que isso (ainda subindo)
+  ignorar_nomes: [".DS_Store", "Thumbs.db", "desktop.ini"]   # lixo de sistema: fora do inventário
+  pastas_de_copias: ["cópia", "copia", "copias", "cópias", "backup", "duplicad", "old"]
+
+pdf:
+  # local    = junta os PDFs no próprio runner (pypdf): sem limite por chamada, sem créditos (padrão)
+  # ilovepdf = usa o iLovePDF via Composio (limite real: 20 arquivos por chamada; consome créditos)
+  motor: "local"
+
+ilovepdf:                        # só vale com pdf.motor: ilovepdf
+  max_arquivos_por_chamada: 20   # limite real do esquema I_LOVE_PDF_MERGE_PDFS (maxItems=20)
+  reservar_creditos: 0
+
+lotes:
+  max_documentos: 25             # com motor local pode subir (ex.: 50); as metas de MB/palavras ainda valem
+  meta_mb: 90                    # meta (margem de segurança) abaixo do teto; pode subir, ex.: 180
+  meta_palavras: 450000
+  limite_mb: 200                 # teto do NotebookLM por fonte (200 MB); nada acima disso é gerado
+  limite_palavras: 500000        # teto do NotebookLM por fonte (500 mil palavras)
+  paginas_amostra_texto: 20      # páginas amostradas para estimar palavras/texto
+  palavras_por_pagina_padrao: 300
+  minimo_caracteres_por_pagina: 25   # abaixo disso => provável digitalização (precisa OCR)
+
+execucao:
+  tempo_max_minutos: 300         # para com segurança antes do limite de 6 h do job
+  pasta_trabalho: "trabalho"
+
+organizacao:                     # fase "temas e autores"
+  destino: "dentro"              # dentro = <Biblioteca>/<Tema>/<Autor>/arquivo
+  mover_nao_classificados: false  # false = quem não foi classificado fica onde está (só aparece no relatório)
+  pasta_nao_classificados: "A classificar"
+  pasta_sem_autor: "_Sem autor identificado"
+  confianca_minima: 0.7
+  classificador: "regras"        # regras | claude  (claude exige ANTHROPIC_API_KEY)
+  modelo_claude: "claude-haiku-4-5-20251001"
+  temas:                         # edite livremente; palavras-chave em minúsculas
+    "Hermetismo e Esoterismo": ["hermet", "kybalion", "alquimia", "esoter", "tarot", "ocult", "gnose"]
+    "Cabala e Misticismo": ["cabala", "kabbal", "zohar", "sefirot", "místic", "mistic"]
+    "Psicologia e Arquétipos": ["arquétipo", "arquetipo", "jung", "psicolog", "inconsciente", "mito"]
+    "Física Quântica e Ciência": ["quânt", "quant", "física", "fisica", "cosmos", "neuro"]
+    "Vendas e Negócios": ["vendas", "negoci", "marketing", "empreend", "lideran", "gestão", "gestao"]
+    "Desenvolvimento Pessoal": ["hábito", "habito", "mindset", "produtiv", "autoconhec", "propósito", "proposito"]

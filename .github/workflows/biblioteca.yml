@@ -1,0 +1,97 @@
+name: Biblioteca Pessoal
+
+on:
+  workflow_dispatch:
+    inputs:
+      acao:
+        description: "O que executar"
+        type: choice
+        required: true
+        default: "Verificar conexões"
+        options:
+          - "Localizar Biblioteca Pessoal"
+          - "Verificar conexões"
+          - "Simular organização"
+          - "Mover duplicados para revisão"
+          - "Simular temas e autores"
+          - "Aplicar temas e autores"
+          - "Testar um lote"
+          - "Processar lotes"
+          - "Retomar"
+          - "Restaurar duplicados"
+          - "Restaurar temas e autores"
+      max_lotes:
+        description: "Processar lotes: quantos lotes nesta execução (0 = todos)"
+        type: string
+        default: "5"
+      incluir_lotes:
+        description: "Simular organização: também analisar PDFs e estimar lotes e uso de API (baixa os PDFs)"
+        type: boolean
+        default: false
+      confirmar:
+        description: "Para ações que MOVEM arquivos no Drive, digite CONFIRMAR"
+        type: string
+        default: ""
+      biblioteca_id:
+        description: "(Opcional) ID da pasta; vazio usa a variável BIBLIOTECA_ID"
+        type: string
+        default: ""
+
+# Uma execução por biblioteca. Uma segunda execução fica na fila (não cancela a que está rodando).
+concurrency:
+  group: biblioteca-${{ inputs.biblioteca_id || vars.BIBLIOTECA_ID || 'sem-id' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  executar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 345          # limite de um job em runner hospedado é 6 h (360 min); sobra margem para salvar o estado
+    env:
+      COMPOSIO_API_KEY: ${{ secrets.COMPOSIO_API_KEY }}
+      COMPOSIO_USER_ID: ${{ secrets.COMPOSIO_USER_ID }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      BIBLIOTECA_ID: ${{ inputs.biblioteca_id || vars.BIBLIOTECA_ID }}
+      PASTA_PAI_ID: ${{ vars.PASTA_PAI_ID }}
+      PASTA_PDFS_ID: ${{ vars.PASTA_PDFS_ID }}
+      PASTA_DUPLICADOS_ID: ${{ vars.PASTA_DUPLICADOS_ID }}
+      PASTA_CONTROLE_ID: ${{ vars.PASTA_CONTROLE_ID }}
+      BIBLIOTECA_CONFIG: config.exemplo.yaml
+      ACAO: ${{ inputs.acao }}
+      MAX_LOTES: ${{ inputs.max_lotes }}
+      INCLUIR_LOTES: ${{ inputs.incluir_lotes }}
+      CONFIRMAR: ${{ inputs.confirmar }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+      - name: Executar
+        run: |
+          set -euo pipefail
+          exige_confirmacao() {
+            if [ "$CONFIRMAR" != "CONFIRMAR" ]; then
+              echo "::error::Esta ação move arquivos no Drive. Rode de novo digitando CONFIRMAR no campo 'confirmar'."
+              exit 1
+            fi
+          }
+          case "$ACAO" in
+            "Localizar Biblioteca Pessoal") python -m biblioteca localizar ;;
+            "Verificar conexões")           python -m biblioteca verificar ;;
+            "Simular organização")
+              if [ "$INCLUIR_LOTES" = "true" ]; then python -m biblioteca simular --com-lotes; else python -m biblioteca simular; fi ;;
+            "Mover duplicados para revisão") exige_confirmacao; python -m biblioteca mover-duplicados ;;
+            "Simular temas e autores")       python -m biblioteca simular-temas ;;
+            "Aplicar temas e autores")       exige_confirmacao; python -m biblioteca aplicar-temas ;;
+            "Testar um lote")                python -m biblioteca testar-lote ;;
+            "Processar lotes")               python -m biblioteca processar-lotes --max-lotes "$MAX_LOTES" ;;
+            "Retomar")                       python -m biblioteca retomar ;;
+            "Restaurar duplicados")          exige_confirmacao; python -m biblioteca restaurar --tipo duplicado ;;
+            "Restaurar temas e autores")     exige_confirmacao; python -m biblioteca restaurar --tipo tema ;;
+            *) echo "::error::Ação desconhecida: $ACAO"; exit 1 ;;
+          esac
