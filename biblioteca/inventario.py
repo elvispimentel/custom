@@ -27,6 +27,9 @@ def inventariar(ctx) -> dict:
             if it["mimeType"] == PASTA:
                 fila.append((it["id"], f"{caminho}/{it['name']}".lstrip("/"), pasta_id))
                 continue
+            if it["name"] in cfg["arquivos"]["ignorar_nomes"]:
+                resumo["ignorados"] = resumo.get("ignorados", 0) + 1     # lixo de sistema (ex.: .DS_Store)
+                continue
             situacao = "ok"
             if it["mimeType"] == ATALHO:
                 situacao = "atalho"

@@ -23,6 +23,7 @@ composio:
 
 arquivos:
   estabilidade_minutos: 30       # ignora arquivos alterados há menos que isso (ainda subindo)
+  ignorar_nomes: [".DS_Store", "Thumbs.db", "desktop.ini"]   # lixo de sistema: fora do inventário
   pastas_de_copias: ["cópia", "copia", "copias", "cópias", "backup", "duplicad", "old"]
 
 pdf:

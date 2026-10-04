@@ -350,3 +350,14 @@ def test_override_manual_vence_regras_e_autores_sao_unificados(mundo):
     inventariar(ctx); dup.detectar(ctx)
     plano = org.planejar_temas(ctx)
     assert len({p["destino"] for p in plano}) == 1                # mesma pasta de autor, sem duplicar por grafia
+
+
+def test_lixo_de_sistema_fica_fora_do_inventario(mundo):
+    d = mundo.drive
+    d.arquivo(".DS_Store", b"x" * 10, mundo.lib, mime="application/octet-stream")
+    d.arquivo("Thumbs.db", b"y" * 10, mundo.lib, mime="application/octet-stream")
+    d.arquivo("livro.pdf", pdf_texto(1, "l"), mundo.lib)
+    ctx = mundo.abrir()
+    r = inventariar(ctx)
+    assert r["ignorados"] == 2
+    assert [x["nome"] for x in ctx.estado.q("SELECT nome FROM arquivos")] == ["livro.pdf"]

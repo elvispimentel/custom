@@ -15,6 +15,7 @@ PADRAO = {
     "composio": {"base_url": "https://backend.composio.dev", "versao_ferramentas": "latest",
                  "contas": {"googledrive": "", "i_love_pdf": ""}},
     "arquivos": {"estabilidade_minutos": 30,
+                 "ignorar_nomes": [".DS_Store", "Thumbs.db", "desktop.ini"],
                  "pastas_de_copias": ["cópia", "copia", "copias", "cópias", "backup", "duplicad", "old"]},
     "pdf": {"motor": "local"},
     "ilovepdf": {"max_arquivos_por_chamada": 20, "reservar_creditos": 0},
