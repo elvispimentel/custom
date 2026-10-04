@@ -12,6 +12,7 @@ from . import relatorios as rel
 from .composio import Composio, DriveComposio, ILovePDFComposio
 from .config import ConfigError, carregar, exigir_credenciais
 from .contexto import Contexto, Orcamento
+from .pdflocal import PdfLocal
 from .controle import BibliotecaOcupada, Controle, PastaAmbigua
 from .inventario import inventariar
 from .util import humano
@@ -38,7 +39,13 @@ def resumo_actions(texto):
 def servicos(cfg):
     c = Composio(cfg.api_key, cfg.user_id, cfg["composio"]["base_url"], cfg["composio"]["versao_ferramentas"],
                  cfg["composio"]["contas"])
-    return c, DriveComposio(c), ILovePDFComposio(c, cfg["ilovepdf"]["max_arquivos_por_chamada"])
+    if cfg["pdf"]["motor"] == "ilovepdf":
+        pdf = ILovePDFComposio(c, cfg["ilovepdf"]["max_arquivos_por_chamada"])
+    elif cfg["pdf"]["motor"] == "local":
+        pdf = PdfLocal()
+    else:
+        raise ConfigError("pdf.motor deve ser 'local' ou 'ilovepdf'")
+    return c, DriveComposio(c), pdf
 
 
 def _pasta(drive, nome, id_cfg, pai, criar):
@@ -74,7 +81,9 @@ def cmd_localizar(cfg, drive):
 
 def cmd_verificar(cfg, c, drive, pdf):
     ok = True
-    for tk in ("googledrive", "i_love_pdf"):
+    toolkits = ("googledrive", "i_love_pdf") if cfg["pdf"]["motor"] == "ilovepdf" else ("googledrive",)
+    log(f"motor de merge: {cfg['pdf']['motor']}")
+    for tk in toolkits:
         try:
             ativas = c.contas_ativas(tk)
             log(f"conexão {tk}: {'ATIVA' if ativas else 'SEM CONEXÃO ATIVA'} ({len(ativas)})")
@@ -82,7 +91,7 @@ def cmd_verificar(cfg, c, drive, pdf):
         except Exception as e:
             log(f"conexão {tk}: falha ao consultar: {e}")
             ok = False
-    for slug in FERRAMENTAS:
+    for slug in [x for x in FERRAMENTAS if cfg["pdf"]["motor"] == "ilovepdf" or not x.startswith("I_LOVE")]:
         try:
             c.esquema_ferramenta(slug)
             log(f"ferramenta {slug}: disponível")
@@ -90,7 +99,7 @@ def cmd_verificar(cfg, c, drive, pdf):
             log(f"ferramenta {slug}: INDISPONÍVEL ({e})")
             ok = False
     try:
-        log(f"iLovePDF: {pdf.conta()}")
+        log(f"motor PDF: {pdf.conta()}")
     except Exception as e:
         log(f"iLovePDF: falha ({e})")
         ok = False

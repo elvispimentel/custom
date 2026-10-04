@@ -16,6 +16,7 @@ PADRAO = {
                  "contas": {"googledrive": "", "i_love_pdf": ""}},
     "arquivos": {"estabilidade_minutos": 30,
                  "pastas_de_copias": ["cópia", "copia", "copias", "cópias", "backup", "duplicad", "old"]},
+    "pdf": {"motor": "local"},
     "ilovepdf": {"max_arquivos_por_chamada": 20, "reservar_creditos": 0},
     "lotes": {"max_documentos": 25, "meta_mb": 90, "meta_palavras": 450000,
               "paginas_amostra_texto": 20, "palavras_por_pagina_padrao": 300,

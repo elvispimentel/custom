@@ -128,7 +128,9 @@ class FakeDrive:
 
 class FakeILovePDF:
     def __init__(self, max_arquivos=20, creditos=1000):
-        self.max, self.creditos = max_arquivos, creditos
+        self.max = self.max_arquivos = max_arquivos
+        self.creditos = creditos
+        self.consome_creditos = True
         self.chamadas = []   # lista de listas de nomes, na ordem
 
     def conta(self):

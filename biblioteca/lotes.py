@@ -105,13 +105,14 @@ def planejar(ctx, analisar_tudo=True, parar_em=None) -> list[dict]:
 
 
 def estimar_uso(ctx, plano) -> dict:
-    mx = ctx.cfg["ilovepdf"]["max_arquivos_por_chamada"]
+    mx = ctx.pdf.max_arquivos
     pend = [p for p in plano if ctx.estado.q("SELECT status FROM lotes WHERE chave=?", p["chave"])[0]["status"] != "done"]
     n_arq = sum(len(p["itens"]) for p in pend)
     merges = sum(chamadas_merge(len(p["itens"]), mx) for p in pend)
-    return {"lotes_pendentes": len(pend), "arquivos_a_juntar": n_arq, "chamadas_merge_ilovepdf": merges,
+    return {"lotes_pendentes": len(pend), "arquivos_a_juntar": n_arq, "chamadas_merge_ilovepdf": merges if getattr(ctx.pdf, "consome_creditos", True) else 0,
+            "chamadas_merge_total": merges,
             "downloads_drive": n_arq, "uploads_drive": len(pend),
-            "chamadas_composio_aprox": n_arq * 3 + merges * 2 + len(pend) * 4 + n_arq}
+            "chamadas_composio_aprox": n_arq * 2 + len(pend) * 4 + (merges * 2 + n_arq if getattr(ctx.pdf, "consome_creditos", True) else 0)}
 
 
 def pasta_saida_para(ctx, caminho: str) -> str:
@@ -145,7 +146,7 @@ def verificar_ilovepdf(ctx, uso) -> dict:
 
 def executar_lote(ctx, p) -> dict:
     est, cfg = ctx.estado, ctx.cfg
-    mx = cfg["ilovepdf"]["max_arquivos_por_chamada"]
+    mx = ctx.pdf.max_arquivos
     arquivos = []
     for it in p["itens"]:
         dados = ctx.drive.baixar(it["id"])

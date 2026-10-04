@@ -1,7 +1,7 @@
 # Manual — Biblioteca Pessoal → NotebookLM (execução 100% pelo GitHub Actions)
 
 Tudo roda na nuvem: você só usa a interface do GitHub. Nada é instalado no seu computador.
-As conexões com Google Drive e iLovePDF passam pelo **Composio**. Nenhum segredo fica no repositório.
+A conexão com o Google Drive passa pelo **Composio**. Os PDFs são **juntados dentro do próprio runner do GitHub** (motor local, `pypdf`) — sem o site do iLovePDF, sem limite de arquivos por chamada e sem créditos. O iLovePDF via Composio continua disponível como motor opcional (seção 7). Nenhum segredo fica no repositório.
 
 > **Não faz** (de propósito): envio automático ao NotebookLM, exclusão definitiva, envio à lixeira.
 > Duplicados **são movidos** para uma pasta de revisão e a origem de cada um fica registrada, então tudo pode ser restaurado.
@@ -13,7 +13,7 @@ As conexões com Google Drive e iLovePDF passam pelo **Composio**. Nenhum segred
 | Etapa (nome da ação no GitHub) | O que faz | Mexe nos arquivos? |
 |---|---|---|
 | **Localizar Biblioteca Pessoal** | Acha a pasta e mostra o ID. Se houver mais de uma com o nome, **lista as opções** e para. | Não |
-| **Verificar conexões** | Confere Composio, Drive, iLovePDF, ferramentas e créditos. | Não |
+| **Verificar conexões** | Confere Composio, Drive, ferramentas e (se `ilovepdf`) a conta do iLovePDF. | Não |
 | **Simular organização** | Inventário completo + grupos de duplicados, o exemplar mantido e os que seriam movidos. | Não |
 | **Mover duplicados para revisão** | Move os duplicados para `Biblioteca Pessoal — Duplicados para Revisão` (fora da biblioteca). | Sim (mover) |
 | **Simular temas e autores** | Gera o plano `Tema / Autor / arquivo` para você revisar. | Não |
@@ -38,7 +38,7 @@ Os originais nunca são alterados nem renomeados.
 2. Defina um **User ID** (um texto, por exemplo `elvis`). Use **o mesmo User ID** em todas as conexões abaixo.
 3. No painel do Composio, conecte para esse User ID:
    - **Google Drive** (autorize a conta dona da Biblioteca Pessoal);
-   - **iLovePDF** (o Composio pedirá as chaves do seu projeto iLovePDF — obtidas na área de desenvolvedores do iLovePDF).
+   - *(só se for usar `pdf.motor: ilovepdf`)* **iLovePDF** — o Composio pedirá as chaves de um projeto da API do iLovePDF. **Com o motor padrão (`local`) isto não é necessário.**
 4. Anote: `COMPOSIO_API_KEY` e `COMPOSIO_USER_ID`.
 
 > Se você tiver mais de uma conta conectada para o mesmo toolkit, preencha também `composio.contas` em `config.exemplo.yaml` com o `connected_account_id` desejado (não é segredo).
@@ -134,9 +134,11 @@ Garantias: quem não for classificado com confiança (`confianca_minima`) **fica
 ## 7. Lotes de PDF para o NotebookLM
 - Apenas **PDFs únicos** (sem os duplicados), por pasta, em **ordem natural** (`cap 2` antes de `cap 10`). Um lote nunca mistura pastas.
 - Até **25** documentos por lote, ajustados às metas `lotes.meta_mb` (90) e `lotes.meta_palavras` (450 000 estimadas). O lote é **reduzido** quando necessário; não precisa ter 25.
-- **Limite real do iLovePDF via Composio: 20 arquivos por chamada** (campo `maxItems` do esquema de `I_LOVE_PDF_MERGE_PDFS`). Com 25 documentos: junta os 20 primeiros, junta os 5 restantes e une os dois resultados, **mantendo a ordem**. Ajustável em `ilovepdf.max_arquivos_por_chamada` se o limite mudar.
-- Transferência no formato do Composio: os bytes são baixados do Drive, enviados ao armazenamento do Composio por URL pré-assinada e passados ao iLovePDF como `{name, mimetype, s3key}`. **Link do Drive não é usado como arquivo.** O resultado volta como `s3url`, é baixado e gravado no Drive.
-- Antes de rodar: o agente consulta a conta do iLovePDF (créditos/arquivos restantes) e **bloqueia** se estiver zerada; se o saldo for menor que o estimado, avisa e o trabalho pode ser retomado depois.
+- **Motor de merge (`pdf.motor` em `config.exemplo.yaml`):**
+  - `local` *(padrão)*: junta no próprio runner com `pypdf`. **Não há limite de arquivos por chamada** — dá para botar `lotes.max_documentos: 50` (ou mais) e juntar tudo numa só passada, sem depender do plano do iLovePDF. Cada documento original vira um **marcador** (bookmark) com o nome dele dentro do PDF final. Os limites que continuam valendo são as metas `meta_mb` e `meta_palavras`.
+  - `ilovepdf`: usa o iLovePDF via Composio. **Limite real da integração: 20 arquivos por chamada** (`maxItems` do esquema de `I_LOVE_PDF_MERGE_PDFS`), e cada merge consome crédito. Com 25 documentos: junta os 20 primeiros, junta os 5 restantes e une os dois resultados, mantendo a ordem. Atenção: o plano premium do site (50 arquivos) **não muda** o limite de 20 desta integração, que vem do esquema da ferramenta.
+- Com o motor `ilovepdf`, os arquivos seguem o formato do Composio: os bytes são baixados do Drive, enviados ao armazenamento do Composio por URL pré-assinada e passados como `{name, mimetype, s3key}`; link do Drive não é usado como arquivo. Com o motor `local` nada disso é necessário para o merge (só o Drive passa pelo Composio).
+- Antes de rodar com `ilovepdf`, o agente consulta a conta (créditos/arquivos restantes) e **bloqueia** se estiver zerada; se o saldo for menor que o estimado, avisa e o trabalho pode ser retomado depois. Com o motor `local` não há essa limitação.
 - Cada PDF final é validado: abre, **número de páginas = soma das páginas dos originais** (divergência = erro, nada some em silêncio), tamanho e texto extraível.
 
 **Itens que aparecem em `indice_pdfs.csv` / `pendencias.csv` em vez de entrar em um lote:**
@@ -161,7 +163,7 @@ Basta **rodar de novo mais tarde**: cada execução refaz o inventário (paginad
 ---
 
 ## 8. Estimativa de uso das APIs
-Cada execução imprime as **chamadas ao Composio por ferramenta** e o estado acumula o total (`status`). *Simular organização* com `incluir_lotes` mostra a estimativa antes de gastar créditos: lotes pendentes, arquivos a juntar, **chamadas de merge no iLovePDF (cada uma consome crédito)**, downloads e uploads no Drive.
+Cada execução imprime as **chamadas ao Composio por ferramenta** e o estado acumula o total (`status`). *Simular organização* com `incluir_lotes` mostra a estimativa antes de gastar créditos: lotes pendentes, arquivos a juntar, **chamadas de merge e, no motor `ilovepdf`, créditos consumidos (cada merge consome um)**, downloads e uploads no Drive.
 
 ---
 
@@ -194,13 +196,13 @@ O workflow **Testes** roda a cada alteração de código; local não é necessá
 - escolha determinística do exemplar, movimento sem exclusão, registro de origem e restauração;
 - interrupção no meio e retomada **sem repetir** movimentos nem gerar PDFs repetidos;
 - exclusão das pastas de saída/revisão/controle e dos atalhos da varredura;
-- 25 documentos → 20 + 5 + união, ordem natural, páginas somadas e intervalos no índice;
+- motor `ilovepdf`: 25 documentos → 20 + 5 + união; motor `local`: 50 documentos em **um** único PDF, com marcadores; ordem natural, páginas somadas e intervalos no índice;
 - metas de documentos/palavras, OCR, protegido, inválido e arquivo grande demais;
 - formato real das chamadas ao Composio (endpoint, `user_id`, `s3key`, `Content-Type`, paginação, upload resumível).
 
 ### Limites desta versão (sem rodeios)
 - **Não foi validado contra suas contas reais.** O ambiente onde escrevi o código não tinha Drive/iLovePDF conectados no Composio. Por isso existem **Verificar conexões** e **Testar um lote**: eles são o seu teste real, antes de processar tudo.
 - Os esquemas das ferramentas foram lidos das definições reais do Composio (`GOOGLEDRIVE_*`, `I_LOVE_PDF_*`); a documentação web do Composio estava bloqueada na minha rede, então formato de resposta de `CREATE_FOLDER`, `UPLOAD_FILE` e `RESUMABLE_UPLOAD` (campo `id`) é verificado em tempo de execução e falha com mensagem clara se diferir.
-- Limites de tamanho por arquivo/tarefa do **iLovePDF** e do **NotebookLM** não foram confirmados; as metas (90 MB / 450 mil palavras) são configuráveis.
+- Limites do **NotebookLM** (tamanho e palavras por fonte) e, no motor `ilovepdf`, de tamanho por tarefa não foram confirmados; as metas (90 MB / 450 mil palavras) são configuráveis. O merge local mantém o texto e o número de páginas (validados), mas não otimiza nem comprime o tamanho do arquivo.
 - Autor/tema por **nome do arquivo**; metadados internos do PDF não são lidos (exigiria baixar todos os livros).
 - Não há OCR nesta versão (apenas sinalização).
