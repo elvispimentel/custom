@@ -34,8 +34,8 @@ Os originais nunca são alterados nem renomeados.
 ## 2. Configuração única (uma vez só)
 
 ### 2.1 Composio
-1. Crie/entre na sua conta no Composio e gere uma **API key** (painel do Composio → configurações → API keys).
-2. Defina um **User ID** (um texto, por exemplo `elvis`). Use **o mesmo User ID** em todas as conexões abaixo.
+1. Entre em https://dashboard.composio.dev e use o produto **Platform** (para desenvolvedores). **Este agente usa a chave de projeto do Platform, que começa com `ak_`** — e não a chave `ck_...` do produto "For You", que é para clientes de IA pessoais e não serve aqui. Segundo a skill oficial do Composio: no Platform, abra o seu projeto → **Getting Started** → passo 1 e copie a chave `ak_...`. (Se o painel mostrar só o "For You", crie um projeto Platform.)
+2. Defina um **User ID**: um texto fixo, por exemplo `elvis`. No Platform ele é um identificador seu; as conexões ficam atreladas a ele. Use **o mesmo User ID** em todas as conexões abaixo e no Secret `COMPOSIO_USER_ID`.
 3. No painel do Composio, conecte para esse User ID:
    - **Google Drive** (autorize a conta dona da Biblioteca Pessoal);
    - *(só se for usar `pdf.motor: ilovepdf`)* **iLovePDF** — o Composio pedirá as chaves de um projeto da API do iLovePDF. **Com o motor padrão (`local`) isto não é necessário.**
