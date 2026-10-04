@@ -94,7 +94,7 @@ def planejar(ctx, analisar_tudo=True, parar_em=None) -> list[dict]:
                 est.x("INSERT INTO lote_itens VALUES(?,?,?,?,?,?)", k, ordem, it["id"], it["nome"], pag, pag + it["paginas"] - 1)
                 pag += it["paginas"]
             plano.append({"chave": k, "pasta": caminho, "seq": seq, "nome": nome, "itens": itens,
-                          "paginas": pag - 1, "tamanho": sum(i["tamanho"] for i in itens)})
+                          "paginas": pag - 1, "palavras": sum(i["palavras"] for i in itens), "tamanho": sum(i["tamanho"] for i in itens)})
         for r in est.q("SELECT chave FROM lotes WHERE pasta=? AND obsoleto=0", caminho):
             if r["chave"] not in chaves:   # composição mudou (novos livros chegando): resultado antigo fica, marcado
                 est.x("UPDATE lotes SET obsoleto=1 WHERE chave=?", r["chave"])
@@ -153,6 +153,8 @@ def executar_lote(ctx, p) -> dict:
         if it["md5"] and md5_bytes(dados) != it["md5"]:
             raise ErroLote(f"checksum do download difere do Drive para {it['nome']}")
         arquivos.append((it["nome"], dados))
+    if p["palavras"] > cfg["lotes"]["limite_palavras"]:
+        raise ErroLote(f"lote com ~{p['palavras']} palavras excede o teto do NotebookLM ({cfg['lotes']['limite_palavras']})")
     final = juntar_ordenado(ctx.pdf, arquivos, p["nome"], mx)
     v = validar_final(final, p["paginas"], cfg)
     if not v["ok"]:

@@ -61,6 +61,9 @@ def formar_lotes(itens, cfg):
                 motivo.append(f"tamanho {it['tamanho'] / 1048576:.1f} MB > meta {L['meta_mb']} MB")
             if it["palavras"] > meta_p:
                 motivo.append(f"~{it['palavras']} palavras > meta {meta_p}")
+            if it["tamanho"] > L["limite_mb"] * 1048576 or it["palavras"] > L["limite_palavras"]:
+                motivo.append(f"EXCEDE o teto do NotebookLM por fonte ({L['limite_mb']} MB / {L['limite_palavras']} palavras): "
+                              "não cabe nem sozinho, precisa ser dividido")
             avulsos.append({**it, "motivo": "; ".join(motivo)})
             continue
         if atual and (len(atual) >= max_d or b + it["tamanho"] > meta_b or p + it["palavras"] > meta_p):
@@ -127,6 +130,9 @@ def validar_final(dados: bytes, paginas_esperadas: int, cfg) -> dict:
             chars += len((leitor.pages[i].extract_text() or "").strip())
         except Exception:
             pass
+    if len(dados) > cfg["lotes"]["limite_mb"] * 1048576:
+        r["avisos"].append(f"PDF final de {len(dados) / 1048576:.1f} MB excede o teto de {cfg['lotes']['limite_mb']} MB do NotebookLM")
+        return r
     r["texto"] = chars / len(am) >= cfg["lotes"]["minimo_caracteres_por_pagina"]
     if not r["texto"]:
         r["avisos"].append("sem texto extraível suficiente: precisa de OCR")

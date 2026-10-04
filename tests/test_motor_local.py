@@ -52,3 +52,26 @@ def test_cinquenta_documentos_em_um_unico_pdf_sem_limite_por_chamada(mundo):
 def test_merge_local_exige_dois_arquivos():
     with pytest.raises(ValueError):
         PdfLocal().juntar([("a.pdf", pdf_texto(1))], "x.pdf")
+
+
+def test_teto_do_notebooklm_marca_arquivo_que_nao_cabe_nem_sozinho(mundo):
+    mundo.cfg.d["lotes"].update(meta_palavras=1000, limite_palavras=2000)   # versão reduzida dos 450k/500k
+    livros = mundo.drive.pasta("Livros", mundo.lib)
+    mundo.drive.arquivo("a.pdf", pdf_texto(2, "a"), livros)                  # ~240 palavras: cabe
+    mundo.drive.arquivo("b entre meta e teto.pdf", pdf_texto(8, "b"), livros)  # ~960 palavras... ajustado abaixo
+    mundo.drive.arquivo("c acima do teto.pdf", pdf_texto(30, "c"), livros)     # ~3600 palavras
+    import biblioteca.cli as c
+    ctx, _ = c.preparar(mundo.cfg, None, mundo.drive, mundo.pdf, True, "r")
+    inventariar(ctx); dup.detectar(ctx)
+    lt.planejar(ctx)
+    motivos = {r["caminho"].split("/")[-1]: r["motivo"] for r in ctx.estado.q("SELECT * FROM avulsos")}
+    assert "EXCEDE o teto do NotebookLM" in motivos["c acima do teto.pdf"]
+    assert not any("b entre" in k and "EXCEDE" in v for k, v in motivos.items())
+
+
+def test_pdf_final_acima_do_teto_de_tamanho_nao_e_gravado():
+    from biblioteca.pdfs import validar_final
+    cfg = carregar("nao-existe.yaml")
+    cfg.d["lotes"]["limite_mb"] = 0.0001
+    v = validar_final(pdf_texto(3, "z"), 3, cfg)
+    assert not v["ok"] and "excede o teto" in v["avisos"][0]

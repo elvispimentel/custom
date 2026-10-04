@@ -133,7 +133,7 @@ Garantias: quem não for classificado com confiança (`confianca_minima`) **fica
 
 ## 7. Lotes de PDF para o NotebookLM
 - Apenas **PDFs únicos** (sem os duplicados), por pasta, em **ordem natural** (`cap 2` antes de `cap 10`). Um lote nunca mistura pastas.
-- Até **25** documentos por lote, ajustados às metas `lotes.meta_mb` (90) e `lotes.meta_palavras` (450 000 estimadas). O lote é **reduzido** quando necessário; não precisa ter 25.
+- Até **25** documentos por lote, ajustados às metas `lotes.meta_mb` (90) e `lotes.meta_palavras` (450 000 estimadas). Os **tetos do NotebookLM por fonte** (200 MB ou 500 mil palavras — informados por você) ficam em `lotes.limite_mb` e `lotes.limite_palavras`: as metas são a margem de segurança (a contagem de palavras é uma estimativa por amostragem) e podem subir, ex.: `meta_mb: 180`; um PDF final acima do teto **nunca é gravado**. O lote é **reduzido** quando necessário; não precisa ter 25.
 - **Motor de merge (`pdf.motor` em `config.exemplo.yaml`):**
   - `local` *(padrão)*: junta no próprio runner com `pypdf`. **Não há limite de arquivos por chamada** — dá para botar `lotes.max_documentos: 50` (ou mais) e juntar tudo numa só passada, sem depender do plano do iLovePDF. Cada documento original vira um **marcador** (bookmark) com o nome dele dentro do PDF final. Os limites que continuam valendo são as metas `meta_mb` e `meta_palavras`.
   - `ilovepdf`: usa o iLovePDF via Composio. **Limite real da integração: 20 arquivos por chamada** (`maxItems` do esquema de `I_LOVE_PDF_MERGE_PDFS`), e cada merge consome crédito. Com 25 documentos: junta os 20 primeiros, junta os 5 restantes e une os dois resultados, mantendo a ordem. Atenção: o plano premium do site (50 arquivos) **não muda** o limite de 20 desta integração, que vem do esquema da ferramenta.
@@ -148,7 +148,7 @@ Garantias: quem não for classificado com confiança (`confianca_minima`) **fica
 | `ocr` | Provável digitalização (sem texto extraível). **Entra no lote** (as páginas não são descartadas), mas fica sinalizado. | Aplicar OCR depois, se quiser texto pesquisável |
 | `protegido` | PDF protegido por senha. **Não é mesclado.** | Remover a senha e rodar *Retomar* |
 | `invalido` | Não abre / corrompido. **Não é mesclado.** | Substituir o arquivo |
-| `enviar_separadamente` | Sozinho já passa da meta de tamanho ou de palavras: **não cabe num resultado único.** O original fica intacto no lugar. Motivo no índice. | Subir **individualmente** no NotebookLM, a partir do ID/caminho do índice |
+| `enviar_separadamente` | Sozinho já passa da meta de tamanho ou de palavras: **não cabe num resultado único.** O original fica intacto no lugar. Motivo no índice. Se o motivo disser **EXCEDE o teto do NotebookLM**, nem sozinho ele é aceito (acima de 200 MB ou 500 mil palavras). | Subir **individualmente** no NotebookLM, pelo ID/caminho do índice; se excede o teto, dividir o arquivo antes |
 | `instavel` / `vazio` | Modificado há menos de `estabilidade_minutos` (30) ou com 0 bytes: **provavelmente ainda subindo.** | Esperar o upload e rodar de novo |
 | `obsoleto` | PDF de lote cuja composição mudou (livros novos chegaram). Mantido, não apagado. | Pode descartar manualmente |
 
@@ -203,6 +203,6 @@ O workflow **Testes** roda a cada alteração de código; local não é necessá
 ### Limites desta versão (sem rodeios)
 - **Não foi validado contra suas contas reais.** O ambiente onde escrevi o código não tinha Drive/iLovePDF conectados no Composio. Por isso existem **Verificar conexões** e **Testar um lote**: eles são o seu teste real, antes de processar tudo.
 - Os esquemas das ferramentas foram lidos das definições reais do Composio (`GOOGLEDRIVE_*`, `I_LOVE_PDF_*`); a documentação web do Composio estava bloqueada na minha rede, então formato de resposta de `CREATE_FOLDER`, `UPLOAD_FILE` e `RESUMABLE_UPLOAD` (campo `id`) é verificado em tempo de execução e falha com mensagem clara se diferir.
-- Limites do **NotebookLM** (tamanho e palavras por fonte) e, no motor `ilovepdf`, de tamanho por tarefa não foram confirmados; as metas (90 MB / 450 mil palavras) são configuráveis. O merge local mantém o texto e o número de páginas (validados), mas não otimiza nem comprime o tamanho do arquivo.
+- Os tetos do **NotebookLM** (200 MB / 500 mil palavras por fonte) vieram de você, não de uma consulta minha à documentação; no motor `ilovepdf`, o limite de tamanho por tarefa também não foi confirmado. O merge local mantém o texto e o número de páginas (validados), mas não otimiza nem comprime o tamanho do arquivo.
 - Autor/tema por **nome do arquivo**; metadados internos do PDF não são lidos (exigiria baixar todos os livros).
 - Não há OCR nesta versão (apenas sinalização).

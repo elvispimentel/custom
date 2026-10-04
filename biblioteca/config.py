@@ -19,6 +19,7 @@ PADRAO = {
     "pdf": {"motor": "local"},
     "ilovepdf": {"max_arquivos_por_chamada": 20, "reservar_creditos": 0},
     "lotes": {"max_documentos": 25, "meta_mb": 90, "meta_palavras": 450000,
+              "limite_mb": 200, "limite_palavras": 500000,
               "paginas_amostra_texto": 20, "palavras_por_pagina_padrao": 300,
               "minimo_caracteres_por_pagina": 25},
     "execucao": {"tempo_max_minutos": 300, "pasta_trabalho": "trabalho"},

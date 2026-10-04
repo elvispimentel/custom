@@ -36,8 +36,10 @@ ilovepdf:                        # só vale com pdf.motor: ilovepdf
 
 lotes:
   max_documentos: 25             # com motor local pode subir (ex.: 50); as metas de MB/palavras ainda valem
-  meta_mb: 90
+  meta_mb: 90                    # meta (margem de segurança) abaixo do teto; pode subir, ex.: 180
   meta_palavras: 450000
+  limite_mb: 200                 # teto do NotebookLM por fonte (200 MB); nada acima disso é gerado
+  limite_palavras: 500000        # teto do NotebookLM por fonte (500 mil palavras)
   paginas_amostra_texto: 20      # páginas amostradas para estimar palavras/texto
   palavras_por_pagina_padrao: 300
   minimo_caracteres_por_pagina: 25   # abaixo disso => provável digitalização (precisa OCR)
