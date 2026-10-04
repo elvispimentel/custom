@@ -45,6 +45,7 @@ concurrency:
 
 permissions:
   contents: read
+  actions: read      # só para saber se a execução dona da trava ainda está rodando
 
 jobs:
   executar:
@@ -60,6 +61,7 @@ jobs:
       PASTA_DUPLICADOS_ID: ${{ vars.PASTA_DUPLICADOS_ID }}
       PASTA_CONTROLE_ID: ${{ vars.PASTA_CONTROLE_ID }}
       BIBLIOTECA_CONFIG: config.exemplo.yaml
+      GITHUB_TOKEN: ${{ github.token }}
       ACAO: ${{ inputs.acao }}
       MAX_LOTES: ${{ inputs.max_lotes }}
       INCLUIR_LOTES: ${{ inputs.incluir_lotes }}

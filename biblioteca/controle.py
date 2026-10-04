@@ -32,8 +32,9 @@ def achar_ou_criar_pasta(drive, nome, pai_id, id_configurado=""):
 
 
 class Controle:
-    def __init__(self, drive, pasta_id, trabalho: Path, run_id="local"):
+    def __init__(self, drive, pasta_id, trabalho: Path, run_id="local", run_ativa=None):
         self.drive, self.pasta, self.trabalho, self.run_id = drive, pasta_id, Path(trabalho), run_id
+        self.run_ativa = run_ativa      # callable(run_id) -> True/False/None (None = não sei)
         self.trabalho.mkdir(parents=True, exist_ok=True)
         self._ids: dict[str, str] = {}
 
@@ -48,9 +49,14 @@ class Controle:
         if t:
             conteudo = json.loads(self.drive.baixar(t["id"]).decode() or "{}")
             if conteudo.get("ocupada") and conteudo.get("run") != self.run_id:
-                idade = (time.time() - parse_data(conteudo.get("desde")).timestamp()) / 60
-                if idade < TTL_TRAVA_MIN:
-                    raise BibliotecaOcupada(f"Execução '{conteudo.get('run')}' em andamento há {idade:.0f} min.")
+                ativa = self.run_ativa(conteudo.get("run")) if self.run_ativa else None
+                if ativa is True:
+                    raise BibliotecaOcupada(f"Execução '{conteudo.get('run')}' ainda está rodando.")
+                if ativa is None:      # sem como confirmar: vale o prazo máximo de um job
+                    idade = (time.time() - parse_data(conteudo.get("desde")).timestamp()) / 60
+                    if idade < TTL_TRAVA_MIN:
+                        raise BibliotecaOcupada(f"Execução '{conteudo.get('run')}' em andamento há {idade:.0f} min.")
+                # ativa is False: a execução dona da trava já terminou (caiu sem liberar) -> assume
         self._gravar(TRAVA, json.dumps({"ocupada": True, "run": self.run_id, "desde": agora()}).encode(),
                      "application/json")
 

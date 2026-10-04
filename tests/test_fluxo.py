@@ -389,3 +389,30 @@ def test_trava_e_liberada_mesmo_se_a_gravacao_do_estado_falhar(mundo):
     ctx.salvar = lambda: (_ for _ in ()).throw(RuntimeError("queda ao gravar estado"))
     c.encerrar(ctx, mundo.ctrl, Cont())      # não levanta, e libera a trava
     mundo.abrir(run="rW")                    # se a trava tivesse ficado presa, levantaria BibliotecaOcupada
+
+
+def _trava_ocupada(mundo, dono="rDONO"):
+    mundo.abrir(run=dono)          # grava a trava como ocupada e "cai" sem liberar
+
+
+def test_trava_de_execucao_terminada_e_assumida_sem_esperar_o_prazo(mundo):
+    from biblioteca.controle import Controle
+    _trava_ocupada(mundo)
+    c = Controle(mundo.drive, mundo.ctrl.pasta, mundo.tmp / "t2", "rNOVA", run_ativa=lambda r: False)
+    c.adquirir_trava()             # não levanta: o dono já terminou
+
+
+def test_trava_de_execucao_em_andamento_continua_valendo(mundo):
+    from biblioteca.controle import Controle
+    _trava_ocupada(mundo)
+    c = Controle(mundo.drive, mundo.ctrl.pasta, mundo.tmp / "t3", "rNOVA", run_ativa=lambda r: True)
+    with pytest.raises(BibliotecaOcupada):
+        c.adquirir_trava()
+
+
+def test_trava_sem_como_confirmar_usa_o_prazo(mundo):
+    from biblioteca.controle import Controle
+    _trava_ocupada(mundo)
+    c = Controle(mundo.drive, mundo.ctrl.pasta, mundo.tmp / "t4", "rNOVA", run_ativa=lambda r: None)
+    with pytest.raises(BibliotecaOcupada):      # trava recente e sem confirmação: respeita o prazo
+        c.adquirir_trava()

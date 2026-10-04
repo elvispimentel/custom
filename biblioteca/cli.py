@@ -146,6 +146,22 @@ def cmd_verificar(cfg, c, drive, pdf):
     return 0 if ok else 1
 
 
+def run_ativa_github(run_id):
+    """True/False se a execução do GitHub Actions ainda está rodando; None se não der para saber."""
+    import requests
+    repo, token = os.environ.get("GITHUB_REPOSITORY"), os.environ.get("GITHUB_TOKEN")
+    if not (repo and token and str(run_id).isdigit()):
+        return None
+    try:
+        r = requests.get(f"https://api.github.com/repos/{repo}/actions/runs/{run_id}", timeout=15,
+                         headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"})
+        if r.status_code != 200:
+            return None
+        return r.json().get("status") != "completed"
+    except requests.RequestException:
+        return None
+
+
 def preparar(cfg, args, drive, pdf, criar_saidas: bool, run_id):
     bid = cfg["biblioteca"]["id"]
     if not bid:
@@ -165,7 +181,7 @@ def preparar(cfg, args, drive, pdf, criar_saidas: bool, run_id):
     ids["duplicados"] = _pasta(drive, S["duplicados_nome"], S["duplicados_id"], pai, criar_saidas)
     if bid in (ids["controle"], ids["pdfs"], ids["duplicados"]):
         raise ConfigError("ID de pasta de saída igual ao da biblioteca")
-    ctrl = Controle(drive, ids["controle"], Path(cfg["execucao"]["pasta_trabalho"]), run_id)
+    ctrl = Controle(drive, ids["controle"], Path(cfg["execucao"]["pasta_trabalho"]), run_id, run_ativa_github)
     ctrl.adquirir_trava()
     estado = ctrl.abrir_estado()
     ctx = Contexto(cfg, drive, pdf, estado, Orcamento(cfg["execucao"]["tempo_max_minutos"]),

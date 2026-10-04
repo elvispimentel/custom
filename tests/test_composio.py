@@ -226,3 +226,14 @@ def test_envio_desiste_apos_tres_falhas():
     with pytest.raises(ComposioError, match="upload para armazenamento falhou"):
         cliente(h).enviar_arquivo(b"dados", "a.pdf", "application/pdf", "T", "tk")
     assert h.tentativas == 3
+
+
+def test_envio_resumivel_le_id_em_file_ou_usa_o_id_conhecido():
+    h = HttpFalso()
+    h.fila["/api/v3.1/files/upload/request"] = Resp(200, {"key": "k", "new_presigned_url": "https://s3/x"})
+    h.fila["/api/v3.1/tools/execute/GOOGLEDRIVE_RESUMABLE_UPLOAD"] = [
+        Resp(200, {"successful": True, "data": {"display_url": "u", "file": {"id": "ID_EM_FILE"}, "sessionUri": "s"}}),
+        Resp(200, {"successful": True, "data": {"display_url": "u", "file": {}, "link_label": "l", "sessionUri": "s"}})]
+    d = DriveComposio(cliente(h))
+    assert d.enviar("g.pdf", b"x" * (5 * 1024 * 1024), "pasta") == "ID_EM_FILE"          # criação: id em 'file'
+    assert d.enviar("estado.db", b"x", "pasta", atualizar_id="F9") == "F9"                # atualização: id conhecido

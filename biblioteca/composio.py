@@ -229,9 +229,12 @@ class DriveComposio:
             ref = self.c.enviar_arquivo(dados, nome, mimetype, slug, self.TK)
             args = {"file_to_upload": ref, "folder_to_upload_to": pasta_id}
         d = self.c.executar(slug, args, self.TK, repetir=False)
-        if not d.get("id"):
+        # RESUMABLE_UPLOAD devolve {display_url, file, link_label, sessionUri}: o id pode estar em 'file'
+        # (criação) ou não vir (atualização, onde o id já é conhecido).
+        fid = d.get("id") or (d.get("file") or {}).get("id") or atualizar_id
+        if not fid:
             raise ComposioError(f"{slug} sem id na resposta: {list(d)}")
-        return d["id"]
+        return fid
 
 
 class ILovePDFComposio:
