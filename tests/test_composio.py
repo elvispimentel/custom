@@ -195,3 +195,34 @@ def test_conectar_nao_gera_link_se_ja_ha_conta_ativa(capsys):
     rc, _ = cli_conectar(h)
     assert rc == 0 and "eu@exemplo.com" in capsys.readouterr().out
     assert [r for r in h.reqs if r[0] == "POST"] == []
+
+
+# ---------- robustez do envio ----------
+class HttpPutInstavel(HttpFalso):
+    def __init__(self, falhas, status_final=200):
+        super().__init__()
+        self.falhas, self.status_final, self.tentativas, self.timeouts = falhas, status_final, 0, []
+
+    def put(self, url, data=None, headers=None, timeout=None):
+        import requests
+        self.tentativas += 1
+        self.timeouts.append(timeout)
+        if self.tentativas <= self.falhas:
+            raise requests.exceptions.ConnectionError("The write operation timed out")
+        return Resp(self.status_final)
+
+
+def test_envio_tenta_de_novo_e_usa_timeout_unico_longo():
+    h = HttpPutInstavel(falhas=2)
+    h.fila["/api/v3.1/files/upload/request"] = Resp(200, {"key": "k", "new_presigned_url": "https://s3/x"})
+    ref = cliente(h).enviar_arquivo(b"dados", "a.pdf", "application/pdf", "T", "tk")
+    assert ref["s3key"] == "k" and h.tentativas == 3
+    assert all(t == 600 for t in h.timeouts)          # número único: o envio do corpo também usa este timeout
+
+
+def test_envio_desiste_apos_tres_falhas():
+    h = HttpPutInstavel(falhas=9)
+    h.fila["/api/v3.1/files/upload/request"] = Resp(200, {"key": "k", "new_presigned_url": "https://s3/x"})
+    with pytest.raises(ComposioError, match="upload para armazenamento falhou"):
+        cliente(h).enviar_arquivo(b"dados", "a.pdf", "application/pdf", "T", "tk")
+    assert h.tentativas == 3

@@ -103,10 +103,21 @@ class Composio:
         pre = self._req("POST", "/api/v3.1/files/upload/request", json={
             "filename": nome, "md5": md5_bytes(dados), "mimetype": mimetype,
             "tool_slug": tool_slug, "toolkit_slug": toolkit_slug})
-        r = self.http.put(pre["new_presigned_url"], data=dados, headers={"Content-Type": mimetype},
-                          timeout=(15, 600))
-        if r.status_code != 200:
-            raise ComposioError(f"upload para armazenamento falhou: HTTP {r.status_code}")
+        # timeout único (não tupla): no requests/urllib3 o ENVIO do corpo usa o timeout de conexão; com (15, 600)
+        # um upload de alguns MB estourava "The write operation timed out". Tenta até 3 vezes.
+        for t in range(3):
+            try:
+                r = self.http.put(pre["new_presigned_url"], data=dados, headers={"Content-Type": mimetype}, timeout=600)
+            except requests.RequestException as e:
+                if t == 2:
+                    raise ComposioError(f"upload para armazenamento falhou: {type(e).__name__}") from e
+                self.dormir(2 ** (t + 1))
+                continue
+            if r.status_code == 200:
+                break
+            if t == 2 or r.status_code < 500:
+                raise ComposioError(f"upload para armazenamento falhou: HTTP {r.status_code}")
+            self.dormir(2 ** (t + 1))
         return {"name": nome, "mimetype": mimetype, "s3key": pre["key"]}
 
     def baixar_s3url(self, s3url) -> bytes:

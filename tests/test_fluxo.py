@@ -361,3 +361,31 @@ def test_lixo_de_sistema_fica_fora_do_inventario(mundo):
     r = inventariar(ctx)
     assert r["ignorados"] == 2
     assert [x["nome"] for x in ctx.estado.q("SELECT nome FROM arquivos")] == ["livro.pdf"]
+
+
+def test_inventario_em_paralelo_equivale_ao_serial(mundo):
+    d = mundo.drive
+    for i in range(12):
+        p = d.pasta(f"P{i}", mundo.lib)
+        sub = d.pasta("sub", p)
+        d.arquivo(f"a{i}.pdf", pdf_texto(1, f"a{i}"), p)
+        d.arquivo(f"b{i}.pdf", pdf_texto(1, f"b{i}"), sub)
+    resultados = []
+    for n in (1, 6):
+        mundo.cfg.d["execucao"]["paralelismo_listagem"] = n
+        ctx = mundo.abrir(run=f"r{n}")
+        r = inventariar(ctx)
+        resultados.append((r, [tuple(x) for x in ctx.estado.q("SELECT nome, caminho FROM arquivos ORDER BY caminho, nome")]))
+        mundo.ctrl.liberar_trava()
+    assert resultados[0] == resultados[1] and resultados[0][0]["pastas"] == 25 and resultados[0][0]["arquivos"] == 24
+
+
+def test_trava_e_liberada_mesmo_se_a_gravacao_do_estado_falhar(mundo):
+    from biblioteca import cli as c
+
+    class Cont:
+        chamadas = {}
+    ctx = mundo.abrir(run="rZ")
+    ctx.salvar = lambda: (_ for _ in ()).throw(RuntimeError("queda ao gravar estado"))
+    c.encerrar(ctx, mundo.ctrl, Cont())      # não levanta, e libera a trava
+    mundo.abrir(run="rW")                    # se a trava tivesse ficado presa, levantaria BibliotecaOcupada

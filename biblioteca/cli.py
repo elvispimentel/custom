@@ -209,12 +209,20 @@ def executar(args):
     try:
         return rodar(ctx, args, c)
     finally:
-        try:
-            ctx.estado.somar_uso(dict(c.chamadas))
-            ctx.salvar()
-            ctrl.liberar_trava()
-        except Exception:
-            traceback.print_exc()
+        encerrar(ctx, ctrl, c)
+
+
+def encerrar(ctx, ctrl, c):
+    """Salva o estado e SEMPRE libera a trava, mesmo que a gravação do estado falhe."""
+    try:
+        ctx.estado.somar_uso(dict(c.chamadas))
+        ctx.salvar()
+    except Exception:
+        traceback.print_exc()
+    try:
+        ctrl.liberar_trava()
+    except Exception:
+        traceback.print_exc()
 
 
 def rodar(ctx, args, c):

@@ -50,6 +50,7 @@ lotes:
 execucao:
   tempo_max_minutos: 300         # para com segurança antes do limite de 6 h do job
   pasta_trabalho: "trabalho"
+  paralelismo_listagem: 6        # pastas listadas ao mesmo tempo no inventário (1 = uma por vez)
 
 organizacao:                     # fase "temas e autores"
   destino: "dentro"              # dentro = <Biblioteca>/<Tema>/<Autor>/arquivo

@@ -24,7 +24,7 @@ PADRAO = {
               "limite_mb": 200, "limite_palavras": 500000,
               "paginas_amostra_texto": 20, "palavras_por_pagina_padrao": 300,
               "minimo_caracteres_por_pagina": 25},
-    "execucao": {"tempo_max_minutos": 300, "pasta_trabalho": "trabalho"},
+    "execucao": {"tempo_max_minutos": 300, "pasta_trabalho": "trabalho", "paralelismo_listagem": 6},
     "organizacao": {"destino": "dentro", "mover_nao_classificados": False,
                     "pasta_nao_classificados": "A classificar", "pasta_sem_autor": "_Sem autor identificado",
                     "confianca_minima": 0.7, "classificador": "regras",
