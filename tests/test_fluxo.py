@@ -537,7 +537,11 @@ def test_nome_do_dono_casa_palavra_inteira_e_ignora_acento_e_hifen():
     assert pessoal.eh_pessoal_nome(cfg, "Dossie Elvis Pimentel.pdf")
     assert pessoal.eh_pessoal_nome(cfg, "Desenho Humano - elvis-pimentel.pdf")
     assert pessoal.eh_pessoal_nome(cfg, "ELVIS  PIMENTEL 1610 - Mentoria.pdf")
-    assert not pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")
+    assert not pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")      # só com o padrão configurado
+    cfg.d["pessoal"]["padroes"] = ["elvis pimentel", "ajay elvish", "ajay krishna das"]
+    assert pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")           # pseudônimo do dono
+    assert pessoal.eh_pessoal_nome(cfg, "ajay-krishna-das - Protocolo.pdf")
+    assert not pessoal.eh_pessoal_nome(cfg, "Ajay Devgan - Biografia.pdf")
     assert not pessoal.eh_pessoal_nome(cfg, "Elvis Presley - Biografia.pdf")
     assert pessoal.eh_pessoal_caminho(cfg, "Livros/Curso de Hipnose/Curso Elvis Pimentel/Modulo 1")
 

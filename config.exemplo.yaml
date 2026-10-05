@@ -38,7 +38,8 @@ ilovepdf:                        # só vale com pdf.motor: ilovepdf
   reservar_creditos: 0
 
 pessoal:                         # arquivos do dono: ficam juntos e separados, para poder vender a biblioteca sem eles
-  padroes: ["elvis pimentel"]    # nome no arquivo (ou numa pasta); casa palavra inteira: "Elvis Pimentel", "elvis-pimentel"
+  padroes: ["elvis pimentel", "ajay elvish", "ajay krishna das"]   # seus nomes (e pseudônimos) no arquivo ou numa pasta;
+                                 # casa palavra inteira: "Elvis Pimentel", "elvis-pimentel", "Ajay Elvish"
   pasta: "00 - Arquivos pessoais (Elvis Pimentel)"   # pasta criada dentro da biblioteca; os lotes dela também ficam à parte
 
 lotes:
