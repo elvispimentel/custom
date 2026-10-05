@@ -527,3 +527,38 @@ def test_max_documentos_zero_nao_limita_a_quantidade_so_mb_e_palavras():
     cfg.d["lotes"]["meta_palavras"] = 250                           # a meta de palavras ainda fecha o lote
     lotes, _ = formar_lotes(itens, cfg)
     assert [len(l) for l in lotes] == [25, 25, 10]
+
+
+def test_nome_do_dono_casa_palavra_inteira_e_ignora_acento_e_hifen():
+    from biblioteca.config import carregar
+    from biblioteca import pessoal
+    cfg = carregar("/nao/existe.yaml")
+    cfg.d["pessoal"]["padroes"] = ["elvis pimentel"]
+    assert pessoal.eh_pessoal_nome(cfg, "Dossie Elvis Pimentel.pdf")
+    assert pessoal.eh_pessoal_nome(cfg, "Desenho Humano - elvis-pimentel.pdf")
+    assert pessoal.eh_pessoal_nome(cfg, "ELVIS  PIMENTEL 1610 - Mentoria.pdf")
+    assert not pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")
+    assert not pessoal.eh_pessoal_nome(cfg, "Elvis Presley - Biografia.pdf")
+    assert pessoal.eh_pessoal_caminho(cfg, "Livros/Curso de Hipnose/Curso Elvis Pimentel/Modulo 1")
+
+
+def test_arquivos_pessoais_vao_para_pasta_propria_e_para_lote_a_parte(mundo):
+    d = mundo.drive
+    d.arquivo("Carl Jung - Os Arquétipos.pdf", pdf_texto(2, "j"), mundo.lib)
+    d.arquivo("Dossie Elvis Pimentel.pdf", pdf_texto(2, "d"), mundo.lib)
+    d.arquivo("Elvis Pimentel - Mentoria Kybalion.pdf", pdf_texto(2, "m"), mundo.lib)
+    ctx = mundo.abrir()
+    ctx.cfg.d["organizacao"]["temas"] = {"Psicologia": ["jung"], "Hermetismo": ["kybalion"]}
+    ctx.cfg.d["pessoal"] = {"padroes": ["elvis pimentel"], "pasta": "00 - Pessoais"}
+    ctx.cfg.d["lotes"]["agrupar_por"] = "tema"
+    inventariar(ctx); dup.detectar(ctx)
+    plano = org.planejar_temas(ctx)
+    por = {p["nome"]: p for p in plano}
+    assert por["Dossie Elvis Pimentel.pdf"]["destino"] == "00 - Pessoais" and por["Dossie Elvis Pimentel.pdf"]["acao"] == "mover"
+    assert por["Elvis Pimentel - Mentoria Kybalion.pdf"]["destino"] == "00 - Pessoais"   # nome do dono vence o tema
+    assert por["Carl Jung - Os Arquétipos.pdf"]["destino"].startswith("Psicologia/")
+    org.aplicar_temas(ctx, plano)
+    inventariar(ctx)
+    lotes = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in lt.planejar(ctx)}
+    assert lotes["00 - Pessoais"] == ["Dossie Elvis Pimentel.pdf", "Elvis Pimentel - Mentoria Kybalion.pdf"]
+    assert all("Elvis" not in n for g, ns in lotes.items() if g != "00 - Pessoais" for n in ns)

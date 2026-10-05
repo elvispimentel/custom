@@ -37,6 +37,10 @@ ilovepdf:                        # só vale com pdf.motor: ilovepdf
   max_arquivos_por_chamada: 20   # limite real do esquema I_LOVE_PDF_MERGE_PDFS (maxItems=20)
   reservar_creditos: 0
 
+pessoal:                         # arquivos do dono: ficam juntos e separados, para poder vender a biblioteca sem eles
+  padroes: ["elvis pimentel"]    # nome no arquivo (ou numa pasta); casa palavra inteira: "Elvis Pimentel", "elvis-pimentel"
+  pasta: "00 - Arquivos pessoais (Elvis Pimentel)"   # pasta criada dentro da biblioteca; os lotes dela também ficam à parte
+
 lotes:
   agrupar_por: "tema"            # tema = junta todos os autores de um tema (lotes cheios); pasta = um grupo por pasta
   grupo_sem_tema: "Sem tema"     # onde entram os livros fora das pastas de tema

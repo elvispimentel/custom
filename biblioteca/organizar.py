@@ -9,6 +9,7 @@ import unicodedata
 
 import requests
 
+from . import pessoal
 from .controle import achar_ou_criar_pasta
 from .util import agora, nome_seguro, natural_key
 
@@ -165,7 +166,8 @@ def planejar_temas(ctx) -> list[dict]:
     usa_ia = org["classificador"] in ("claude", "openai")
     formatos = org.get("formatos_livro") or ["pdf", "epub", "mobi", "azw3", "doc", "docx", "txt", "rtf", "odt"]
     # cache só vale para o classificador pago; regras são baratas e mudam com o config
-    novos = [f for f in arqs if f["id"] not in manual and eh_livro(f["nome"], formatos) and
+    novos = [f for f in arqs if f["id"] not in manual and eh_livro(f["nome"], formatos)
+             and not pessoal.eh_pessoal_nome(cfg, f["nome"]) and
              not (usa_ia and f["id"] in cache and cache[f["id"]]["md5"] == (f["md5"] or "")
                   and cache[f["id"]]["fonte"] == org["classificador"])]
     ia = {}
@@ -198,19 +200,26 @@ def planejar_temas(ctx) -> list[dict]:
         est.x("INSERT OR REPLACE INTO classif VALUES(?,?,?,?,?,?)", f["id"], f["md5"] or "", tema, autor, fonte, conf)
     canon: dict[str, str] = {}      # variações de grafia do mesmo autor viram uma só pasta
     plano = []
+    pasta_pessoal = nome_seguro(cfg["pessoal"]["pasta"])
     for f in arqs:
+        pess = f["id"] not in manual and pessoal.eh_pessoal_nome(cfg, f["nome"])
         if f["id"] in manual:
             tema, autor, fonte, conf = manual[f["id"]][0], manual[f["id"]][1], "manual", 1.0
+        elif pess:                       # o nome do dono no arquivo: vai para a pasta pessoal, sem tema nem autor
+            tema, autor, fonte, conf = cfg["pessoal"]["pasta"], None, "pessoal", 1.0
         else:
             c = est.q("SELECT * FROM classif WHERE file_id=?", f["id"])
             c = c[0] if c else {"tema": None, "autor": None, "fonte": "formato", "confianca": 0.0}
             tema, autor, fonte, conf = c["tema"], c["autor"], c["fonte"], c["confianca"]
         if autor:
             autor = canon.setdefault(_norm(autor), nome_seguro(autor))
-        if f["id"] not in manual and not eh_livro(f["nome"], formatos):
+        if f["id"] not in manual and not pess and not eh_livro(f["nome"], formatos):
             acao, destino, tema, autor, fonte, conf = "fora_do_escopo_nao_livro", "", None, None, "formato", 0.0
         elif f["situacao"] != "ok":
             acao, destino = "aguardar_upload_terminar", ""
+        elif pess:
+            destino = pasta_pessoal
+            acao = "ja_organizado" if f["caminho"] == destino else "mover"
         elif not tema or conf < org["confianca_minima"]:
             if org["mover_nao_classificados"]:
                 acao, destino = "mover", nome_seguro(org["pasta_nao_classificados"])

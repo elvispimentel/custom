@@ -2,6 +2,7 @@ import csv
 import io
 
 from .controle import achar_ou_criar_pasta
+from . import pessoal
 from .pdfs import Info, analisar, chamadas_merge, formar_lotes, juntar_ordenado, validar_final
 from .util import agora, md5_bytes, natural_key, nome_seguro, sha256_bytes
 
@@ -14,11 +15,13 @@ def _eh_pdf(r) -> bool:
     return r["mime"] == "application/pdf" or r["nome"].lower().endswith(".pdf")
 
 
-def _grupo(ctx, caminho: str) -> str:
+def _grupo(ctx, caminho: str, nome: str = "") -> str:
     """Chave de agrupamento dos lotes. 'pasta': cada pasta é um grupo. 'tema': todos os autores de um tema
     juntos (lotes cheios); o que está fora das pastas de tema vai para o grupo 'sem tema'."""
     if ctx.cfg["lotes"].get("agrupar_por", "pasta") != "tema":
         return caminho
+    if pessoal.eh_pessoal_nome(ctx.cfg, nome) or pessoal.eh_pessoal_caminho(ctx.cfg, caminho):
+        return ctx.cfg["pessoal"]["pasta"]           # arquivos pessoais ficam num grupo à parte, nunca misturados
     topo = caminho.split("/")[0] if caminho else ""
     return topo if topo in ctx.cfg["organizacao"]["temas"] else ctx.cfg["lotes"]["grupo_sem_tema"]
 
@@ -29,7 +32,7 @@ def pdfs_unicos(ctx) -> dict[str, list[dict]]:
     por_grupo: dict[str, list[dict]] = {}
     for r in ctx.estado.q("SELECT * FROM arquivos WHERE situacao='ok'"):
         if _eh_pdf(r) and r["id"] not in dups:
-            por_grupo.setdefault(_grupo(ctx, r["caminho"]), []).append(dict(r))
+            por_grupo.setdefault(_grupo(ctx, r["caminho"], r["nome"]), []).append(dict(r))
     for lista in por_grupo.values():
         lista.sort(key=lambda r: natural_key(r["caminho"] + "/" + r["nome"]))
     return dict(sorted(por_grupo.items(), key=lambda kv: natural_key(kv[0])))
