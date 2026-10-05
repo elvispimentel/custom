@@ -1,0 +1,4 @@
+{"items": [
+ {"id": {"channelId": "UC1"}, "snippet": {"channelId": "UC1", "channelTitle": "Canal Um"}},
+ {"id": {"channelId": "UC2"}, "snippet": {"channelId": "UC2", "channelTitle": "Canal Dois"}}
+]}
