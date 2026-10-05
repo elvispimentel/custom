@@ -174,12 +174,19 @@ def planejar_temas(ctx) -> list[dict]:
     if org["classificador"] == "openai" and not cfg.openai_key:
         raise RuntimeError("classificador 'openai' exige o Secret OPENAI_API_KEY")
     if usa_ia:
-        def guardar(bloco, resp):          # progresso salvo a cada lote: uma queda não perde o já classificado
+        contagem = {"blocos": 0}
+
+        def guardar(bloco, resp):          # grava local a cada lote e sobe ao Drive a cada 10 (e não derruba a execução)
             for f in bloco:
                 t, a, c = resp.get(f["id"], (None, None, 0.0))
                 est.x("INSERT OR REPLACE INTO classif VALUES(?,?,?,?,?,?)", f["id"], f["md5"] or "", t, a,
                       org["classificador"], c)
-            ctx.salvar()
+            contagem["blocos"] += 1
+            if contagem["blocos"] % 10 == 0:
+                try:
+                    ctx.salvar()
+                except Exception as e:
+                    ctx.log(f"AVISO: não consegui subir o estado ao Drive agora ({type(e).__name__}); sigo e tento no fim")
         ia = classificar_ia(ctx, novos, guardar)
     for f in novos:
         if usa_ia:
