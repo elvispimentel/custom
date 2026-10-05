@@ -3,7 +3,7 @@ import io
 from datetime import datetime, timezone
 
 import pytest
-from pypdf import PdfReader
+from pypdf import PdfReader, PdfWriter
 
 from biblioteca import cli
 from biblioteca import duplicados as dup
@@ -568,3 +568,47 @@ def test_arquivos_pessoais_vao_para_pasta_propria_e_para_lote_a_parte(mundo):
     lotes = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in lt.planejar(ctx)}
     assert lotes["00 - Pessoais"] == ["Elvis Pimentel 0510202615h21 - Mentoria Kybalion.pdf"]
     assert all("0510202615h21" not in n for g, ns in lotes.items() if g != "00 - Pessoais" for n in ns)
+
+
+def _pdf_com_restricao_sem_senha_para_abrir(paginas=2, marca="r") -> bytes:
+    """Criptografado (AES) só com senha de dono: abre normalmente com senha vazia."""
+    w = PdfWriter()
+    w.append(PdfReader(io.BytesIO(pdf_texto(paginas, marca))))
+    w.encrypt(user_password="", owner_password="dono", algorithm="AES-256")
+    b = io.BytesIO()
+    w.write(b)
+    return b.getvalue()
+
+
+def test_pdf_so_com_restricoes_abre_com_senha_vazia_e_entra_no_lote():
+    from biblioteca.config import carregar
+    from biblioteca.pdfs import analisar, abrir_leitor, ProtegidoPorSenha
+    from biblioteca.pdflocal import PdfLocal
+    cfg = carregar("/nao/existe.yaml")
+    restrito = _pdf_com_restricao_sem_senha_para_abrir(3, "restrito")
+    i = analisar(restrito, cfg)
+    assert i.situacao == "ok" and i.paginas == 3 and "senha vazia" in i.detalhe
+    final = PdfLocal().juntar([("a.pdf", restrito), ("b.pdf", pdf_texto(2, "normal"))], "lote.pdf")
+    assert len(PdfReader(io.BytesIO(final)).pages) == 5
+    com_senha = pdf_protegido()                                    # senha de abertura de verdade
+    assert analisar(com_senha, cfg).situacao == "protegido"
+    try:
+        abrir_leitor(com_senha)
+        assert False
+    except ProtegidoPorSenha:
+        pass
+
+
+def test_protegido_do_analisador_antigo_e_reanalisado(mundo):
+    d = mundo.drive
+    pasta = d.pasta("Livros", mundo.lib)
+    d.arquivo("restrito.pdf", _pdf_com_restricao_sem_senha_para_abrir(2, "re"), pasta)
+    d.arquivo("normal.pdf", pdf_texto(2, "no"), pasta)
+    ctx = mundo.abrir()
+    inventariar(ctx)
+    f = [r for r in ctx.estado.q("SELECT * FROM arquivos") if r["nome"] == "restrito.pdf"][0]
+    ctx.estado.x("INSERT OR REPLACE INTO pdf_info VALUES(?,?,?,?,?,?,?)", f["id"], f["md5"] or "", 0, 0, 0.0,
+                 "protegido", "PDF criptografado/protegido por senha; não foi mesclado")      # resultado antigo, sem [v2]
+    plano = lt.planejar(ctx)
+    nomes = sorted(i["nome"] for pl in plano for i in pl["itens"])
+    assert nomes == ["normal.pdf", "restrito.pdf"]

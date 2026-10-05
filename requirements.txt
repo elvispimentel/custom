@@ -1,3 +1,4 @@
 requests>=2.31
 PyYAML>=6.0
 pypdf>=4.2
+cryptography>=42      # abre PDFs com criptografia AES que só têm restrições (senha de abertura vazia)

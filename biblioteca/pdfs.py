@@ -14,6 +14,45 @@ class Info:
     detalhe: str = ""
 
 
+MARCA_V2 = "[v2]"      # resultados 'protegido'/'invalido' sem esta marca vêm do analisador antigo e são refeitos
+
+
+class ProtegidoPorSenha(Exception):
+    pass
+
+
+def abrir_leitor(dados: bytes):
+    """Abre o PDF do jeito mais tolerante possível. Devolve (leitor, nota).
+    - criptografado só com restrições (sem senha para abrir): abre com senha vazia;
+    - estrutura meio quebrada: tenta de novo em modo tolerante (strict=False).
+    Levanta ProtegidoPorSenha se realmente exige senha, ou a exceção original se não abre de jeito nenhum."""
+    nota = ""
+    try:
+        leitor = PdfReader(io.BytesIO(dados))
+        if leitor.is_encrypted:
+            if leitor.decrypt("") == 0:
+                raise ProtegidoPorSenha()
+            nota = "aberto com senha vazia (só tinha restrições)"
+        len(leitor.pages)
+        leitor.pages[0]
+        return leitor, nota
+    except ProtegidoPorSenha:
+        raise
+    except Exception as primeiro:
+        try:
+            leitor = PdfReader(io.BytesIO(dados), strict=False)
+            if leitor.is_encrypted and leitor.decrypt("") == 0:
+                raise ProtegidoPorSenha()
+            if len(leitor.pages) == 0:
+                raise ValueError("sem páginas")
+            leitor.pages[0]
+            return leitor, (nota + "; " if nota else "") + "lido em modo tolerante (estrutura com defeitos)"
+        except ProtegidoPorSenha:
+            raise
+        except Exception:
+            raise primeiro
+
+
 def _amostra(n_paginas: int, k: int) -> list[int]:
     if n_paginas <= k:
         return list(range(n_paginas))
@@ -23,14 +62,14 @@ def _amostra(n_paginas: int, k: int) -> list[int]:
 
 def analisar(dados: bytes, cfg) -> Info:
     try:
-        leitor = PdfReader(io.BytesIO(dados))
-        if leitor.is_encrypted:
-            return Info("protegido", detalhe="PDF criptografado/protegido por senha; não foi mesclado")
+        leitor, nota = abrir_leitor(dados)
         n = len(leitor.pages)
+    except ProtegidoPorSenha:
+        return Info("protegido", detalhe=f"PDF exige senha para abrir; não foi mesclado {MARCA_V2}")
     except Exception as e:
-        return Info("invalido", detalhe=f"não abre: {type(e).__name__}: {str(e)[:120]}")
+        return Info("invalido", detalhe=f"não abre: {type(e).__name__}: {str(e)[:120]} {MARCA_V2}")
     if n == 0:
-        return Info("invalido", detalhe="PDF sem páginas")
+        return Info("invalido", detalhe=f"PDF sem páginas {MARCA_V2}")
     L = cfg["lotes"]
     amostra, chars, palavras = _amostra(n, L["paginas_amostra_texto"]), 0, 0
     for i in amostra:
@@ -43,8 +82,9 @@ def analisar(dados: bytes, cfg) -> Info:
     cpp = chars / len(amostra)
     if cpp < L["minimo_caracteres_por_pagina"]:
         return Info("ocr", n, n * L["palavras_por_pagina_padrao"], cpp,
-                    "provável digitalização sem texto extraível: precisa de OCR (palavras estimadas por padrão)")
-    return Info("ok", n, round(palavras / len(amostra) * n), cpp)
+                    "provável digitalização sem texto extraível: precisa de OCR (palavras estimadas por padrão)"
+                    + (f"; {nota}" if nota else ""))
+    return Info("ok", n, round(palavras / len(amostra) * n), cpp, nota)
 
 
 def formar_lotes(itens, cfg):

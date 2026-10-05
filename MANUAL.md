@@ -216,3 +216,11 @@ O workflow **Testes** roda a cada alteração de código; local não é necessá
 - Os tetos do **NotebookLM** (200 MB / 500 mil palavras por fonte) vieram de você, não de uma consulta minha à documentação; no motor `ilovepdf`, o limite de tamanho por tarefa também não foi confirmado. O merge local mantém o texto e o número de páginas (validados), mas não otimiza nem comprime o tamanho do arquivo.
 - Autor/tema por **nome do arquivo**; metadados internos do PDF não são lidos (exigiria baixar todos os livros).
 - Não há OCR nesta versão (apenas sinalização).
+
+
+## PDFs protegidos, com defeito e escaneados
+- **Protegidos:** muitos PDFs são "criptografados" só para impedir edição, sem senha para abrir. O agente tenta abrir com **senha vazia** e, se der, junta normalmente (anotado no índice). Só fica de fora, como `protegido`, o PDF que exige senha de verdade. Se você souber a senha, tire a proteção e reenvie.
+- **Com defeito:** se o PDF não abre no modo normal, o agente tenta o **modo tolerante** do `pypdf`. O que ainda assim não abre fica como `invalido`.
+- **Escaneados (`ocr`):** entram no lote, mas sinalizados, porque não têm texto selecionável. Rode um OCR neles antes, se quiser que o NotebookLM leia melhor.
+- **Grandes demais (`enviar_separadamente`):** acima do teto de palavras/MB de uma fonte; suba esses sozinhos no NotebookLM.
+- Resultados antigos de `protegido`/`invalido` são **refeitos automaticamente** quando o analisador melhora.

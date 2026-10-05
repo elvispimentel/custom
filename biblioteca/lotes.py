@@ -3,7 +3,7 @@ import io
 
 from .controle import achar_ou_criar_pasta
 from . import pessoal
-from .pdfs import Info, analisar, chamadas_merge, formar_lotes, juntar_ordenado, validar_final
+from .pdfs import MARCA_V2, Info, analisar, chamadas_merge, formar_lotes, juntar_ordenado, validar_final
 from .util import agora, md5_bytes, natural_key, nome_seguro, sha256_bytes
 
 
@@ -40,6 +40,8 @@ def pdfs_unicos(ctx) -> dict[str, list[dict]]:
 
 def info_de(ctx, f, baixar=True) -> Info | None:
     r = ctx.estado.q("SELECT * FROM pdf_info WHERE file_id=? AND md5=?", f["id"], f["md5"] or "")
+    if r and r[0]["situacao"] in ("protegido", "invalido") and MARCA_V2 not in (r[0]["detalhe"] or ""):
+        r = []                                   # resultado do analisador antigo: refaz com a abertura tolerante
     if r:
         r = r[0]
         return Info(r["situacao"], r["paginas"], r["palavras"], r["chars_pag"], r["detalhe"])
