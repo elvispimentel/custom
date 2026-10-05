@@ -60,10 +60,15 @@ organizacao:                     # fase "temas e autores"
   confianca_minima: 0.7
   classificador: "regras"        # regras | claude  (claude exige ANTHROPIC_API_KEY)
   modelo_claude: "claude-haiku-4-5-20251001"
+  formatos_livro: ["pdf", "epub", "mobi", "azw3", "doc", "docx", "txt", "rtf", "odt"]  # o resto (imagens, html, psd, .icloud) não é movido
   temas:                         # edite livremente; palavras-chave em minúsculas
-    "Hermetismo e Esoterismo": ["hermet", "kybalion", "alquimia", "esoter", "tarot", "ocult", "gnose"]
-    "Cabala e Misticismo": ["cabala", "kabbal", "zohar", "sefirot", "místic", "mistic"]
-    "Psicologia e Arquétipos": ["arquétipo", "arquetipo", "jung", "psicolog", "inconsciente", "mito"]
-    "Física Quântica e Ciência": ["quânt", "quant", "física", "fisica", "cosmos", "neuro"]
-    "Vendas e Negócios": ["vendas", "negoci", "marketing", "empreend", "lideran", "gestão", "gestao"]
-    "Desenvolvimento Pessoal": ["hábito", "habito", "mindset", "produtiv", "autoconhec", "propósito", "proposito"]
+    "Hermetismo e Esoterismo": ["hermet", "kybalion", "alquimia", "esoter", "tarot", "ocult", "gnose", "astrolog", "magia", "teosof", "rosacruz", "maçon", "macon", "numerolog", "thoth", "trismegist"]
+    "Cabala e Misticismo": ["cabala", "kabbal", "zohar", "sefirot", "místic", "mistic", "sufi", "upanishad", "budis", "yoga", "vedan", "espiritual"]
+    "Psicologia e Arquétipos": ["arquétipo", "arquetipo", "jung", "psicolog", "inconsciente", "mito", "freud", "terapia", "emoç", "emoc", "comportament", "sonho", "psique"]
+    "Física Quântica e Ciência": ["quânt", "quant", "física", "fisica", "cosmos", "neuro", "universo", "ciência", "ciencia", "biolog", "matemática", "matematica", "relatividade", "astronomia"]
+    "Vendas e Negócios": ["vendas", "negoci", "marketing", "empreend", "lideran", "gestão", "gestao", "copywriting", "finança", "financ", "investi", "startup", "persuas", "negocia", "milion"]
+    "Desenvolvimento Pessoal": ["hábito", "habito", "mindset", "produtiv", "autoconhec", "propósito", "proposito", "autoestima", "motiva", "disciplina", "sucesso", "inteligência emocional"]
+    "Filosofia": ["filosof", "platão", "platao", "aristót", "aristot", "nietzsche", "sócrates", "socrates", "estoic", "sêneca", "seneca", "república", "republica", "ética", "etica", "metafísica", "metafisica", "kant", "schopenhauer"]
+    "História e Sociedade": ["históri", "histori", "sociolog", "política", "politica", "guerra", "civiliza", "antropolog", "império", "imperio", "revolução", "revolucao", "economia"]
+    "Religião e Teologia": ["bíblia", "biblia", "teolog", "cristian", "evangelho", "alcorão", "alcorao", "judaísmo", "judaismo", "igreja", "espírita", "espirita", "kardec"]
+    "Saúde e Corpo": ["saúde", "saude", "nutri", "dieta", "medicin", "fitness", "jejum", "terapêut"]

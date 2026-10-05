@@ -329,7 +329,7 @@ def test_temas_simulacao_nao_move_e_aplicacao_organiza(mundo):
     por_nome = {p["nome"]: p for p in plano}
     j = por_nome["Carl Jung - Os Arquétipos e o Inconsciente Coletivo.pdf"]
     assert (j["tema"], j["autor"], j["acao"]) == ("Psicologia e Arquétipos", "Carl Jung", "mover")
-    assert por_nome["Planilha qualquer.xlsx"]["acao"] == "manter_nao_classificado"
+    assert por_nome["Planilha qualquer.xlsx"]["acao"] == "fora_do_escopo_nao_livro"
     r = org.aplicar_temas(ctx, plano)
     assert r["movidos"] == 3 and r["erros"] == 0
     antes = mundo.drive.chamadas["mover"]
@@ -437,3 +437,13 @@ def test_exemplar_sem_datas_nao_vira_o_mais_antigo():
     sem = dict(id="z", nome="sem-data.pdf", caminho="", criado=None, modificado=None)
     com = dict(id="a", nome="com-data.pdf", caminho="", criado="2024-01-01T00:00:00+00:00", modificado=None)
     assert escolher_exemplar([sem, com], [])[0]["id"] == "a"
+
+
+def test_nao_livros_ficam_fora_do_plano_de_temas():
+    assert org.eh_livro("Platão - A republica.pdf", ["pdf", "epub"])
+    assert not org.eh_livro("index.html", ["pdf", "epub"])
+    assert not org.eh_livro("125x125.jpg", ["pdf"])
+    assert not org.eh_livro("Livro.pdf.icloud", ["pdf"])
+    temas = {"Filosofia": ["platão", "república", "republica"], "Vendas": ["vendas"]}
+    tema, _, conf = org.classificar_regras({"caminho": "", "nome": "Platão - A republica.pdf"}, temas)
+    assert tema == "Filosofia" and conf >= 0.7

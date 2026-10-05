@@ -127,6 +127,8 @@ Não apague `estado.db`: sem ele o agente esquece o que já fez (ainda é seguro
 
 Como classifica: por padrão, **regras** sobre o nome do arquivo e as pastas atuais (`Autor - Título`, `Título (Autor)`). Com `organizacao.classificador: claude` e o Secret `ANTHROPIC_API_KEY`, o Claude sugere o tema (sempre escolhido **dentro da sua lista**) e o autor (sem inventar). Só o **nome do arquivo e a pasta atual** são enviados — o conteúdo dos livros não é lido.
 
+Só **livros** entram no plano (`organizacao.formatos_livro`: pdf, epub, mobi, azw3, doc, docx, txt, rtf, odt). Imagens, HTML, `.psd` e `.icloud` aparecem como `fora_do_escopo_nao_livro` e não são movidos. Os temas padrão agora são 10 (inclui Filosofia, História, Religião, Saúde); edite as palavras-chave no config.
+
 Garantias: quem não for classificado com confiança (`confianca_minima`) **fica onde está** e aparece no plano como `manter_nao_classificado`. Autores com grafias diferentes só em maiúsculas/acentos viram **uma** pasta. Arquivos ainda subindo e duplicados não são movidos.
 
 > **Por que antes dos lotes?** Os lotes são formados por pasta. Se você reorganizar depois de gerar PDFs, os lotes mudam de composição; os PDFs antigos ficam **marcados como `obsoleto`** no índice (nunca apagados) e novos são gerados. Reorganize primeiro e processe depois.

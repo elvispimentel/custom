@@ -49,6 +49,11 @@ def extrair_autor(nome: str) -> str | None:
     return None
 
 
+def eh_livro(nome: str, formatos) -> bool:
+    ext = nome.rsplit(".", 1)[-1].lower() if "." in nome else ""
+    return ext in {x.lower().lstrip(".") for x in formatos}
+
+
 def classificar_regras(f, temas: dict[str, list[str]]):
     texto = _norm(f"{f['caminho']} {_sem_ext(f['nome'])}")
     pontos = {t: sum(texto.count(_norm(k)) for k in kws) for t, kws in temas.items()}
@@ -115,8 +120,12 @@ def planejar_temas(ctx) -> list[dict]:
     arqs.sort(key=lambda f: natural_key(f["caminho"] + "/" + f["nome"]))
     manual = carregar_manual(ctx)
     cache = {r["file_id"]: r for r in est.q("SELECT * FROM classif")}
-    novos = [f for f in arqs if f["id"] not in manual and
-             not (f["id"] in cache and cache[f["id"]]["md5"] == (f["md5"] or ""))]
+    usa_claude = org["classificador"] == "claude"
+    formatos = org.get("formatos_livro") or ["pdf", "epub", "mobi", "azw3", "doc", "docx", "txt", "rtf", "odt"]
+    # cache só vale para o classificador pago; regras são baratas e mudam com o config
+    novos = [f for f in arqs if f["id"] not in manual and eh_livro(f["nome"], formatos) and
+             not (usa_claude and f["id"] in cache and cache[f["id"]]["md5"] == (f["md5"] or "")
+                  and cache[f["id"]]["fonte"] == "claude")]
     claude = {}
     if org["classificador"] == "claude":
         if not cfg.anthropic_key:
@@ -136,11 +145,14 @@ def planejar_temas(ctx) -> list[dict]:
         if f["id"] in manual:
             tema, autor, fonte, conf = manual[f["id"]][0], manual[f["id"]][1], "manual", 1.0
         else:
-            c = est.q("SELECT * FROM classif WHERE file_id=?", f["id"])[0]
+            c = est.q("SELECT * FROM classif WHERE file_id=?", f["id"])
+            c = c[0] if c else {"tema": None, "autor": None, "fonte": "formato", "confianca": 0.0}
             tema, autor, fonte, conf = c["tema"], c["autor"], c["fonte"], c["confianca"]
         if autor:
             autor = canon.setdefault(_norm(autor), nome_seguro(autor))
-        if f["situacao"] != "ok":
+        if f["id"] not in manual and not eh_livro(f["nome"], formatos):
+            acao, destino, tema, autor, fonte, conf = "fora_do_escopo_nao_livro", "", None, None, "formato", 0.0
+        elif f["situacao"] != "ok":
             acao, destino = "aguardar_upload_terminar", ""
         elif not tema or conf < org["confianca_minima"]:
             if org["mover_nao_classificados"]:
