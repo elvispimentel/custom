@@ -529,55 +529,42 @@ def test_max_documentos_zero_nao_limita_a_quantidade_so_mb_e_palavras():
     assert [len(l) for l in lotes] == [25, 25, 10]
 
 
-def test_nome_do_dono_casa_palavra_inteira_e_ignora_acento_e_hifen():
+def test_so_o_codigo_de_data_e_hora_torna_o_arquivo_pessoal():
     from biblioteca.config import carregar
     from biblioteca import pessoal
     cfg = carregar("/nao/existe.yaml")
-    cfg.d["pessoal"]["padroes"] = ["elvis pimentel"]
-    assert pessoal.eh_pessoal_nome(cfg, "Dossie Elvis Pimentel.pdf")
-    assert pessoal.eh_pessoal_nome(cfg, "Desenho Humano - elvis-pimentel.pdf")
-    assert pessoal.eh_pessoal_nome(cfg, "ELVIS  PIMENTEL 1610 - Mentoria.pdf")
-    assert not pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")      # só com o padrão configurado
-    cfg.d["pessoal"]["padroes"] = ["elvis pimentel", "ajay elvish", "ajay krishna das"]
-    assert pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")           # pseudônimo do dono
-    assert pessoal.eh_pessoal_nome(cfg, "ajay-krishna-das - Protocolo.pdf")
-    assert not pessoal.eh_pessoal_nome(cfg, "Ajay Devgan - Biografia.pdf")
-    assert not pessoal.eh_pessoal_nome(cfg, "Elvis Presley - Biografia.pdf")
-    assert pessoal.eh_pessoal_caminho(cfg, "Livros/Curso de Hipnose/Curso Elvis Pimentel/Modulo 1")
+    for nome in ["Elvis Pimentel 0510202615h21 - Mentoria.pdf", "Elvis Pimentel 1709198917h56 - Análise dos insights.pdf",
+                 "Elvis Pimentel 1708202615h46C1RTFLNSC - Investigando.pdf", "0709202521h00 - RELATÓRIO.pdf",
+                 "Ajay Elvish - 17h3219052025 Protocolo Holográfico.pdf"]:
+        assert pessoal.eh_pessoal_nome(cfg, nome), nome
+    for nome in ["Dossie Elvis Pimentel.pdf", "Desenho Humano - elvis-pimentel.pdf", "Ajay Elvish - Despertando Sentidos.pdf",
+                 "doc-[Elvis-Pimentel-18022026C1RTFLNSC---Voz-do-Autor_Marca]-2026-08-26.pdf",
+                 "Livro 12345678901.pdf", "Plano 3213202615h21.pdf", "Hipnose 0510202625h21.pdf"]:
+        assert not pessoal.eh_pessoal_nome(cfg, nome), nome         # sem código válido de data e hora
+    assert pessoal.eh_pessoal_caminho(cfg, "00 - Arquivos pessoais/x")             # já está na pasta pessoal
+    assert not pessoal.eh_pessoal_caminho(cfg, "Livros/Curso Elvis Pimentel")      # nome do dono numa pasta não basta
+    cfg.d["pessoal"]["padroes"] = ["ajay elvish"]
+    assert pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")  # nomes opcionais continuam possíveis
 
 
 def test_arquivos_pessoais_vao_para_pasta_propria_e_para_lote_a_parte(mundo):
     d = mundo.drive
     d.arquivo("Carl Jung - Os Arquétipos.pdf", pdf_texto(2, "j"), mundo.lib)
-    d.arquivo("Dossie Elvis Pimentel.pdf", pdf_texto(2, "d"), mundo.lib)
-    d.arquivo("Elvis Pimentel - Mentoria Kybalion.pdf", pdf_texto(2, "m"), mundo.lib)
+    d.arquivo("Dossie Elvis Pimentel.pdf", pdf_texto(2, "d"), mundo.lib)                      # nome sem código: NÃO é pessoal
+    d.arquivo("Elvis Pimentel 0510202615h21 - Mentoria Kybalion.pdf", pdf_texto(2, "m"), mundo.lib)
     ctx = mundo.abrir()
     ctx.cfg.d["organizacao"]["temas"] = {"Psicologia": ["jung"], "Hermetismo": ["kybalion"]}
-    ctx.cfg.d["pessoal"] = {"padroes": ["elvis pimentel"], "pasta": "00 - Pessoais"}
+    ctx.cfg.d["pessoal"] = {"padroes": [], "codigo_data_hora": True, "pasta": "00 - Pessoais"}
     ctx.cfg.d["lotes"]["agrupar_por"] = "tema"
     inventariar(ctx); dup.detectar(ctx)
     plano = org.planejar_temas(ctx)
     por = {p["nome"]: p for p in plano}
-    assert por["Dossie Elvis Pimentel.pdf"]["destino"] == "00 - Pessoais" and por["Dossie Elvis Pimentel.pdf"]["acao"] == "mover"
-    assert por["Elvis Pimentel - Mentoria Kybalion.pdf"]["destino"] == "00 - Pessoais"   # nome do dono vence o tema
+    m = por["Elvis Pimentel 0510202615h21 - Mentoria Kybalion.pdf"]
+    assert (m["destino"], m["acao"], m["fonte"]) == ("00 - Pessoais", "mover", "pessoal")   # o código vence o tema
+    assert por["Dossie Elvis Pimentel.pdf"]["destino"] != "00 - Pessoais"
     assert por["Carl Jung - Os Arquétipos.pdf"]["destino"].startswith("Psicologia/")
     org.aplicar_temas(ctx, plano)
     inventariar(ctx)
     lotes = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in lt.planejar(ctx)}
-    assert lotes["00 - Pessoais"] == ["Dossie Elvis Pimentel.pdf", "Elvis Pimentel - Mentoria Kybalion.pdf"]
-    assert all("Elvis" not in n for g, ns in lotes.items() if g != "00 - Pessoais" for n in ns)
-
-
-def test_autor_reconhecido_pela_ia_como_o_dono_tambem_e_pessoal(mundo):
-    d = mundo.drive
-    d.arquivo("Elvis Pimetel 2610 - Manifesta 10x.pdf", pdf_texto(2, "m"), mundo.lib)     # nome com erro de digitação
-    ctx = mundo.abrir()
-    ctx.cfg.d["organizacao"]["temas"] = {"Vendas": ["manifesta"]}
-    ctx.cfg.d["pessoal"] = {"padroes": ["elvis pimentel"], "pasta": "00 - Pessoais"}
-    inventariar(ctx)
-    f = ctx.estado.q("SELECT * FROM arquivos")[0]
-    ctx.estado.x("INSERT OR REPLACE INTO classif VALUES(?,?,?,?,?,?)", f["id"], f["md5"] or "", None, "Elvis Pimentel", "openai", 0.0)
-    ctx.cfg.d["organizacao"]["classificador"] = "openai"      # resultado já em cache: não chama a API
-    ctx.cfg.openai_key = "sk-teste"
-    plano = org.planejar_temas(ctx)
-    assert (plano[0]["destino"], plano[0]["fonte"], plano[0]["acao"]) == ("00 - Pessoais", "pessoal", "mover")
+    assert lotes["00 - Pessoais"] == ["Elvis Pimentel 0510202615h21 - Mentoria Kybalion.pdf"]
+    assert all("0510202615h21" not in n for g, ns in lotes.items() if g != "00 - Pessoais" for n in ns)
