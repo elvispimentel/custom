@@ -18,7 +18,7 @@
   "janela_dias": 90,
   "idade_minima_horas": 48,
   "analise_por_plataforma": 5,
-  "modelo_analise": "claude-haiku-4-5-20251001",
+  "modelo_analise": "gpt-4o-mini",
   "max_buscas_youtube": 5,
   "max_posts_por_concorrente": 30
 }

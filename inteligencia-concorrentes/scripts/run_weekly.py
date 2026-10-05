@@ -138,24 +138,25 @@ def main(argv: list[str]) -> int:
         return 0
 
     yt_key = os.environ.get("YOUTUBE_API_KEY")
-    claude_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not yt_key or not claude_key:
-        print("Faltam YOUTUBE_API_KEY e/ou ANTHROPIC_API_KEY.", file=sys.stderr)
+    openai_key = os.environ.get("OPENAI_API_KEY")
+    if not yt_key or not openai_key:
+        print("Faltam YOUTUBE_API_KEY e/ou OPENAI_API_KEY.", file=sys.stderr)
         return 2
-    import anthropic
+    import openai
 
     from analyze import analyze_post
     from instagram import collect_instagram
+    from llm import OpenAILLM
     from youtube import collect_youtube
 
-    client = anthropic.Anthropic(api_key=claude_key)
+    llm = OpenAILLM(openai.OpenAI(api_key=openai_key))
     meta, ig_id = os.environ.get("META_ACCESS_TOKEN"), os.environ.get("IG_USER_ID")
     ig = (lambda c: collect_instagram(c, ig_id, meta, limit=config["max_posts_por_concorrente"])) if meta and ig_id else None
     cols = Collectors(
         youtube=lambda c: collect_youtube(c, yt_key, max_videos=config["max_posts_por_concorrente"]),
         instagram=ig,
     )
-    run(config, data_dir, now, cols, lambda p: analyze_post(p, client, config["modelo_analise"]))
+    run(config, data_dir, now, cols, lambda p: analyze_post(p, llm, config["modelo_analise"]))
     return 0
 
 

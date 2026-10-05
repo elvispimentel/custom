@@ -21,3 +21,10 @@ def test_config_sem_chave_obrigatoria_falha(tmp_path):
     p.write_text(json.dumps({"territorio": "A"}))
     with pytest.raises(ValueError):
         load_config(p)
+
+
+def test_dependencias_e_modelo_sao_da_openai():
+    base = REAL.parent.parent
+    reqs = (base / "requirements.txt").read_text().split()
+    assert "openai" in reqs and "anthropic" not in reqs
+    assert load_config(REAL)["modelo_analise"].startswith("gpt")

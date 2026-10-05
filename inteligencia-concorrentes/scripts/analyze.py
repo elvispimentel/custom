@@ -28,20 +28,17 @@ def select_top(ranked: dict[str, list[dict]], analisadas: set[str], config: dict
     return top
 
 
-def analyze_post(post: dict, client, model: str) -> dict | None:
+def analyze_post(post: dict, llm, model: str) -> dict | None:
     prompt = ANALISE_PROMPT.format(
         plataforma=post["plataforma"],
         formato=post.get("formato", ""),
         texto=post.get("titulo_ou_legenda", ""),
         url=post.get("url", ""),
     )
-    resp = client.messages.create(
-        model=model, max_tokens=600, messages=[{"role": "user", "content": prompt}]
-    )
     try:
-        texto = resp.content[0].text
+        texto = llm.complete(prompt, model, 600)
         data = json.loads(texto[texto.index("{") : texto.rindex("}") + 1])
-    except (ValueError, IndexError, AttributeError):
+    except ValueError:
         return None
     if not isinstance(data, dict) or any(not isinstance(data.get(k), str) for k in CAMPOS):
         return None

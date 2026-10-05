@@ -143,3 +143,10 @@ def test_sem_acesso_aparece_nas_falhas(tmp_path):
 
     r = run(CFG, tmp_path, NOW, Collectors(youtube=yt_ok, instagram=ig_sem_acesso), analyzer_ok)
     assert any("sem_acesso" in f and "Canal i1" in f for f in r.falhas)
+
+
+def test_main_sem_chaves_exige_openai(monkeypatch, tmp_path, capsys):
+    monkeypatch.delenv("YOUTUBE_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    assert main(["--data-dir", str(tmp_path)]) == 2
+    assert "OPENAI_API_KEY" in capsys.readouterr().err

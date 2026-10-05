@@ -1,7 +1,7 @@
 # Inteligência de Concorrentes — Instituto Galifrael
 
 Agente semanal que coleta os posts de maior engajamento de concorrentes aprovados
-(YouTube + Instagram), ranqueia, analisa o top com o Claude e abre uma Issue com o
+(YouTube + Instagram), ranqueia, analisa o top com um modelo da OpenAI e abre uma Issue com o
 relatório 5-3 (5 concorrentes, 3 conteúdos de cada).
 
 Spec: `docs/superpowers/specs/2026-10-05-inteligencia-concorrentes-design.md`
@@ -19,7 +19,7 @@ No GitHub: **Settings → Secrets and variables → Actions → New repository s
 | Secret | Para quê | Obrigatório |
 |---|---|---|
 | `YOUTUBE_API_KEY` | YouTube Data API v3 (grátis, 10.000 unidades/dia) | sim |
-| `ANTHROPIC_API_KEY` | Análise do top semanal (único custo variável) | sim |
+| `OPENAI_API_KEY` | Análise do top semanal (único custo variável; precisa de créditos da API em platform.openai.com) | sim |
 | `META_ACCESS_TOKEN` | Token da Meta com acesso à Business Discovery | só para Instagram |
 | `IG_USER_ID` | ID da sua conta profissional do Instagram | só para Instagram |
 
@@ -55,4 +55,4 @@ python scripts/run_weekly.py --dry-run --data-dir /tmp/dados-teste
 - **A integração com a Meta não foi verificada contra a API real**: nomes de campos, versão da API
   (`GRAPH` em `scripts/instagram.py`) e códigos de erro vieram de conhecimento prévio. Confirme na primeira
   execução com o token real.
-- Sem transcrição: o gancho vem do título/legenda (fase 2: transcrição e adaptação ao seu acervo do Drive).
+- Sem transcrição: o gancho vem do título/legenda (o modelo usado fica em `modelo_analise`, em `config/territorios.json`; fase 2: transcrição e adaptação ao seu acervo do Drive).

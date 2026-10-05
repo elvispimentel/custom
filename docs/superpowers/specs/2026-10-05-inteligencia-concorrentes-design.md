@@ -25,7 +25,7 @@ Territórios futuros (fora do escopo desta fase): hipnose/influência/vendas; ap
 2. **Aprovar:** Elvis revisa e muda para `aprovado` ou `descartado`. Só `aprovado` é coletado.
 3. **Coletar:** semanalmente. YouTube pela API oficial; Instagram pela Business Discovery da Meta.
 4. **Ranquear:** score por post, ranking separado por plataforma.
-5. **Analisar:** o Claude classifica apenas o top 10 da semana, nunca repetindo um post já analisado.
+5. **Analisar:** o modelo de IA (OpenAI) classifica apenas o top 10 da semana, nunca repetindo um post já analisado.
 6. **Relatar:** relatório em Markdown e Issue de resumo com notificação.
 
 ## 4. Estrutura do repositório
@@ -47,7 +47,7 @@ data/analises.json             # análises já feitas
 relatorios/AAAA-MM-DD.md       # relatório semanal
 ```
 
-Chaves (YouTube, Meta, Claude) ficam somente em GitHub Secrets.
+Chaves (YouTube, Meta, OpenAI) ficam somente em GitHub Secrets.
 
 ## 5. Modelo de dados
 
@@ -66,7 +66,7 @@ Concorrentes e posts ficam separados para que aprovar ou descartar um perfil nã
 - Rankings separados por plataforma; métricas não são comparáveis entre elas.
 - Janela: últimos 90 dias. Posts com menos de 48 horas são excluídos.
 - Selo "validado": YouTube com 1 milhão de views ou mais; Instagram com piso de curtidas definido em `config` (sugestão inicial: 50 mil).
-- Análise do Claude: top 10 = 5 por plataforma (`analise_por_plataforma`); JSON de saída fixo; sem transcrição na fase 1, o gancho vem do título ou da legenda.
+- Análise pelo modelo de IA (OpenAI, `modelo_analise`): top 10 = 5 por plataforma (`analise_por_plataforma`); JSON de saída fixo; sem transcrição na fase 1, o gancho vem do título ou da legenda.
 - Relatório: para cada um dos 5 melhores concorrentes, os 3 posts de topo; padrões da semana (ganchos e formatos recorrentes); uma sugestão de conteúdo por padrão, ligada à tese do Galifrael.
 
 ## 7. Agendamento e erros
@@ -90,7 +90,7 @@ Concorrentes e posts ficam separados para que aprovar ou descartar um perfil nã
 
 - A Business Discovery do Instagram não entrega views de Reels e só enxerga contas profissionais ou de criador.
 - A disponibilidade e as regras da API da Meta devem ser confirmadas na implementação.
-- Custo variável apenas na classificação pelo Claude, limitado ao top 10 semanal.
+- Custo variável apenas na classificação pelo modelo de IA, limitado ao top 10 semanal.
 
 ## 10. Fora do escopo (fase 1)
 

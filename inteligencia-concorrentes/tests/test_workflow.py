@@ -43,7 +43,7 @@ def test_push_so_na_branch_de_dados():
 
 def test_chaves_vem_de_secrets():
     texto, _, _ = carregar()
-    for nome in ("YOUTUBE_API_KEY", "META_ACCESS_TOKEN", "IG_USER_ID", "ANTHROPIC_API_KEY"):
+    for nome in ("YOUTUBE_API_KEY", "META_ACCESS_TOKEN", "IG_USER_ID", "OPENAI_API_KEY"):
         assert f"${{{{ secrets.{nome} }}}}" in texto
 
 

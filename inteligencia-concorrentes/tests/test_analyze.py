@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from types import SimpleNamespace
 
 from analyze import ANALISE_PROMPT, analyze_post, select_top
 from config import load_config
@@ -8,15 +7,14 @@ from config import load_config
 CFG = load_config(Path(__file__).resolve().parent.parent / "config" / "territorios.json")
 
 
-class FakeClient:
+class FakeLLM:
     def __init__(self, text):
         self.text = text
         self.calls = []
-        self.messages = SimpleNamespace(create=self._create)
 
-    def _create(self, **kw):
-        self.calls.append(kw)
-        return SimpleNamespace(content=[SimpleNamespace(text=self.text)])
+    def complete(self, prompt, model, max_tokens):
+        self.calls.append({"prompt": prompt, "model": model, "max_tokens": max_tokens})
+        return self.text
 
 
 def p(pid, plat="youtube"):
@@ -47,7 +45,7 @@ def test_analyze_post_json_valido():
         "por_que_funcionou": "identificação imediata",
         "adaptacao_galifrael": "Descubra quem você está repetindo",
     }
-    client = FakeClient(json.dumps(resposta))
+    client = FakeLLM(json.dumps(resposta))
     r = analyze_post(p("y1"), client, "modelo-x")
     assert r == {"post_id": "y1", **resposta}
     assert client.calls[0]["model"] == "modelo-x"
@@ -55,11 +53,11 @@ def test_analyze_post_json_valido():
 
 
 def test_analyze_post_texto_fora_do_json_retorna_none():
-    assert analyze_post(p("y1"), FakeClient("Claro! Aqui vai a análise..."), "m") is None
+    assert analyze_post(p("y1"), FakeLLM("Claro! Aqui vai a análise..."), "m") is None
 
 
 def test_analyze_post_json_sem_chaves_retorna_none():
-    assert analyze_post(p("y1"), FakeClient('{"gancho": "x"}'), "m") is None
+    assert analyze_post(p("y1"), FakeLLM('{"gancho": "x"}'), "m") is None
 
 
 def test_prompt_pede_json_e_cita_a_tese():
@@ -70,11 +68,11 @@ def test_prompt_pede_json_e_cita_a_tese():
 def test_analyze_post_aceita_json_dentro_de_cerca_de_codigo():
     resposta = {k: "x" for k in ("gancho", "tema", "promessa", "por_que_funcionou", "adaptacao_galifrael")}
     texto = "```json\n" + json.dumps(resposta) + "\n```"
-    r = analyze_post(p("y1"), FakeClient(texto), "m")
+    r = analyze_post(p("y1"), FakeLLM(texto), "m")
     assert r is not None and r["post_id"] == "y1"
 
 
 def test_analyze_post_rejeita_campos_que_nao_sao_texto():
     resposta = {k: "x" for k in ("gancho", "promessa", "por_que_funcionou", "adaptacao_galifrael")}
     resposta["tema"] = ["a", "b"]
-    assert analyze_post(p("y1"), FakeClient(json.dumps(resposta)), "m") is None
+    assert analyze_post(p("y1"), FakeLLM(json.dumps(resposta)), "m") is None
