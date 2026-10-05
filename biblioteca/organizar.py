@@ -67,31 +67,53 @@ def classificar_regras(f, temas: dict[str, list[str]]):
     return tema, extrair_autor(f["nome"]), conf
 
 
-def classificar_claude(ctx, arquivos):
-    """Classificador opcional: tema fechado (lista do config) + autor, em lotes de 40 nomes por chamada."""
+def _prompt(temas, bloco):
+    itens = [{"id": f["id"], "arquivo": f["nome"], "pasta_atual": f["caminho"]} for f in bloco]
+    return ("Classifique cada livro/arquivo da lista abaixo. Escolha 'tema' EXATAMENTE entre: "
+            + json.dumps(temas, ensure_ascii=False) + " ou null se não houver encaixe claro. "
+            "'autor' é o autor do livro se o nome do arquivo permitir identificar com segurança "
+            "(ignore prefixos numéricos de download, hífens no lugar de espaços e sufixos como z-lib, pdf, free); "
+            "senão null; não invente. 'confianca' vai de 0 a 1. Responda SOMENTE um array JSON de objetos "
+            "{id, tema, autor, confianca}.\n" + json.dumps(itens, ensure_ascii=False))
+
+
+def _ler_resposta(ctx, texto, temas, out):
+    try:
+        dado = json.loads(texto[texto.index("["): texto.rindex("]") + 1])
+        for o in dado:
+            tema = o.get("tema") if o.get("tema") in temas else None
+            out[o["id"]] = (tema, o.get("autor") or None, float(o.get("confianca") or 0) if tema else 0.0)
+    except (ValueError, KeyError, TypeError, AttributeError):
+        ctx.log("AVISO: resposta do classificador ilegível para um bloco; esses arquivos ficam sem classificação")
+
+
+def _chamar_claude(cfg, prompt):
+    r = requests.post("https://api.anthropic.com/v1/messages", timeout=120, headers={
+        "x-api-key": cfg.anthropic_key, "anthropic-version": "2023-06-01", "content-type": "application/json"},
+        json={"model": cfg["organizacao"]["modelo_claude"], "max_tokens": 4000,
+              "messages": [{"role": "user", "content": prompt}]})
+    r.raise_for_status()
+    return r.json()["content"][0]["text"]
+
+
+def _chamar_openai(cfg, prompt):
+    r = requests.post("https://api.openai.com/v1/chat/completions", timeout=120, headers={
+        "Authorization": f"Bearer {cfg.openai_key}", "content-type": "application/json"},
+        json={"model": cfg["organizacao"].get("modelo_openai", "gpt-4o-mini"), "temperature": 0,
+              "messages": [{"role": "user", "content": prompt}]})
+    r.raise_for_status()
+    return r.json()["choices"][0]["message"]["content"]
+
+
+def classificar_ia(ctx, arquivos):
+    """Classificador opcional (claude ou openai): tema fechado (lista do config) + autor, 40 nomes por chamada."""
     cfg = ctx.cfg
     temas = list(cfg["organizacao"]["temas"])
+    chamar = _chamar_openai if cfg["organizacao"]["classificador"] == "openai" else _chamar_claude
     out = {}
     for i in range(0, len(arquivos), 40):
-        bloco = arquivos[i:i + 40]
-        itens = [{"id": f["id"], "arquivo": f["nome"], "pasta_atual": f["caminho"]} for f in bloco]
-        prompt = ("Classifique cada livro/arquivo da lista abaixo. Escolha 'tema' EXATAMENTE entre: "
-                  + json.dumps(temas, ensure_ascii=False) + " ou null se não houver encaixe claro. "
-                  "'autor' é o autor do livro se o nome do arquivo permitir identificar com segurança, senão null; "
-                  "não invente. 'confianca' vai de 0 a 1. Responda SOMENTE um array JSON de objetos "
-                  "{id, tema, autor, confianca}.\n" + json.dumps(itens, ensure_ascii=False))
-        r = requests.post("https://api.anthropic.com/v1/messages", timeout=120, headers={
-            "x-api-key": cfg.anthropic_key, "anthropic-version": "2023-06-01", "content-type": "application/json"},
-            json={"model": cfg["organizacao"]["modelo_claude"], "max_tokens": 4000,
-                  "messages": [{"role": "user", "content": prompt}]})
-        r.raise_for_status()
-        texto = r.json()["content"][0]["text"]
-        try:
-            for o in json.loads(texto[texto.index("["): texto.rindex("]") + 1]):
-                tema = o.get("tema") if o.get("tema") in temas else None
-                out[o["id"]] = (tema, o.get("autor") or None, float(o.get("confianca") or 0) if tema else 0.0)
-        except (ValueError, KeyError, TypeError):
-            ctx.log("AVISO: resposta do classificador ilegível para um bloco; esses arquivos ficam sem classificação")
+        _ler_resposta(ctx, chamar(cfg, _prompt(temas, arquivos[i:i + 40])), temas, out)
+        ctx.log(f"classificador: {min(i + 40, len(arquivos))}/{len(arquivos)}")
     return out
 
 
@@ -120,21 +142,23 @@ def planejar_temas(ctx) -> list[dict]:
     arqs.sort(key=lambda f: natural_key(f["caminho"] + "/" + f["nome"]))
     manual = carregar_manual(ctx)
     cache = {r["file_id"]: r for r in est.q("SELECT * FROM classif")}
-    usa_claude = org["classificador"] == "claude"
+    usa_ia = org["classificador"] in ("claude", "openai")
     formatos = org.get("formatos_livro") or ["pdf", "epub", "mobi", "azw3", "doc", "docx", "txt", "rtf", "odt"]
     # cache só vale para o classificador pago; regras são baratas e mudam com o config
     novos = [f for f in arqs if f["id"] not in manual and eh_livro(f["nome"], formatos) and
-             not (usa_claude and f["id"] in cache and cache[f["id"]]["md5"] == (f["md5"] or "")
-                  and cache[f["id"]]["fonte"] == "claude")]
-    claude = {}
-    if org["classificador"] == "claude":
-        if not cfg.anthropic_key:
-            raise RuntimeError("classificador 'claude' exige o Secret ANTHROPIC_API_KEY")
-        claude = classificar_claude(ctx, novos)
+             not (usa_ia and f["id"] in cache and cache[f["id"]]["md5"] == (f["md5"] or "")
+                  and cache[f["id"]]["fonte"] == org["classificador"])]
+    ia = {}
+    if org["classificador"] == "claude" and not cfg.anthropic_key:
+        raise RuntimeError("classificador 'claude' exige o Secret ANTHROPIC_API_KEY")
+    if org["classificador"] == "openai" and not cfg.openai_key:
+        raise RuntimeError("classificador 'openai' exige o Secret OPENAI_API_KEY")
+    if usa_ia:
+        ia = classificar_ia(ctx, novos)
     for f in novos:
-        if org["classificador"] == "claude":
-            tema, autor, conf = claude.get(f["id"], (None, None, 0.0))
-            fonte = "claude"
+        if usa_ia:
+            tema, autor, conf = ia.get(f["id"], (None, None, 0.0))
+            fonte = org["classificador"]
         else:
             tema, autor, conf = classificar_regras(f, org["temas"])
             fonte = "regras"

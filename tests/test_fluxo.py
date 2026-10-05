@@ -447,3 +447,29 @@ def test_nao_livros_ficam_fora_do_plano_de_temas():
     temas = {"Filosofia": ["platão", "república", "republica"], "Vendas": ["vendas"]}
     tema, _, conf = org.classificar_regras({"caminho": "", "nome": "Platão - A republica.pdf"}, temas)
     assert tema == "Filosofia" and conf >= 0.7
+
+
+def test_classificador_openai_le_resposta_e_descarta_tema_fora_da_lista(mundo, monkeypatch):
+    ctx = mundo.abrir()
+    ctx.cfg.d["organizacao"]["classificador"] = "openai"
+    ctx.cfg.d["organizacao"]["temas"] = {"Filosofia": ["x"], "Saúde e Corpo": ["y"]}
+    ctx.cfg.openai_key = "sk-teste"
+    chamadas = []
+
+    class R:
+        def raise_for_status(self): pass
+        def json(self):
+            return {"choices": [{"message": {"content":
+                '```json\n[{"id":"a","tema":"Filosofia","autor":"Platão","confianca":0.9},'
+                '{"id":"b","tema":"Inventado","autor":null,"confianca":0.9}]\n```'}}]}
+
+    def fake_post(url, **kw):
+        chamadas.append((url, kw["headers"]["Authorization"]))
+        return R()
+
+    monkeypatch.setattr(org.requests, "post", fake_post)
+    out = org.classificar_ia(ctx, [{"id": "a", "nome": "A República.pdf", "caminho": ""},
+                                   {"id": "b", "nome": "Outro.pdf", "caminho": ""}])
+    assert chamadas == [("https://api.openai.com/v1/chat/completions", "Bearer sk-teste")]
+    assert out["a"] == ("Filosofia", "Platão", 0.9)
+    assert out["b"] == (None, None, 0.0)

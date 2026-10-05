@@ -60,6 +60,7 @@ class Config:
     api_key: str = ""
     user_id: str = ""
     anthropic_key: str = ""
+    openai_key: str = ""
 
     def __getitem__(self, k):
         return self.d[k]
@@ -80,7 +81,8 @@ def carregar(caminho: str | None = None) -> Config:
             d[sec][chave] = os.environ[env].strip()
     return Config(d=d, api_key=os.environ.get("COMPOSIO_API_KEY", ""),
                   user_id=os.environ.get("COMPOSIO_USER_ID", ""),
-                  anthropic_key=os.environ.get("ANTHROPIC_API_KEY", ""))
+                  anthropic_key=os.environ.get("ANTHROPIC_API_KEY", ""),
+                  openai_key=os.environ.get("OPENAI_API_KEY", ""))
 
 
 def exigir_credenciais(cfg: Config):

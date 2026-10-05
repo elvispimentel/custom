@@ -50,6 +50,7 @@ No repositório: **Settings → Secrets and variables → Actions → aba *Secre
 |---|---|---|
 | `COMPOSIO_API_KEY` | sua API key do Composio | Sim |
 | `COMPOSIO_USER_ID` | o User ID das conexões | Sim |
+| `OPENAI_API_KEY` | chave da API OpenAI — classifica temas/autores com IA (classificador `openai`, padrão) | Não |
 | `ANTHROPIC_API_KEY` | chave da API Claude — só para classificar temas/autores com IA | Não |
 
 ### 2.3 Variables no GitHub (IDs de pastas — não são segredos)
@@ -125,7 +126,7 @@ Não apague `estado.db`: sem ele o agente esquece o que já fez (ainda é seguro
 2. Revise. Para corrigir, crie `classificacao_manual.csv` na pasta de controle (`id_drive,tema,autor`) — o manual **vence** qualquer regra. Para ajustar os temas e palavras-chave, edite `organizacao.temas` em `config.exemplo.yaml` (no GitHub: arquivo → ícone de lápis → *Commit changes*).
 3. Rode **Aplicar temas e autores** (digite `CONFIRMAR`). Estrutura: `Biblioteca Pessoal/<Tema>/<Autor>/arquivo`.
 
-Como classifica: por padrão, **regras** sobre o nome do arquivo e as pastas atuais (`Autor - Título`, `Título (Autor)`). Com `organizacao.classificador: claude` e o Secret `ANTHROPIC_API_KEY`, o Claude sugere o tema (sempre escolhido **dentro da sua lista**) e o autor (sem inventar). Só o **nome do arquivo e a pasta atual** são enviados — o conteúdo dos livros não é lido.
+Como classifica: por padrão, **regras** sobre o nome do arquivo e as pastas atuais (`Autor - Título`, `Título (Autor)`). Com `organizacao.classificador: openai` (ou `claude`) e o Secret `OPENAI_API_KEY` (ou `ANTHROPIC_API_KEY`), a IA sugere o tema (sempre escolhido **dentro da sua lista**) e o autor (sem inventar). Só o **nome do arquivo e a pasta atual** são enviados — o conteúdo dos livros não é lido.
 
 Só **livros** entram no plano (`organizacao.formatos_livro`: pdf, epub, mobi, azw3, doc, docx, txt, rtf, odt). Imagens, HTML, `.psd` e `.icloud` aparecem como `fora_do_escopo_nao_livro` e não são movidos. Os temas padrão agora são 10 (inclui Filosofia, História, Religião, Saúde); edite as palavras-chave no config.
 

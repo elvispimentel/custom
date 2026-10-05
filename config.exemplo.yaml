@@ -58,7 +58,8 @@ organizacao:                     # fase "temas e autores"
   pasta_nao_classificados: "A classificar"
   pasta_sem_autor: "_Sem autor identificado"
   confianca_minima: 0.7
-  classificador: "regras"        # regras | claude  (claude exige ANTHROPIC_API_KEY)
+  classificador: "openai"        # regras | claude | openai  (exigem ANTHROPIC_API_KEY / OPENAI_API_KEY)
+  modelo_openai: "gpt-4o-mini"
   modelo_claude: "claude-haiku-4-5-20251001"
   formatos_livro: ["pdf", "epub", "mobi", "azw3", "doc", "docx", "txt", "rtf", "odt"]  # o resto (imagens, html, psd, .icloud) não é movido
   temas:                         # edite livremente; palavras-chave em minúsculas
