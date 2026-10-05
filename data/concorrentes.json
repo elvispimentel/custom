@@ -323,5 +323,44 @@
     "status": "candidato",
     "motivo": "palavra-chave: mudança de comportamento",
     "descoberto_em": "2026-10-05"
+  },
+  {
+    "id": "yt-UCukDVVmJ1tBsmuw6Fbjg-yA",
+    "nome": "crenças limitantes ",
+    "plataforma": "youtube",
+    "channel_id": "UCukDVVmJ1tBsmuw6Fbjg-yA",
+    "pais": "",
+    "idioma": "",
+    "seguidores": 1,
+    "territorio": "A",
+    "status": "candidato",
+    "motivo": "palavra-chave: crenças limitantes",
+    "descoberto_em": "2026-10-05"
+  },
+  {
+    "id": "yt-UCPHC0Id97zqpL6tIFYKPOyQ",
+    "nome": "Identidade Podcast",
+    "plataforma": "youtube",
+    "channel_id": "UCPHC0Id97zqpL6tIFYKPOyQ",
+    "pais": "PT",
+    "idioma": "",
+    "seguidores": 4090,
+    "territorio": "A",
+    "status": "candidato",
+    "motivo": "palavra-chave: identidade",
+    "descoberto_em": "2026-10-05"
+  },
+  {
+    "id": "yt-UC0gxqwe89lus8ZR2sctudgA",
+    "nome": "Identidade 13",
+    "plataforma": "youtube",
+    "channel_id": "UC0gxqwe89lus8ZR2sctudgA",
+    "pais": "BR",
+    "idioma": "",
+    "seguidores": 54400,
+    "territorio": "A",
+    "status": "candidato",
+    "motivo": "palavra-chave: identidade",
+    "descoberto_em": "2026-10-05"
   }
 ]
