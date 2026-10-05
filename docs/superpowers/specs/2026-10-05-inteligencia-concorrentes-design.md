@@ -24,7 +24,7 @@ Territórios futuros (fora do escopo desta fase): hipnose/influência/vendas; ap
 1. **Descobrir:** o agente busca candidatos do território A (Brasil e exterior) e grava com status `candidato`.
 2. **Aprovar:** Elvis revisa e muda para `aprovado` ou `descartado`. Só `aprovado` é coletado.
 3. **Coletar:** semanalmente. YouTube pela API oficial; Instagram pela Business Discovery da Meta.
-4. **Ranquear:** score por post, ranking separado por plataforma.
+4. **Ranquear:** score por post a partir de visualizações e comentários (inscritos não entram), ranking separado por plataforma.
 5. **Analisar:** o modelo de IA (OpenAI) classifica apenas o top 10 da semana, nunca repetindo um post já analisado.
 6. **Relatar:** relatório em Markdown e Issue de resumo com notificação.
 
@@ -61,10 +61,9 @@ Concorrentes e posts ficam separados para que aprovar ou descartar um perfil nã
 
 ## 6. Ranking e análise
 
-- `score = (curtidas + 2 × comentarios) / seguidores`.
-- YouTube tem também `views / seguidores`.
+- `score` = média das posições do post entre todos os da plataforma, em **views e comentários** (YouTube) ou **curtidas e comentários** (Instagram, sem views). O tamanho do canal (inscritos) não entra na conta: vale o que foi visto e comentado.
 - Rankings separados por plataforma; métricas não são comparáveis entre elas.
-- Janela: últimos 90 dias. Posts com menos de 48 horas são excluídos.
+- Janela: todo o histórico coletado (`janela_dias`, hoje 3650), porque o objetivo é uma biblioteca de conteúdo validado. Posts com menos de 48 horas são excluídos. A análise pelo modelo de IA só pega posts ainda não analisados, então o top vai descendo a cada semana.
 - Selo "validado": YouTube com 1 milhão de views ou mais; Instagram com piso de curtidas definido em `config` (sugestão inicial: 50 mil).
 - Análise pelo modelo de IA (OpenAI, `modelo_analise`): top 10 = 5 por plataforma (`analise_por_plataforma`); JSON de saída fixo; sem transcrição na fase 1, o gancho vem do título ou da legenda.
 - Relatório: para cada um dos 5 melhores concorrentes, os 3 posts de topo; padrões da semana (ganchos e formatos recorrentes); uma sugestão de conteúdo por padrão, ligada à tese do Galifrael.
@@ -75,8 +74,8 @@ Concorrentes e posts ficam separados para que aprovar ou descartar um perfil nã
 - Dados em branch separada `dados-concorrentes`; nunca force push.
 - Ao final, o workflow abre uma Issue com o resumo.
 - Falha em uma fonte não interrompe as demais; aparece no topo da Issue.
-- YouTube: na coleta semanal, usar playlist de uploads (1 unidade) em vez de busca (100 unidades); cota diária de 10.000 unidades.
-- Descoberta de candidatos: ocorre sob demanda (disparo manual). Busca os vídeos mais vistos no YouTube por palavra-chave (autores, obras e temas do Elvis, em `config`), extrai os canais, descarta os abaixo de `min_seguidores_candidato` e ordena por quantas palavras o canal cobre. Cada busca custa 100 unidades; `channels.list` roda em lotes de 50 ids.
+- YouTube: na coleta semanal, cada canal aprovado usa a playlist de uploads (recentes, 1 unidade) **e** uma busca dos vídeos mais vistos do canal (`max_mais_vistos_por_canal`, 100 unidades por canal); `videos.list` em lotes de 50 ids. Cota diária de 10.000 unidades: cabe com folga até cerca de 60 canais aprovados.
+- Descoberta de candidatos: ocorre sob demanda (disparo manual). Busca os vídeos mais vistos no YouTube por palavra-chave (autores, obras e temas do Elvis, em `config`) e extrai os canais. O filtro é a visualização do melhor vídeo do canal (`min_views_video`), não o número de inscritos; cada candidato mostra esse vídeo como prova. Ordena por quantas palavras o canal cobre. Cada busca custa 100 unidades; `videos.list` e `channels.list` rodam em lotes de 50 ids.
 - Token da Meta expira (cerca de 60 dias): a Issue avisa para renovar.
 - Perfil sem acesso (não profissional ou privado): marcado `sem_acesso` para decisão do Elvis.
 

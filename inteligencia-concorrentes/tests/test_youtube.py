@@ -9,7 +9,9 @@ CONC = {"id": "c1", "plataforma": "youtube", "channel_id": "UC_abc", "handle": "
 
 def make_fetch(calls):
     def fetch(url, params):
-        calls.append(url)
+        calls.append((url, params))
+        if url.endswith("/search"):
+            return {"items": [{"id": {"videoId": "v2"}}, {"id": {"videoId": "v9"}}]}
         for key, name in (("channels", "youtube_channel"), ("playlistItems", "youtube_playlist"), ("videos", "youtube_videos")):
             if url.endswith("/" + key):
                 return json.loads((FIX / f"{name}.json").read_text())
@@ -41,10 +43,21 @@ def test_collect_youtube_curtidas_ocultas_viram_none():
     assert posts[1]["curtidas"] is None
 
 
-def test_collect_youtube_nunca_usa_search():
+def test_collect_youtube_busca_os_mais_vistos_do_canal_alem_dos_recentes():
     calls = []
     collect_youtube(CONC, "KEY", fetch=make_fetch(calls))
-    assert calls and all("search" not in c for c in calls)
+    buscas = [p for u, p in calls if u.endswith("/search")]
+    assert len(buscas) == 1
+    assert buscas[0]["channelId"] == "UC_abc" and buscas[0]["order"] == "viewCount" and buscas[0]["type"] == "video"
+    pedidos = [p["id"].split(",") for u, p in calls if u.endswith("/videos")]
+    ids = [i for lote in pedidos for i in lote]
+    assert sorted(set(ids)) == ["v1", "v2", "v9"] and len(ids) == 3  # sem duplicar v2
+
+
+def test_collect_youtube_sem_mais_vistos_nao_chama_search():
+    calls = []
+    collect_youtube(CONC, "KEY", fetch=make_fetch(calls), max_mais_vistos=0)
+    assert all("search" not in u for u, _ in calls)
 
 
 def test_http_get_json_mostra_o_motivo_do_erro_sem_vazar_a_chave(monkeypatch):

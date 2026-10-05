@@ -7,9 +7,8 @@ from typing import Callable
 
 from config import load_config
 from storage import load_json, save_json
-from youtube import API, YouTubeAPIError, http_get_json
+from youtube import API, YouTubeAPIError, em_lotes, http_get_json
 
-CANAIS_POR_CHAMADA = 50  # limite de ids por chamada channels.list
 DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "config" / "territorios.json"
 
 
@@ -30,7 +29,10 @@ def merge_candidates(existing: list[dict], found: list[dict]) -> list[dict]:
 def youtube_candidates(
     config: dict, api_key: str, fetch: Callable[[str, dict], dict] = http_get_json
 ) -> list[dict]:
-    """Canais dos vídeos mais vistos para cada palavra-chave (autores, obras, temas)."""
+    """Canais dos vídeos mais vistos para cada palavra-chave (autores, obras, temas).
+
+    Vale a visualização do melhor vídeo do canal (`min_views_video`), não o número de inscritos.
+    """
     achados: dict[str, dict] = {}
     for termo in config["palavras_chave"][: config["max_buscas_youtube"]]:
         resp = fetch(
@@ -39,28 +41,35 @@ def youtube_candidates(
         )
         for item in resp.get("items", []):
             cid = item["snippet"]["channelId"]
-            info = achados.setdefault(cid, {"nome": item["snippet"]["channelTitle"], "termos": []})
+            info = achados.setdefault(cid, {"nome": item["snippet"]["channelTitle"], "termos": [], "videos": []})
             if termo not in info["termos"]:
                 info["termos"].append(termo)
+            vid = item["id"]["videoId"]
+            if vid not in info["videos"]:
+                info["videos"].append(vid)
     if not achados:
         return []
 
-    ids = list(achados)
-    detalhes: dict[str, dict] = {}
-    for i in range(0, len(ids), CANAIS_POR_CHAMADA):
-        resp = fetch(
-            f"{API}/channels",
-            {"part": "statistics,snippet", "id": ",".join(ids[i : i + CANAIS_POR_CHAMADA]), "key": api_key},
-        )
-        detalhes.update({c["id"]: c for c in resp.get("items", [])})
+    stats: dict[str, dict] = {}
+    for lote in em_lotes([v for info in achados.values() for v in info["videos"]]):
+        resp = fetch(f"{API}/videos", {"part": "snippet,statistics", "id": ",".join(lote), "key": api_key})
+        stats.update({v["id"]: v for v in resp.get("items", [])})
+    canais: dict[str, dict] = {}
+    for lote in em_lotes(list(achados)):
+        resp = fetch(f"{API}/channels", {"part": "statistics,snippet", "id": ",".join(lote), "key": api_key})
+        canais.update({c["id"]: c for c in resp.get("items", [])})
 
     hoje = datetime.now(timezone.utc).date().isoformat()
     candidatos = []
     for cid, info in achados.items():
-        d = detalhes.get(cid, {})
-        seguidores = int(d.get("statistics", {}).get("subscriberCount", 0))
-        if seguidores < config["min_seguidores_candidato"]:
+        videos = [stats[v] for v in info["videos"] if v in stats]
+        if not videos:
             continue
+        melhor = max(videos, key=lambda v: int(v["statistics"].get("viewCount", 0)))
+        views = int(melhor["statistics"].get("viewCount", 0))
+        if views < config["min_views_video"]:
+            continue
+        d = canais.get(cid, {})
         candidatos.append(
             {
                 "id": f"yt-{cid}",
@@ -69,15 +78,21 @@ def youtube_candidates(
                 "channel_id": cid,
                 "pais": d.get("snippet", {}).get("country", ""),
                 "idioma": "",
-                "seguidores": seguidores,
+                "seguidores": int(d.get("statistics", {}).get("subscriberCount", 0)),
                 "territorio": config["territorio"],
                 "status": "candidato",
                 "motivo": "vídeos muito vistos para: " + ", ".join(info["termos"]),
+                "video_mais_visto": {
+                    "titulo": melhor["snippet"]["title"],
+                    "url": f"https://www.youtube.com/watch?v={melhor['id']}",
+                    "views": views,
+                    "comentarios": int(melhor["statistics"].get("commentCount", 0)),
+                },
                 "descoberto_em": hoje,
                 "_termos": len(info["termos"]),
             }
         )
-    candidatos.sort(key=lambda c: (-c["_termos"], -c["seguidores"]))
+    candidatos.sort(key=lambda c: (-c["_termos"], -c["video_mais_visto"]["views"]))
     for c in candidatos:
         del c["_termos"]
     return candidatos

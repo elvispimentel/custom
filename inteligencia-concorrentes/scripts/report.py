@@ -4,6 +4,15 @@ from datetime import datetime
 MAX_ISSUE = 60_000
 
 
+def _n(valor) -> str:
+    return f"{(valor or 0):,}".replace(",", ".")
+
+
+def _metricas(p: dict) -> str:
+    base = f"{_n(p.get('views'))} views" if p["plataforma"] == "youtube" else f"{_n(p.get('curtidas'))} curtidas"
+    return f"{base}, {_n(p.get('comentarios'))} comentários"
+
+
 def _top_concorrentes(ranked: dict, concorrentes: list[dict], n: int = 5):
     por_conc: dict[str, list[dict]] = {}
     for lista in ranked.values():
@@ -31,7 +40,7 @@ def build_report(ranked: dict, concorrentes: list[dict], analises: dict, falhas:
             selo = " ✅ validado" if p["validado"] else ""
             out.append(
                 f"- [{p['titulo_ou_legenda'][:80]}]({p['url']}) — {p['formato']}, "
-                f"score {p['score']:.3f}{selo}"
+                f"{_metricas(p)}, score {p['score']:.2f}{selo}"
             )
         out.append("")
 

@@ -1,17 +1,10 @@
+from bisect import bisect_left, bisect_right
 from datetime import datetime, timedelta, timezone
 
 
 def _parse(ts: str) -> datetime:
     dt = datetime.fromisoformat(ts)
     return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
-
-
-def score_post(post: dict, seguidores: int) -> float:
-    if not seguidores or seguidores <= 0:
-        return 0.0
-    curtidas = post.get("curtidas") or 0
-    comentarios = post.get("comentarios") or 0
-    return (curtidas + 2 * comentarios) / seguidores
 
 
 def is_validated(post: dict, config: dict) -> bool:
@@ -30,16 +23,42 @@ def in_window(post: dict, now: datetime, config: dict) -> bool:
     )
 
 
+METRICAS = {"youtube": ("views", "comentarios"), "instagram": ("curtidas", "comentarios")}
+
+
+def _posicoes(valores: list[int]) -> list[float]:
+    """Posição de cada valor entre todos, de 0 a 1 (empates dividem a posição)."""
+    ordenados = sorted(valores)
+    n = len(ordenados)
+    out = []
+    for v in valores:
+        menores = bisect_left(ordenados, v)
+        iguais = bisect_right(ordenados, v) - menores
+        out.append((menores + 0.5 * iguais) / n)
+    return out
+
+
 def rank(posts: list[dict], concorrentes: list[dict], config: dict, now: datetime) -> dict[str, list[dict]]:
-    aprovados = {c["id"]: c for c in concorrentes if c.get("status") == "aprovado"}
-    out: dict[str, list[dict]] = {"youtube": [], "instagram": []}
-    for p in posts:
-        c = aprovados.get(p["concorrente_id"])
-        if c is None or p["plataforma"] not in out or not in_window(p, now, config):
+    """Ranking por plataforma: média das posições em visualizações (ou curtidas) e comentários.
+
+    O tamanho do canal (inscritos) não entra na conta: vídeo muito visto vale
+    pelo que foi visto, venha de um canal grande ou pequeno.
+    """
+    aprovados = {c["id"] for c in concorrentes if c.get("status") == "aprovado"}
+    out: dict[str, list[dict]] = {}
+    for plataforma, metricas in METRICAS.items():
+        elegiveis = [
+            p for p in posts
+            if p["plataforma"] == plataforma and p["concorrente_id"] in aprovados and in_window(p, now, config)
+        ]
+        if not elegiveis:
+            out[plataforma] = []
             continue
-        out[p["plataforma"]].append(
-            {**p, "score": score_post(p, c.get("seguidores") or 0), "validado": is_validated(p, config)}
-        )
-    for lista in out.values():
-        lista.sort(key=lambda x: x["score"], reverse=True)
+        por_metrica = [_posicoes([p.get(m) or 0 for p in elegiveis]) for m in metricas]
+        ranqueados = [
+            {**p, "score": sum(col[i] for col in por_metrica) / len(metricas), "validado": is_validated(p, config)}
+            for i, p in enumerate(elegiveis)
+        ]
+        ranqueados.sort(key=lambda x: x["score"], reverse=True)
+        out[plataforma] = ranqueados
     return out

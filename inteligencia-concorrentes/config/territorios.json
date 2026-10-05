@@ -25,11 +25,12 @@
     "youtube_views_validado": 1000000,
     "instagram_curtidas_validado": 50000
   },
-  "janela_dias": 90,
+  "janela_dias": 3650,
   "idade_minima_horas": 48,
   "analise_por_plataforma": 5,
   "modelo_analise": "gpt-4o-mini",
   "max_buscas_youtube": 20,
   "max_posts_por_concorrente": 30,
-  "min_seguidores_candidato": 10000
+  "min_views_video": 100000,
+  "max_mais_vistos_por_canal": 25
 }
