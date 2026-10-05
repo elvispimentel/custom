@@ -40,8 +40,9 @@ ilovepdf:                        # só vale com pdf.motor: ilovepdf
 lotes:
   agrupar_por: "tema"            # tema = junta todos os autores de um tema (lotes cheios); pasta = um grupo por pasta
   grupo_sem_tema: "Sem tema"     # onde entram os livros fora das pastas de tema
-  max_documentos: 25             # com motor local pode subir (ex.: 50); as metas de MB/palavras ainda valem
-  meta_mb: 90                    # meta (margem de segurança) abaixo do teto; pode subir, ex.: 180
+  max_documentos: 0              # 0 = sem limite de quantidade: junta o máximo que couber nas metas de MB e de palavras
+                                 # (o limite de 25 era só do iLovePDF; com o motor local não existe)
+  meta_mb: 180                   # meta (margem de segurança) abaixo do teto de 200 MB do NotebookLM
   meta_palavras: 450000
   limite_mb: 200                 # teto do NotebookLM por fonte (200 MB); nada acima disso é gerado
   limite_palavras: 500000        # teto do NotebookLM por fonte (500 mil palavras)

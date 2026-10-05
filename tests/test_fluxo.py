@@ -514,3 +514,16 @@ def test_agrupar_por_tema_junta_autores_e_manda_o_resto_para_sem_tema(mundo):
     plano = lt.planejar(ctx)
     por_grupo = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in plano}
     assert por_grupo == {"Hermetismo": ["a.pdf", "b.pdf"], "Sem tema": ["c.pdf", "d.pdf"]}
+
+
+def test_max_documentos_zero_nao_limita_a_quantidade_so_mb_e_palavras():
+    from biblioteca.config import carregar
+    from biblioteca.pdfs import formar_lotes
+    cfg = carregar("/nao/existe.yaml")
+    cfg.d["lotes"].update({"max_documentos": 0, "meta_mb": 100, "meta_palavras": 1000})
+    itens = [{"id": str(i), "nome": f"{i}.pdf", "tamanho": 1000, "palavras": 10} for i in range(60)]
+    lotes, avulsos = formar_lotes(itens, cfg)
+    assert [len(l) for l in lotes] == [60] and not avulsos          # 60 livros num arquivo só
+    cfg.d["lotes"]["meta_palavras"] = 250                           # a meta de palavras ainda fecha o lote
+    lotes, _ = formar_lotes(itens, cfg)
+    assert [len(l) for l in lotes] == [25, 25, 10]

@@ -50,7 +50,8 @@ def analisar(dados: bytes, cfg) -> Info:
 def formar_lotes(itens, cfg):
     """itens: dicts com tamanho e palavras, JÁ em ordem natural. Devolve (lotes, avulsos).
     Fecha o lote antes de estourar qualquer meta; documento que sozinho excede vai para 'avulsos'
-    (subir separadamente no NotebookLM). Nunca reordena."""
+    (subir separadamente no NotebookLM). Nunca reordena. max_documentos 0 = sem limite de quantidade
+    (só valem as metas de MB e de palavras)."""
     L = cfg["lotes"]
     meta_b, meta_p, max_d = cfg.meta_bytes, L["meta_palavras"], L["max_documentos"]
     lotes, atual, b, p, avulsos = [], [], 0, 0, []
@@ -66,7 +67,7 @@ def formar_lotes(itens, cfg):
                               "não cabe nem sozinho, precisa ser dividido")
             avulsos.append({**it, "motivo": "; ".join(motivo)})
             continue
-        if atual and (len(atual) >= max_d or b + it["tamanho"] > meta_b or p + it["palavras"] > meta_p):
+        if atual and ((max_d and len(atual) >= max_d) or b + it["tamanho"] > meta_b or p + it["palavras"] > meta_p):
             lotes.append(atual)
             atual, b, p = [], 0, 0
         atual.append(it)
