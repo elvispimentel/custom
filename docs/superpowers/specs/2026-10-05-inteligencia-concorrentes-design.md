@@ -76,7 +76,7 @@ Concorrentes e posts ficam separados para que aprovar ou descartar um perfil nã
 - Ao final, o workflow abre uma Issue com o resumo.
 - Falha em uma fonte não interrompe as demais; aparece no topo da Issue.
 - YouTube: na coleta semanal, usar playlist de uploads (1 unidade) em vez de busca (100 unidades); cota diária de 10.000 unidades.
-- Descoberta de candidatos: ocorre sob demanda (disparo manual), não semanalmente, usando busca na web e busca do YouTube (100 unidades por chamada, com número limitado de chamadas por execução).
+- Descoberta de candidatos: ocorre sob demanda (disparo manual). Busca os vídeos mais vistos no YouTube por palavra-chave (autores, obras e temas do Elvis, em `config`), extrai os canais, descarta os abaixo de `min_seguidores_candidato` e ordena por quantas palavras o canal cobre. Cada busca custa 100 unidades; `channels.list` roda em lotes de 50 ids.
 - Token da Meta expira (cerca de 60 dias): a Issue avisa para renovar.
 - Perfil sem acesso (não profissional ou privado): marcado `sem_acesso` para decisão do Elvis.
 
