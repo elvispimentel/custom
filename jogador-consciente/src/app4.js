@@ -167,7 +167,15 @@ function sincronizar(motivo){
     method:'POST', headers:{'Content-Type':'application/json'},
     body:JSON.stringify({jogador:retratoJogador(), eventos:fila, motivo:motivo||''})
   }).then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
-    .then(function(){
+    .then(function(resposta){
+      /* o servidor pode devolver um player_id diferente do que mandamos —
+         é o canônico, achado por e-mail (ver ingestao). Adota ele daqui
+         pra frente, senão cada sincronização nova cria outra linha. */
+      try{
+        if(resposta&&resposta.jogador&&resposta.jogador!==playerId){
+          playerId=resposta.jogador; S.playerId=playerId; ls(PID,playerId);
+        }
+      }catch(e){}
       /* só apaga da fila o que foi confirmado; o que entrou no meio fica */
       try{
         var agora=JSON.parse(ls(FILA)||'[]');

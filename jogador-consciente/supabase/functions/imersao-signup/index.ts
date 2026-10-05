@@ -47,12 +47,37 @@ Deno.serve(async (req: Request) => {
   const emailNorm = String(email).trim().toLowerCase();
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
-  // .limit(1) em vez de .maybeSingle(): pode haver mais de um pedido com o
-  // mesmo e-mail (reenvio de webhook de teste, compra duplicada etc.) e
-  // .maybeSingle() falha silenciosamente quando vem mais de uma linha.
-  const { data: jogadores } = await supabase.from("players").select("player_id, email").ilike("email", emailNorm).limit(1);
+  // Pode haver mais de uma linha de `players` com o mesmo e-mail (bug de
+  // duplicação na ingestão, já em correção — enquanto a limpeza de dados
+  // antigos não roda, isto ainda pode acontecer). Nunca escolher "a que o
+  // Postgres devolver primeiro": ordena por quem já tem Autorretrato rico
+  // do rpgojc (chave "mapa") > qualquer Autorretrato > mais recente. Se
+  // houver mais de um candidato, registra o conflito em admin_notes para
+  // revisão manual — não trava o cadastro por isso.
+  const { data: jogadores } = await supabase.from("players")
+    .select("player_id, email, autorretrato_json, autorretrato_em, created_at")
+    .ilike("email", emailNorm);
   const { data: pedidos } = await supabase.from("imersao_orders").select("id, email").ilike("email", emailNorm).eq("status", "paid").limit(1);
-  const jogador = jogadores && jogadores[0];
+
+  let jogador: { player_id: string; email: string | null } | undefined;
+  if (jogadores && jogadores.length) {
+    const pontuar = (r: any) =>
+      (r.autorretrato_json?.mapa ? 2 : 0) + (r.autorretrato_json ? 1 : 0);
+    const ordenados = [...jogadores].sort((a, b) =>
+      pontuar(b) - pontuar(a) ||
+      new Date(b.autorretrato_em ?? b.created_at).getTime() - new Date(a.autorretrato_em ?? a.created_at).getTime());
+    jogador = ordenados[0];
+    if (jogadores.length > 1) {
+      await supabase.from("admin_notes").insert({
+        player_id: jogador.player_id,
+        autor: "imersao-signup",
+        nota: `Conflito de e-mail duplicado no login: ${jogadores.length} linhas de players com ` +
+          `"${emailNorm}" (${jogadores.map((j: any) => j.player_id).join(", ")}). ` +
+          `Login ligado a ${jogador.player_id} (critério: Autorretrato mais completo/recente). ` +
+          `Revisar e consolidar as demais manualmente.`,
+      });
+    }
+  }
   const pedido = pedidos && pedidos[0];
 
   if (!jogador && !pedido) {
