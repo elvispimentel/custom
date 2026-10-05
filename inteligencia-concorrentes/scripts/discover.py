@@ -7,7 +7,7 @@ from typing import Callable
 
 from config import load_config
 from storage import load_json, save_json
-from youtube import API, http_get_json
+from youtube import API, YouTubeAPIError, http_get_json
 
 DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "config" / "territorios.json"
 
@@ -76,7 +76,12 @@ def main(argv: list[str]) -> int:
         return 2
     config = load_config(Path(args.config))
     arq = Path(args.data_dir) / "data" / "concorrentes.json"
-    merged = merge_candidates(load_json(arq, []), youtube_candidates(config, key))
+    try:
+        achados = youtube_candidates(config, key)
+    except YouTubeAPIError as e:
+        print(f"Erro da API do YouTube: {e}", file=sys.stderr)
+        return 1
+    merged = merge_candidates(load_json(arq, []), achados)
     save_json(arq, merged)
     return 0
 

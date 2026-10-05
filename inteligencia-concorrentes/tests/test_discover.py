@@ -50,3 +50,16 @@ def test_merge_nao_duplica_nem_rebaixa_aprovado():
     assert len(r) == 2
     assert next(c for c in r if c["channel_id"] == "UC1")["status"] == "aprovado"
     assert next(c for c in r if c["channel_id"] == "UC2")["status"] == "candidato"
+
+
+def test_main_mostra_erro_da_api_sem_traceback(monkeypatch, tmp_path, capsys):
+    import discover
+    from youtube import YouTubeAPIError
+
+    def falha(config, key):
+        raise YouTubeAPIError("HTTP 403: chave sem permissão [accessNotConfigured]")
+
+    monkeypatch.setenv("YOUTUBE_API_KEY", "k")
+    monkeypatch.setattr(discover, "youtube_candidates", falha)
+    assert discover.main(["--data-dir", str(tmp_path)]) == 1
+    assert "accessNotConfigured" in capsys.readouterr().err
