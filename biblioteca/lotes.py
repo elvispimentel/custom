@@ -14,16 +14,25 @@ def _eh_pdf(r) -> bool:
     return r["mime"] == "application/pdf" or r["nome"].lower().endswith(".pdf")
 
 
+def _grupo(ctx, caminho: str) -> str:
+    """Chave de agrupamento dos lotes. 'pasta': cada pasta é um grupo. 'tema': todos os autores de um tema
+    juntos (lotes cheios); o que está fora das pastas de tema vai para o grupo 'sem tema'."""
+    if ctx.cfg["lotes"].get("agrupar_por", "pasta") != "tema":
+        return caminho
+    topo = caminho.split("/")[0] if caminho else ""
+    return topo if topo in ctx.cfg["organizacao"]["temas"] else ctx.cfg["lotes"]["grupo_sem_tema"]
+
+
 def pdfs_unicos(ctx) -> dict[str, list[dict]]:
-    """PDFs estáveis, não duplicados (exemplares e únicos), agrupados por pasta e em ordem natural."""
+    """PDFs estáveis, não duplicados (exemplares e únicos), agrupados (por pasta ou por tema) em ordem natural."""
     dups = {r["file_id"] for r in ctx.estado.q("SELECT file_id FROM membros_dup WHERE papel='duplicado'")}
-    por_pasta: dict[str, list[dict]] = {}
+    por_grupo: dict[str, list[dict]] = {}
     for r in ctx.estado.q("SELECT * FROM arquivos WHERE situacao='ok'"):
         if _eh_pdf(r) and r["id"] not in dups:
-            por_pasta.setdefault(r["caminho"], []).append(dict(r))
-    for lista in por_pasta.values():
-        lista.sort(key=lambda r: natural_key(r["nome"]))
-    return dict(sorted(por_pasta.items(), key=lambda kv: natural_key(kv[0])))
+            por_grupo.setdefault(_grupo(ctx, r["caminho"]), []).append(dict(r))
+    for lista in por_grupo.values():
+        lista.sort(key=lambda r: natural_key(r["caminho"] + "/" + r["nome"]))
+    return dict(sorted(por_grupo.items(), key=lambda kv: natural_key(kv[0])))
 
 
 def info_de(ctx, f, baixar=True) -> Info | None:

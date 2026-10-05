@@ -132,7 +132,9 @@ Só **livros** entram no plano (`organizacao.formatos_livro`: pdf, epub, mobi, a
 
 Garantias: quem não for classificado com confiança (`confianca_minima`) **fica onde está** e aparece no plano como `manter_nao_classificado`. Autores com grafias diferentes só em maiúsculas/acentos viram **uma** pasta. Arquivos ainda subindo e duplicados não são movidos.
 
-> **Por que antes dos lotes?** Os lotes são formados por pasta. Se você reorganizar depois de gerar PDFs, os lotes mudam de composição; os PDFs antigos ficam **marcados como `obsoleto`** no índice (nunca apagados) e novos são gerados. Reorganize primeiro e processe depois.
+> **Como os lotes são agrupados (`lotes.agrupar_por`).** Com `tema` (padrão do config de exemplo), todos os autores de um mesmo tema entram juntos, em ordem de autor e título, e os lotes saem cheios (até 25 livros). Tudo que está **fora das pastas de tema** (os livros sem tema) vai para o grupo **Sem tema** (`lotes.grupo_sem_tema`). Com `pasta`, cada pasta forma seu próprio grupo. Os originais **nunca saem do lugar**: os PDFs agrupados vão para a pasta "Biblioteca Pessoal — PDFs para NotebookLM", em uma subpasta por tema, e o índice diz de qual original e de quais páginas cada livro veio.
+>
+> **Por que antes dos lotes?** Os lotes são formados por pasta/tema. Se você reorganizar depois de gerar PDFs, os lotes mudam de composição; os PDFs antigos ficam **marcados como `obsoleto`** no índice (nunca apagados) e novos são gerados. Reorganize primeiro e processe depois.
 
 ---
 

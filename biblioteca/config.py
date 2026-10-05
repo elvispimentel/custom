@@ -20,7 +20,7 @@ PADRAO = {
                  "pastas_de_copias": ["cópia", "copia", "copias", "cópias", "backup", "duplicad", "old"]},
     "pdf": {"motor": "local"},
     "ilovepdf": {"max_arquivos_por_chamada": 20, "reservar_creditos": 0},
-    "lotes": {"max_documentos": 25, "meta_mb": 90, "meta_palavras": 450000,
+    "lotes": {"agrupar_por": "pasta", "grupo_sem_tema": "Sem tema", "max_documentos": 25, "meta_mb": 90, "meta_palavras": 450000,
               "limite_mb": 200, "limite_palavras": 500000,
               "paginas_amostra_texto": 20, "palavras_por_pagina_padrao": 300,
               "minimo_caracteres_por_pagina": 25},

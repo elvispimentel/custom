@@ -496,3 +496,21 @@ def test_retry_repete_429_e_nao_repete_401(monkeypatch):
         assert False
     except org.requests.HTTPError:
         pass
+
+
+def test_agrupar_por_tema_junta_autores_e_manda_o_resto_para_sem_tema(mundo):
+    d = mundo.drive
+    h = d.pasta("Hermetismo", mundo.lib)
+    a1, a2 = d.pasta("Autor Um", h), d.pasta("Autor Dois", h)
+    solta = d.pasta("Curso antigo", mundo.lib)
+    d.arquivo("a.pdf", pdf_texto(2, "a"), a1)
+    d.arquivo("b.pdf", pdf_texto(2, "b"), a2)
+    d.arquivo("c.pdf", pdf_texto(2, "c"), solta)
+    d.arquivo("d.pdf", pdf_texto(2, "d"), mundo.lib)
+    ctx = mundo.abrir()
+    ctx.cfg.d["organizacao"]["temas"] = {"Hermetismo": ["x"]}
+    ctx.cfg.d["lotes"]["agrupar_por"] = "tema"
+    inventariar(ctx)
+    plano = lt.planejar(ctx)
+    por_grupo = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in plano}
+    assert por_grupo == {"Hermetismo": ["a.pdf", "b.pdf"], "Sem tema": ["c.pdf", "d.pdf"]}

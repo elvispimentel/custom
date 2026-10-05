@@ -38,6 +38,8 @@ ilovepdf:                        # só vale com pdf.motor: ilovepdf
   reservar_creditos: 0
 
 lotes:
+  agrupar_por: "tema"            # tema = junta todos os autores de um tema (lotes cheios); pasta = um grupo por pasta
+  grupo_sem_tema: "Sem tema"     # onde entram os livros fora das pastas de tema
   max_documentos: 25             # com motor local pode subir (ex.: 50); as metas de MB/palavras ainda valem
   meta_mb: 90                    # meta (margem de segurança) abaixo do teto; pode subir, ex.: 180
   meta_palavras: 450000
