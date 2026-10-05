@@ -566,3 +566,18 @@ def test_arquivos_pessoais_vao_para_pasta_propria_e_para_lote_a_parte(mundo):
     lotes = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in lt.planejar(ctx)}
     assert lotes["00 - Pessoais"] == ["Dossie Elvis Pimentel.pdf", "Elvis Pimentel - Mentoria Kybalion.pdf"]
     assert all("Elvis" not in n for g, ns in lotes.items() if g != "00 - Pessoais" for n in ns)
+
+
+def test_autor_reconhecido_pela_ia_como_o_dono_tambem_e_pessoal(mundo):
+    d = mundo.drive
+    d.arquivo("Elvis Pimetel 2610 - Manifesta 10x.pdf", pdf_texto(2, "m"), mundo.lib)     # nome com erro de digitação
+    ctx = mundo.abrir()
+    ctx.cfg.d["organizacao"]["temas"] = {"Vendas": ["manifesta"]}
+    ctx.cfg.d["pessoal"] = {"padroes": ["elvis pimentel"], "pasta": "00 - Pessoais"}
+    inventariar(ctx)
+    f = ctx.estado.q("SELECT * FROM arquivos")[0]
+    ctx.estado.x("INSERT OR REPLACE INTO classif VALUES(?,?,?,?,?,?)", f["id"], f["md5"] or "", None, "Elvis Pimentel", "openai", 0.0)
+    ctx.cfg.d["organizacao"]["classificador"] = "openai"      # resultado já em cache: não chama a API
+    ctx.cfg.openai_key = "sk-teste"
+    plano = org.planejar_temas(ctx)
+    assert (plano[0]["destino"], plano[0]["fonte"], plano[0]["acao"]) == ("00 - Pessoais", "pessoal", "mover")

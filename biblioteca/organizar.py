@@ -211,6 +211,8 @@ def planejar_temas(ctx) -> list[dict]:
             c = est.q("SELECT * FROM classif WHERE file_id=?", f["id"])
             c = c[0] if c else {"tema": None, "autor": None, "fonte": "formato", "confianca": 0.0}
             tema, autor, fonte, conf = c["tema"], c["autor"], c["fonte"], c["confianca"]
+            if autor and pessoal.casa(cfg, autor):      # a IA reconheceu o dono (ex.: nome com erro de digitação)
+                pess, tema, autor, fonte, conf = True, cfg["pessoal"]["pasta"], None, "pessoal", 1.0
         if autor:
             autor = canon.setdefault(_norm(autor), nome_seguro(autor))
         if f["id"] not in manual and not pess and not eh_livro(f["nome"], formatos):
