@@ -76,6 +76,7 @@ def run(
             posts, seguidores = coletor(c)
         except SemAcesso:
             c["status"] = "sem_acesso"
+            falhas.append(f"{c.get('nome', c['id'])} marcado como sem_acesso: manter ou descartar?")
             continue
         except TokenExpirado:
             token_expirado = True
@@ -102,6 +103,8 @@ def run(
             continue
         if a:
             analises[a["post_id"]] = a
+        else:
+            falhas.append(f"análise inválida de {p['id']} (tentaremos de novo na próxima execução)")
     save_json(caminho_analises, analises)
 
     no_ranking = {p["id"] for lista in ranked.values() for p in lista}

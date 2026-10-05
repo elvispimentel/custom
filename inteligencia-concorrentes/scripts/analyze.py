@@ -39,9 +39,10 @@ def analyze_post(post: dict, client, model: str) -> dict | None:
         model=model, max_tokens=600, messages=[{"role": "user", "content": prompt}]
     )
     try:
-        data = json.loads(resp.content[0].text)
-    except (json.JSONDecodeError, IndexError, AttributeError):
+        texto = resp.content[0].text
+        data = json.loads(texto[texto.index("{") : texto.rindex("}") + 1])
+    except (ValueError, IndexError, AttributeError):
         return None
-    if not isinstance(data, dict) or any(k not in data for k in CAMPOS):
+    if not isinstance(data, dict) or any(not isinstance(data.get(k), str) for k in CAMPOS):
         return None
     return {"post_id": post["id"], **{k: data[k] for k in CAMPOS}}

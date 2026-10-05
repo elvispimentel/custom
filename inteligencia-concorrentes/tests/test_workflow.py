@@ -45,3 +45,19 @@ def test_chaves_vem_de_secrets():
     texto, _, _ = carregar()
     for nome in ("YOUTUBE_API_KEY", "META_ACCESS_TOKEN", "IG_USER_ID", "ANTHROPIC_API_KEY"):
         assert f"${{{{ secrets.{nome} }}}}" in texto
+
+
+def test_git_add_funciona_sem_pasta_relatorios(tmp_path):
+    """Modo descobrir só cria data/; o git add do workflow não pode falhar nem versionar issue.md."""
+    import subprocess
+
+    texto, _, _ = carregar()
+    comando = next(l.strip() for l in texto.splitlines() if l.strip().startswith("git add"))
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "concorrentes.json").write_text("[]")
+    (tmp_path / "issue.md").write_text("resumo")
+    r = subprocess.run(comando, shell=True, cwd=tmp_path, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    staged = subprocess.run(["git", "diff", "--cached", "--name-only"], cwd=tmp_path, capture_output=True, text=True).stdout.split()
+    assert staged == ["data/concorrentes.json"]

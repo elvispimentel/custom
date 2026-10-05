@@ -127,3 +127,19 @@ def test_dry_run_gera_relatorio_posts_e_issue_sem_rede(tmp_path):
     assert list((tmp_path / "data" / "posts").glob("*.json"))
     assert list((tmp_path / "relatorios").glob("*.md"))
     assert (tmp_path / "issue.md").read_text(encoding="utf-8").strip()
+
+
+def test_analise_invalida_vira_falha_visivel(tmp_path):
+    setup(tmp_path, [conc("a")])
+    r = run(CFG, tmp_path, NOW, Collectors(youtube=yt_ok, instagram=None), lambda p: None)
+    assert any("análise inválida" in f and "yt:a" in f for f in r.falhas)
+
+
+def test_sem_acesso_aparece_nas_falhas(tmp_path):
+    setup(tmp_path, [conc("i1", "instagram")])
+
+    def ig_sem_acesso(c):
+        raise SemAcesso("não profissional")
+
+    r = run(CFG, tmp_path, NOW, Collectors(youtube=yt_ok, instagram=ig_sem_acesso), analyzer_ok)
+    assert any("sem_acesso" in f and "Canal i1" in f for f in r.falhas)

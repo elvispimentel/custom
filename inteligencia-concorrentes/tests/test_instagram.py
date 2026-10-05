@@ -54,3 +54,10 @@ def test_nao_profissional_levanta_sem_acesso():
 def test_token_expirado_levanta_token_expirado():
     with pytest.raises(TokenExpirado):
         collect_instagram(CONC, "IGID", "TOKEN", fetch=fetch_from("ig_error_token"))
+
+
+def test_erro_de_limite_nao_vira_sem_acesso():
+    from instagram import GraphError
+
+    with pytest.raises(GraphError):
+        collect_instagram(CONC, "IGID", "TOKEN", fetch=fetch_from("ig_error_limite"))

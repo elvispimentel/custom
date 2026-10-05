@@ -65,3 +65,16 @@ def test_analyze_post_json_sem_chaves_retorna_none():
 def test_prompt_pede_json_e_cita_a_tese():
     assert "JSON" in ANALISE_PROMPT
     assert "descubra quem você está repetindo" in ANALISE_PROMPT.lower()
+
+
+def test_analyze_post_aceita_json_dentro_de_cerca_de_codigo():
+    resposta = {k: "x" for k in ("gancho", "tema", "promessa", "por_que_funcionou", "adaptacao_galifrael")}
+    texto = "```json\n" + json.dumps(resposta) + "\n```"
+    r = analyze_post(p("y1"), FakeClient(texto), "m")
+    assert r is not None and r["post_id"] == "y1"
+
+
+def test_analyze_post_rejeita_campos_que_nao_sao_texto():
+    resposta = {k: "x" for k in ("gancho", "promessa", "por_que_funcionou", "adaptacao_galifrael")}
+    resposta["tema"] = ["a", "b"]
+    assert analyze_post(p("y1"), FakeClient(json.dumps(resposta)), "m") is None

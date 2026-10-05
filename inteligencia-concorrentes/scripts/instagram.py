@@ -13,11 +13,16 @@ from typing import Callable
 
 GRAPH = "https://graph.facebook.com/v21.0"
 CODIGO_TOKEN = 190
+CODIGO_USUARIO_INVALIDO = 110
 FORMATOS = {"VIDEO": "reel", "CAROUSEL_ALBUM": "carrossel", "IMAGE": "imagem"}
 
 
 class SemAcesso(Exception):
     """Perfil inexistente, privado ou não profissional/criador."""
+
+
+class GraphError(Exception):
+    """Qualquer outro erro da Graph API (limite de taxa, permissão, instabilidade)."""
 
 
 class TokenExpirado(Exception):
@@ -49,7 +54,9 @@ def collect_instagram(
     if "error" in resp:
         if resp["error"].get("code") == CODIGO_TOKEN:
             raise TokenExpirado(resp["error"].get("message", ""))
-        raise SemAcesso(resp["error"].get("message", ""))
+        if resp["error"].get("code") == CODIGO_USUARIO_INVALIDO:
+            raise SemAcesso(resp["error"].get("message", ""))
+        raise GraphError(f"erro {resp['error'].get('code')}: {resp['error'].get('message', '')}")
 
     bd = resp["business_discovery"]
     agora = datetime.now(timezone.utc).isoformat()
