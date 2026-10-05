@@ -28,7 +28,12 @@ Sem os dois secrets da Meta, a coleta roda só no YouTube e a Issue avisa "Insta
 ## Usar
 
 1. **Descobrir candidatos (sob demanda):** Actions → *Concorrentes semanal* → Run workflow → modo `descobrir`.
-   Cada busca do YouTube custa 100 unidades; o limite por execução é `max_buscas_youtube`.
+   O agente busca no YouTube os **vídeos mais vistos** para cada palavra de `palavras_chave` (autores, obras e temas,
+   em `config/territorios.json`) e lista os **canais** desses vídeos, descartando os que têm menos de
+   `min_seguidores_candidato` inscritos. Canais que aparecem em mais palavras vêm primeiro.
+   Cada busca custa 100 unidades da cota diária (10.000); o limite por execução é `max_buscas_youtube`.
+   Para buscar outro autor ou obra, acrescente a palavra em `palavras_chave` (e aumente `max_buscas_youtube` se passar de 20).
+   Se já houver candidatos antigos que você não quer, deixe `data/concorrentes.json` como `[]` antes de rodar de novo.
 2. **Aprovar:** na branch `dados-concorrentes`, edite `data/concorrentes.json` pelo GitHub e mude
    `"status": "candidato"` para `"aprovado"` (ou `"descartado"`). Só `aprovado` é coletado.
    Concorrentes do Instagram: adicione manualmente com `plataforma: "instagram"`, `handle` e `status`.

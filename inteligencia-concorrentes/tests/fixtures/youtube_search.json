@@ -1,4 +1,5 @@
 {"items": [
- {"id": {"channelId": "UC1"}, "snippet": {"channelId": "UC1", "channelTitle": "Canal Um"}},
- {"id": {"channelId": "UC2"}, "snippet": {"channelId": "UC2", "channelTitle": "Canal Dois"}}
+ {"id": {"videoId": "v1"}, "snippet": {"channelId": "UC1", "channelTitle": "Canal Um"}},
+ {"id": {"videoId": "v2"}, "snippet": {"channelId": "UC2", "channelTitle": "Canal Dois"}},
+ {"id": {"videoId": "v3"}, "snippet": {"channelId": "UC2", "channelTitle": "Canal Dois"}}
 ]}

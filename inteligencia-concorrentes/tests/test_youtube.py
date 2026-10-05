@@ -45,3 +45,26 @@ def test_collect_youtube_nunca_usa_search():
     calls = []
     collect_youtube(CONC, "KEY", fetch=make_fetch(calls))
     assert calls and all("search" not in c for c in calls)
+
+
+def test_http_get_json_mostra_o_motivo_do_erro_sem_vazar_a_chave(monkeypatch):
+    import io
+    import urllib.error
+
+    import pytest
+
+    from youtube import YouTubeAPIError, http_get_json
+
+    corpo = json.dumps(
+        {"error": {"code": 403, "message": "YouTube Data API v3 has not been used", "errors": [{"reason": "accessNotConfigured"}]}}
+    ).encode()
+
+    def fake_urlopen(url, timeout):
+        raise urllib.error.HTTPError(url, 403, "Forbidden", {}, io.BytesIO(corpo))
+
+    monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+    with pytest.raises(YouTubeAPIError) as e:
+        http_get_json("https://exemplo.invalid/x", {"key": "SEGREDO123"})
+    msg = str(e.value)
+    assert "403" in msg and "accessNotConfigured" in msg and "has not been used" in msg
+    assert "SEGREDO123" not in msg

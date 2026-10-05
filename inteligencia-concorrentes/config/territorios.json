@@ -2,10 +2,20 @@
   "territorio": "A",
   "nome": "Comportamento e identidade",
   "palavras_chave": [
-    "condicionamento",
+    "joe dispenza",
+    "helio couto",
+    "transurfing",
+    "ressonância harmônica",
+    "lei da atração",
+    "código da realidade",
+    "código oculto",
+    "hackeando a mente",
+    "mudança de realidade",
+    "mudança de vida",
     "crenças limitantes",
     "autossabotagem",
-    "identidade",
+    "condicionamento mental",
+    "identidade pessoal",
     "mudança de comportamento",
     "behavior change",
     "limiting beliefs",
@@ -19,6 +29,7 @@
   "idade_minima_horas": 48,
   "analise_por_plataforma": 5,
   "modelo_analise": "gpt-4o-mini",
-  "max_buscas_youtube": 5,
-  "max_posts_por_concorrente": 30
+  "max_buscas_youtube": 20,
+  "max_posts_por_concorrente": 30,
+  "min_seguidores_candidato": 10000
 }
