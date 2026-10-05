@@ -473,3 +473,26 @@ def test_classificador_openai_le_resposta_e_descarta_tema_fora_da_lista(mundo, m
     assert chamadas == [("https://api.openai.com/v1/chat/completions", "Bearer sk-teste")]
     assert out["a"] == ("Filosofia", "Platão", 0.9)
     assert out["b"] == (None, None, 0.0)
+
+
+def test_retry_repete_429_e_nao_repete_401(monkeypatch):
+    monkeypatch.setattr(org.time, "sleep", lambda s: None)
+
+    class Resp: 
+        def __init__(self, c): self.status_code = c
+
+    n = {"v": 0}
+    def instavel():
+        n["v"] += 1
+        if n["v"] < 3:
+            raise org.requests.HTTPError(response=Resp(429))
+        return "ok"
+    assert org._com_retry(instavel) == "ok" and n["v"] == 3
+
+    def negado():
+        raise org.requests.HTTPError(response=Resp(401))
+    try:
+        org._com_retry(negado)
+        assert False
+    except org.requests.HTTPError:
+        pass

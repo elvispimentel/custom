@@ -4,6 +4,7 @@ import csv
 import io
 import json
 import re
+import time
 import unicodedata
 
 import requests
@@ -96,6 +97,21 @@ def _chamar_claude(cfg, prompt):
     return r.json()["content"][0]["text"]
 
 
+def _com_retry(fn, tentativas=4):
+    """Repete em 429/5xx/queda de rede com espera crescente; erro definitivo (401, 400…) sobe na hora."""
+    for i in range(tentativas):
+        try:
+            return fn()
+        except requests.HTTPError as e:
+            cod = e.response.status_code if e.response is not None else 0
+            if cod not in (429, 500, 502, 503, 504) or i == tentativas - 1:
+                raise
+        except (requests.ConnectionError, requests.Timeout):
+            if i == tentativas - 1:
+                raise
+        time.sleep(5 * 2 ** i)
+
+
 def _chamar_openai(cfg, prompt):
     r = requests.post("https://api.openai.com/v1/chat/completions", timeout=120, headers={
         "Authorization": f"Bearer {cfg.openai_key}", "content-type": "application/json"},
@@ -105,15 +121,19 @@ def _chamar_openai(cfg, prompt):
     return r.json()["choices"][0]["message"]["content"]
 
 
-def classificar_ia(ctx, arquivos):
+def classificar_ia(ctx, arquivos, ao_bloco=None):
     """Classificador opcional (claude ou openai): tema fechado (lista do config) + autor, 40 nomes por chamada."""
     cfg = ctx.cfg
     temas = list(cfg["organizacao"]["temas"])
     chamar = _chamar_openai if cfg["organizacao"]["classificador"] == "openai" else _chamar_claude
     out = {}
     for i in range(0, len(arquivos), 40):
-        _ler_resposta(ctx, chamar(cfg, _prompt(temas, arquivos[i:i + 40])), temas, out)
+        bloco = arquivos[i:i + 40]
+        antes = set(out)
+        _ler_resposta(ctx, _com_retry(lambda: chamar(cfg, _prompt(temas, bloco))), temas, out)
         ctx.log(f"classificador: {min(i + 40, len(arquivos))}/{len(arquivos)}")
+        if ao_bloco:
+            ao_bloco(bloco, {k: out[k] for k in out if k not in antes})
     return out
 
 
@@ -154,7 +174,13 @@ def planejar_temas(ctx) -> list[dict]:
     if org["classificador"] == "openai" and not cfg.openai_key:
         raise RuntimeError("classificador 'openai' exige o Secret OPENAI_API_KEY")
     if usa_ia:
-        ia = classificar_ia(ctx, novos)
+        def guardar(bloco, resp):          # progresso salvo a cada lote: uma queda não perde o já classificado
+            for f in bloco:
+                t, a, c = resp.get(f["id"], (None, None, 0.0))
+                est.x("INSERT OR REPLACE INTO classif VALUES(?,?,?,?,?,?)", f["id"], f["md5"] or "", t, a,
+                      org["classificador"], c)
+            ctx.salvar()
+        ia = classificar_ia(ctx, novos, guardar)
     for f in novos:
         if usa_ia:
             tema, autor, conf = ia.get(f["id"], (None, None, 0.0))
