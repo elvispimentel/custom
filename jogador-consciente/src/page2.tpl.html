@@ -546,6 +546,19 @@ body[data-ficha]{overflow:hidden}
 .f-voltar:hover{background:var(--brass)}
 .f-msg{font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--muted);margin:6px 0 2px}
 .ficha-sep{border:0;border-top:1px solid var(--rule);margin:34px 0}
+
+/* "Já comecei" — recuperar progresso por e-mail. Mesmo padrão da Ficha
+   (#ficha): topo fixo, corpo rolável, pé com as ações. */
+#recuperar{position:fixed;inset:0;z-index:550;background:var(--ground);color:var(--ink);
+  display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s ease}
+#recuperar.on{opacity:1;pointer-events:auto}
+#recuperar p,#recuperar .fine{color:var(--ink-soft)}
+#recuperar h2{color:var(--ink)}
+.r-codigo{font-family:var(--mono);font-size:28px;letter-spacing:.2em;text-align:center}
+.c-link{display:block;width:100%;text-align:center;background:none;border:0;margin-top:18px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.c-link:hover{color:var(--brass)}
 @media print{
   #ficha{position:static;opacity:1;pointer-events:auto;display:block}
   .f-topo,.f-pe{display:none!important}

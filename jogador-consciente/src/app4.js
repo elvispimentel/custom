@@ -769,6 +769,7 @@ function T0(){return tela(
      '<p>Jogo de interpretação de papéis. Em vez de assistir a uma história, você joga dentro dela: tem um personagem, um mapa, itens, fases e escolhas que mudam o que acontece depois.</p>'+
      '<p>Aqui o personagem é você. É um jogo de <b>mundo aberto</b> — as fases não são vencidas na tela do celular, são vividas na rua, no trabalho, nas conversas. Você traz o que aconteceu de volta pro jogo, e é isso que abre a próxima porta.</p>'+
      '<p>Esta partida entra por um campo específico: o do trabalho, do dinheiro e da sua expressão profissional.</p></details>'+
+     '<button type="button" class="c-link" id="b-recuperar">Já comecei — recuperar pelo e-mail</button>'+
    '</div>'+
    '<p class="c-rod">Você teria oito minutos para dedicar a você?<br><span>É de graça.</span></p>'+
  '</div>','cartaz-tela');}
@@ -1706,9 +1707,121 @@ document.addEventListener('click', function(ev){
   var t=ev.target;
   while(t && t!==document){
     if(t.id==='b-iniciar'){ ev.preventDefault(); iniciarJogo(); return; }
+    if(t.id==='b-recuperar'){ ev.preventDefault(); abrirRecuperar(); return; }
     t=t.parentNode;
   }
 }, true);
+
+/* =====================================================================
+   RECUPERAR PROGRESSO POR E-MAIL — a pessoa pode ter começado o
+   Autorretrato, parado, e agora está num aparelho diferente (ou no
+   mesmo, depois de limpar o navegador). Em vez de criar um jogador novo,
+   ela digita o e-mail, recebe um código de 6 dígitos, confirma, e o jogo
+   retoma de onde parou. Mesma lógica de "esqueci a senha": o código
+   prova que ela é dona daquele e-mail antes de qualquer dado sensível
+   (data de nascimento, Autorretrato) voltar.
+   ===================================================================== */
+function abrirRecuperar(){
+  var d=document.getElementById('recuperar');
+  if(!d){
+    d=document.createElement('div'); d.id='recuperar';
+    document.body.appendChild(d);
+  }
+  d.innerHTML='<div class="f-topo">'+
+      '<span class="f-tit">Recuperar progresso</span>'+
+      '<button type="button" class="f-fechar" id="r-x">Fechar</button></div>'+
+    '<div class="f-corpo" id="r-corpo"></div>';
+  document.getElementById('r-x').onclick=fecharRecuperar;
+  d.classList.add('on');
+  recDesenhaEmail();
+}
+function fecharRecuperar(){
+  var d=document.getElementById('recuperar'); if(!d) return;
+  d.classList.remove('on');
+}
+function recDesenhaEmail(prefillEmail){
+  document.getElementById('r-corpo').innerHTML='<div class="miolo">'+
+    '<h2>Qual é o seu e-mail?</h2>'+
+    '<p class="lede">O mesmo que você usou quando começou. Mandamos um código de 6 dígitos pra confirmar que é você.</p>'+
+    '<label class="campo"><span>E-mail</span>'+
+      '<input id="r-email" type="email" value="'+esc(prefillEmail||'')+'" autocomplete="email" placeholder="voce@email.com"></label>'+
+    '<button type="button" class="go" id="r-enviar">Mandar código</button>'+
+    '<p class="fine" id="r-msg"></p>'+
+  '</div>';
+  var ei=document.getElementById('r-email');
+  setTimeout(function(){try{ei.focus();}catch(e){}},200);
+  document.getElementById('r-enviar').onclick=function(){
+    var msg=document.getElementById('r-msg'), bt=this;
+    var email=ei.value.trim();
+    if(!email||email.indexOf('@')<0){ msg.textContent='Preciso de um e-mail válido.'; msg.className='fine erro'; return; }
+    bt.disabled=true; msg.className='fine'; msg.textContent='Enviando…';
+    fetch(API+'recuperar-progresso',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({acao:'enviar',email:email})})
+      .then(function(r){ return r.json().catch(function(){return {};}); })
+      .then(function(j){
+        bt.disabled=false;
+        if(j&&j.ok){ trackEvent('recovery_code_sent'); recDesenhaCodigo(email); return; }
+        if(j&&j.erro==='sem_chave'){ msg.textContent='O envio está fora do ar agora — tenta de novo em alguns minutos.'; return; }
+        msg.textContent='Não consegui enviar — é problema meu, não seu. Tenta de novo.';
+      })
+      .catch(function(){ bt.disabled=false; msg.textContent='Sem conexão para enviar agora.'; });
+  };
+}
+function recDesenhaCodigo(email){
+  document.getElementById('r-corpo').innerHTML='<div class="miolo">'+
+    '<h2>Chegou um código no seu e-mail</h2>'+
+    '<p class="lede">Cola aqui os 6 dígitos que mandamos para '+esc(email)+'. Vale por 10 minutos.</p>'+
+    '<label class="campo"><span>Código</span>'+
+      '<input id="r-codigo" class="r-codigo" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="000000"></label>'+
+    '<button type="button" class="go" id="r-confirmar">Confirmar</button>'+
+    '<p class="fine" id="r-msg"></p>'+
+    '<button type="button" class="ghost" id="r-voltar">Usar outro e-mail</button>'+
+  '</div>';
+  var ci=document.getElementById('r-codigo');
+  setTimeout(function(){try{ci.focus();}catch(e){}},200);
+  document.getElementById('r-voltar').onclick=function(){ recDesenhaEmail(email); };
+  document.getElementById('r-confirmar').onclick=function(){
+    var msg=document.getElementById('r-msg'), bt=this;
+    var codigo=ci.value.trim();
+    if(!/^\d{6}$/.test(codigo)){ msg.textContent='O código tem 6 números.'; msg.className='fine erro'; return; }
+    bt.disabled=true; msg.className='fine'; msg.textContent='Confirmando…';
+    fetch(API+'recuperar-progresso',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({acao:'confirmar',email:email,codigo:codigo})})
+      .then(function(r){ return r.json().catch(function(){return {};}).then(function(j){return {r:r,j:j};}); })
+      .then(function(o){
+        bt.disabled=false;
+        if(o.r.ok&&o.j.ok&&o.j.encontrado){ recRestaurar(o.j.jogador); return; }
+        if(o.r.ok&&o.j.ok&&!o.j.encontrado){ msg.textContent='O código era certo, mas não achei nenhum jogo salvo com este e-mail.'; return; }
+        if(o.j&&o.j.erro==='codigo_incorreto'){ msg.textContent='Código errado — confere os 6 números.'; return; }
+        if(o.j&&o.j.erro==='codigo_expirado'){ msg.textContent='Esse código já venceu. Volta e pede outro.'; return; }
+        if(o.j&&o.j.erro==='muitas_tentativas'){ msg.textContent='Muitas tentativas erradas. Volta e pede um código novo.'; return; }
+        if(o.j&&o.j.erro==='sem_codigo_pendente'){ msg.textContent='Esse código já foi usado ou nunca foi pedido. Pede um novo.'; return; }
+        msg.textContent='Não consegui confirmar agora — tenta de novo.';
+      })
+      .catch(function(){ bt.disabled=false; msg.textContent='Sem conexão para confirmar agora.'; });
+  };
+}
+function recRestaurar(j){
+  trackEvent('recovery_restored');
+  playerId=j.player_id; S.playerId=playerId; ls(PID,playerId);
+  S.nome=j.nome||S.nome; S.email=j.email||S.email; S.tel=j.whatsapp||S.tel;
+  S.genero=j.genero||S.genero;
+  S.data=j.data_nascimento||S.data;
+  S.hora=j.hora_nascimento?String(j.hora_nascimento).slice(0,5):S.hora;
+  S.horaIncerta=!!j.hora_incerta;
+  if(j.cidade) S.cidade={nome:j.cidade, uf:j.uf, tz:j.timezone};
+  S.reflexao=j.reflection_selected||S.reflexao;
+  if(j.consentimentos){
+    S.okRelatorio=!!j.consentimentos.relatorio;
+    S.okNovidades=!!j.consentimentos.novidades;
+    S.maior=!!j.consentimentos.maior;
+  }
+  var etapaAlvo=Math.max(0,Math.min(7,+j.current_stage||0));
+  S.etapa=etapaAlvo||1; S.sub=0;
+  salvar();
+  fecharRecuperar();
+  ir(S.etapa,0);
+}
 
 function socorro(msg){
   try{
