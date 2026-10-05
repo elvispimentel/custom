@@ -237,3 +237,22 @@ def test_envio_resumivel_le_id_em_file_ou_usa_o_id_conhecido():
     d = DriveComposio(cliente(h))
     assert d.enviar("g.pdf", b"x" * (5 * 1024 * 1024), "pasta") == "ID_EM_FILE"          # criação: id em 'file'
     assert d.enviar("estado.db", b"x", "pasta", atualizar_id="F9") == "F9"                # atualização: id conhecido
+
+
+def test_cota_do_google_espera_e_repete_mesmo_sem_repetir():
+    h = HttpFalso()
+    cota = Resp(200, {"successful": False, "error": "403 Quota exceeded ... rateLimitExceeded"})
+    h.fila["/api/v3.1/tools/execute/GOOGLEDRIVE_MOVE_FILE"] = [cota, cota, Resp(200, {"successful": True, "data": {"id": "x"}})]
+    esperas = []
+    c = cliente(h)
+    c.dormir = esperas.append
+    assert c.executar("GOOGLEDRIVE_MOVE_FILE", {}, repetir=False) == {"id": "x"}
+    assert esperas == [15, 30] and len(h.reqs) == 3
+
+
+def test_cota_persistente_acaba_em_erro():
+    h = HttpFalso()
+    h.fila["/api/v3.1/tools/execute/X"] = Resp(200, {"successful": False, "error": "rateLimitExceeded"})
+    with pytest.raises(ComposioError, match="rateLimitExceeded"):
+        cliente(h).executar("X", {})
+    assert len(h.reqs) == 7

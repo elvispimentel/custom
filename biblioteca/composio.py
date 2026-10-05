@@ -21,6 +21,10 @@ PASTA = "application/vnd.google-apps.folder"
 ATALHO = "application/vnd.google-apps.shortcut"
 
 
+ESPERAS_COTA_S = (15, 30, 60, 60, 90, 120)
+MARCAS_COTA = ("rateLimitExceeded", "RATE_LIMIT_EXCEEDED", "userRateLimitExceeded", "Quota exceeded")
+
+
 class ComposioError(Exception):
     pass
 
@@ -61,10 +65,17 @@ class Composio:
         if toolkit and self.contas.get(toolkit):
             corpo["connected_account_id"] = self.contas[toolkit]
         self.chamadas[slug] += 1
-        resp = self._req("POST", f"/api/v3.1/tools/execute/{slug}", tentativas=5 if repetir else 1, json=corpo)
-        if not resp.get("successful"):
-            raise ComposioError(f"{slug}: {resp.get('error')}")
-        return resp.get("data") or {}
+        for t in range(ESPERAS_COTA_S.__len__() + 1):
+            resp = self._req("POST", f"/api/v3.1/tools/execute/{slug}", tentativas=5 if repetir else 1, json=corpo)
+            if resp.get("successful"):
+                return resp.get("data") or {}
+            erro = str(resp.get("error"))
+            # cota por minuto do Google (projeto compartilhado do Composio): a chamada foi recusada antes de
+            # executar, então esperar e repetir é seguro mesmo para uploads
+            if t < len(ESPERAS_COTA_S) and any(m in erro for m in MARCAS_COTA):
+                self.dormir(ESPERAS_COTA_S[t])
+                continue
+            raise ComposioError(f"{slug}: {erro}")
 
     def esquema_ferramenta(self, slug):
         return self._req("GET", f"/api/v3.1/tools/{slug}", params={"toolkit_versions": self.versao})
