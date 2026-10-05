@@ -8,6 +8,12 @@ from typing import Callable
 
 API = "https://www.googleapis.com/youtube/v3"
 SHORT_MAX_SEGUNDOS = 180
+IDS_POR_CHAMADA = 50  # limite de ids por chamada videos.list / channels.list
+
+
+def em_lotes(itens: list, n: int = IDS_POR_CHAMADA):
+    for i in range(0, len(itens), n):
+        yield itens[i : i + n]
 
 
 class YouTubeAPIError(RuntimeError):
@@ -45,6 +51,7 @@ def collect_youtube(
     api_key: str,
     fetch: Callable[[str, dict], dict] = http_get_json,
     max_videos: int = 30,
+    max_mais_vistos: int = 25,
 ) -> tuple[list[dict], int]:
     canal = fetch(
         f"{API}/channels",
@@ -58,13 +65,25 @@ def collect_youtube(
         {"part": "contentDetails", "playlistId": uploads, "maxResults": max_videos, "key": api_key},
     )["items"]
     ids = [i["contentDetails"]["videoId"] for i in itens]
+    if max_mais_vistos > 0:
+        mais_vistos = fetch(
+            f"{API}/search",
+            {
+                "part": "id", "channelId": concorrente["channel_id"], "order": "viewCount",
+                "type": "video", "maxResults": min(max_mais_vistos, 50), "key": api_key,
+            },
+        )
+        ids += [i["id"]["videoId"] for i in mais_vistos.get("items", [])]
+    ids = list(dict.fromkeys(ids))  # sem repetir, mantendo a ordem
     if not ids:
         return [], seguidores
 
-    videos = fetch(
-        f"{API}/videos",
-        {"part": "snippet,contentDetails,statistics", "id": ",".join(ids), "key": api_key},
-    )["items"]
+    videos = []
+    for lote in em_lotes(ids):
+        videos += fetch(
+            f"{API}/videos",
+            {"part": "snippet,contentDetails,statistics", "id": ",".join(lote), "key": api_key},
+        )["items"]
     agora = datetime.now(timezone.utc).isoformat()
     posts = []
     for v in videos:

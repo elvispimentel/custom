@@ -10,7 +10,8 @@ REQUIRED = (
     "analise_por_plataforma",
     "modelo_analise",
     "max_buscas_youtube",
-    "min_seguidores_candidato",
+    "min_views_video",
+    "max_mais_vistos_por_canal",
     "max_posts_por_concorrente",
 )
 

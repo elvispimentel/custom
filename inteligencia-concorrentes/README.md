@@ -29,15 +29,16 @@ Sem os dois secrets da Meta, a coleta roda só no YouTube e a Issue avisa "Insta
 
 1. **Descobrir candidatos (sob demanda):** Actions → *Concorrentes semanal* → Run workflow → modo `descobrir`.
    O agente busca no YouTube os **vídeos mais vistos** para cada palavra de `palavras_chave` (autores, obras e temas,
-   em `config/territorios.json`) e lista os **canais** desses vídeos, descartando os que têm menos de
-   `min_seguidores_candidato` inscritos. Canais que aparecem em mais palavras vêm primeiro.
+   em `config/territorios.json`) e lista os **canais** desses vídeos. O que conta é a visualização do melhor vídeo
+   (`min_views_video`, hoje 100 mil), **não** o número de inscritos; cada candidato mostra esse vídeo como prova.
+   Canais que aparecem em mais palavras vêm primeiro.
    Cada busca custa 100 unidades da cota diária (10.000); o limite por execução é `max_buscas_youtube`.
    Para buscar outro autor ou obra, acrescente a palavra em `palavras_chave` (e aumente `max_buscas_youtube` se passar de 20).
    Se já houver candidatos antigos que você não quer, deixe `data/concorrentes.json` como `[]` antes de rodar de novo.
 2. **Aprovar:** na branch `dados-concorrentes`, edite `data/concorrentes.json` pelo GitHub e mude
    `"status": "candidato"` para `"aprovado"` (ou `"descartado"`). Só `aprovado` é coletado.
    Concorrentes do Instagram: adicione manualmente com `plataforma: "instagram"`, `handle` e `status`.
-3. **Coletar:** roda sozinho toda segunda (06h em Brasília), ou manualmente com modo `coletar`.
+3. **Coletar:** para cada canal aprovado, o agente pega os vídeos recentes **e** os mais vistos do canal (100 unidades de cota por canal), e ranqueia por **visualizações e comentários** de todo o histórico (inscritos não entram na conta). Roda sozinho toda segunda (06h em Brasília), ou manualmente com modo `coletar`.
    O resultado chega como uma Issue.
 
 ## Renovar o token da Meta

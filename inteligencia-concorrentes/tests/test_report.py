@@ -56,3 +56,12 @@ def test_issue_body_avisa_renovar_token():
     body = build_issue_body("# Relatório", ["renovar token Meta"])
     assert "renovar token Meta" in body.splitlines()[0]
     assert "# Relatório" in body
+
+
+def test_relatorio_mostra_views_e_comentarios_de_cada_post():
+    concs = [{"id": "c1", "nome": "Canal 1", "plataforma": "youtube", "status": "aprovado"}]
+    yt = {**post("p1", "c1", score=0.9, validado=True), "views": 1_200_000, "comentarios": 3400}
+    ig = {**post("p2", "c1", score=0.8, plat="instagram", formato="reel"), "views": None, "curtidas": 52000, "comentarios": 410}
+    md = build_report({"youtube": [yt], "instagram": [ig]}, concs, {}, [], NOW)
+    assert "1.200.000 views" in md and "3.400 comentários" in md
+    assert "52.000 curtidas" in md and "410 comentários" in md

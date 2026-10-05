@@ -153,7 +153,9 @@ def main(argv: list[str]) -> int:
     meta, ig_id = os.environ.get("META_ACCESS_TOKEN"), os.environ.get("IG_USER_ID")
     ig = (lambda c: collect_instagram(c, ig_id, meta, limit=config["max_posts_por_concorrente"])) if meta and ig_id else None
     cols = Collectors(
-        youtube=lambda c: collect_youtube(c, yt_key, max_videos=config["max_posts_por_concorrente"]),
+        youtube=lambda c: collect_youtube(
+            c, yt_key, max_videos=config["max_posts_por_concorrente"], max_mais_vistos=config["max_mais_vistos_por_canal"]
+        ),
         instagram=ig,
     )
     run(config, data_dir, now, cols, lambda p: analyze_post(p, llm, config["modelo_analise"]))

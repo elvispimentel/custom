@@ -12,7 +12,7 @@ def test_config_real_tem_valores_do_spec():
     cfg = load_config(REAL)
     assert cfg["limiares"]["youtube_views_validado"] == 1_000_000
     assert cfg["limiares"]["instagram_curtidas_validado"] == 50_000
-    assert cfg["janela_dias"] == 90
+    assert cfg["janela_dias"] >= 365  # ranking dos mais vistos de todo o histórico
     assert cfg["idade_minima_horas"] == 48
 
 
@@ -30,10 +30,12 @@ def test_dependencias_e_modelo_sao_da_openai():
     assert load_config(REAL)["modelo_analise"].startswith("gpt")
 
 
-def test_config_tem_autores_obras_e_piso_de_inscritos():
+def test_config_tem_autores_obras_e_piso_de_views():
     cfg = load_config(REAL)
     palavras = [p.lower() for p in cfg["palavras_chave"]]
     for termo in ("joe dispenza", "helio couto", "transurfing", "ressonância harmônica", "lei da atração", "hackeando a mente"):
         assert termo in palavras
-    assert cfg["min_seguidores_candidato"] >= 1000
+    assert cfg["min_views_video"] >= 10_000
+    assert "min_seguidores_candidato" not in cfg
+    assert cfg["max_mais_vistos_por_canal"] >= 10
     assert cfg["max_buscas_youtube"] >= len(cfg["palavras_chave"])
