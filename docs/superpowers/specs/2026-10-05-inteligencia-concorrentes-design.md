@@ -30,14 +30,21 @@ Territórios futuros (fora do escopo desta fase): hipnose/influência/vendas; ap
 
 ## 4. Estrutura do repositório
 
+Branch principal (código):
 ```
 inteligencia-concorrentes/
   config/territorios.json      # território A, palavras-chave, limiares
-  data/concorrentes.json       # lista com status
-  data/posts/AAAA-MM.json      # posts e métricas
-  relatorios/AAAA-MM-DD.md     # relatório semanal
   scripts/                     # descobrir, coletar, ranquear, analisar, relatar
-  .github/workflows/semanal.yml
+  tests/
+.github/workflows/semanal.yml  # na raiz: o GitHub só lê workflows de lá
+```
+
+Branch `dados-concorrentes` (dados, nunca force push):
+```
+data/concorrentes.json         # lista com status
+data/posts/AAAA-MM.json        # posts e métricas
+data/analises.json             # análises já feitas
+relatorios/AAAA-MM-DD.md       # relatório semanal
 ```
 
 Chaves (YouTube, Meta, Claude) ficam somente em GitHub Secrets.
@@ -46,7 +53,7 @@ Chaves (YouTube, Meta, Claude) ficam somente em GitHub Secrets.
 
 **Concorrente:** `id`, `nome`, `plataforma`, `handle` ou `channel_id`, `pais`, `idioma`, `seguidores`, `territorio`, `status` (candidato | aprovado | descartado | sem_acesso), `motivo`, `descoberto_em`.
 
-**Post:** `id`, `concorrente_id`, `plataforma`, `url`, `formato` (reel | carrossel | short | video), `publicado_em`, `titulo_ou_legenda`, `views` (somente YouTube), `curtidas`, `comentarios`, `score`, `coletado_em`. Mantém a coleta atual e a anterior; sem histórico completo.
+**Post:** `id`, `concorrente_id`, `plataforma`, `url`, `formato` (reel | carrossel | imagem | short | video), `publicado_em`, `titulo_ou_legenda`, `views` (somente YouTube), `curtidas`, `comentarios`, `score`, `coletado_em`. Mantém a coleta atual e a anterior; sem histórico completo.
 
 **Análise (top 10):** `post_id`, `gancho`, `tema`, `promessa`, `por_que_funcionou`, `adaptacao_galifrael`.
 
@@ -59,7 +66,7 @@ Concorrentes e posts ficam separados para que aprovar ou descartar um perfil nã
 - Rankings separados por plataforma; métricas não são comparáveis entre elas.
 - Janela: últimos 90 dias. Posts com menos de 48 horas são excluídos.
 - Selo "validado": YouTube com 1 milhão de views ou mais; Instagram com piso de curtidas definido em `config` (sugestão inicial: 50 mil).
-- Análise do Claude: JSON de saída fixo; sem transcrição na fase 1, o gancho vem do título ou da legenda.
+- Análise do Claude: top 10 = 5 por plataforma (`analise_por_plataforma`); JSON de saída fixo; sem transcrição na fase 1, o gancho vem do título ou da legenda.
 - Relatório: para cada um dos 5 melhores concorrentes, os 3 posts de topo; padrões da semana (ganchos e formatos recorrentes); uma sugestão de conteúdo por padrão, ligada à tese do Galifrael.
 
 ## 7. Agendamento e erros
