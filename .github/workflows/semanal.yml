@@ -1,0 +1,75 @@
+name: Concorrentes semanal
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "coletar (ranking + relatório) ou descobrir (novos candidatos)"
+        type: choice
+        options: [coletar, descobrir]
+        default: coletar
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: concorrentes-semanal
+  cancel-in-progress: false
+
+jobs:
+  semanal:
+    runs-on: ubuntu-latest
+    env:
+      MODO: ${{ inputs.modo || 'coletar' }}
+      YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: pip install -r inteligencia-concorrentes/requirements.txt
+
+      - name: Rodar testes
+        run: cd inteligencia-concorrentes && python -m pytest -q
+
+      - name: Preparar branch de dados
+        run: |
+          git fetch origin dados-concorrentes || true
+          if git show-ref --verify --quiet refs/remotes/origin/dados-concorrentes; then
+            git worktree add -B dados-concorrentes dados origin/dados-concorrentes
+          else
+            git worktree add --orphan -b dados-concorrentes dados
+          fi
+
+      - name: Executar
+        run: |
+          if [ "$MODO" = "descobrir" ]; then
+            python inteligencia-concorrentes/scripts/discover.py --data-dir dados
+          else
+            python inteligencia-concorrentes/scripts/run_weekly.py --data-dir dados
+          fi
+
+      - name: Salvar dados na branch dados-concorrentes
+        run: |
+          cd dados
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data relatorios
+          if ! git diff --cached --quiet; then
+            git commit -m "dados: execução $(date -u +%F) ($MODO)"
+            git push origin dados-concorrentes
+          fi
+
+      - name: Abrir Issue com o resumo
+        if: ${{ env.MODO != 'descobrir' }}
+        run: gh issue create --title "Concorrentes — semana de $(date -u +%F)" --body-file dados/issue.md
