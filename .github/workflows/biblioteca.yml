@@ -11,6 +11,7 @@ on:
         options:
           - "Localizar Biblioteca Pessoal"
           - "Verificar conexões"
+          - "Conectar Google Drive"
           - "Simular organização"
           - "Mover duplicados para revisão"
           - "Simular temas e autores"
@@ -44,6 +45,7 @@ concurrency:
 
 permissions:
   contents: read
+  actions: read      # só para saber se a execução dona da trava ainda está rodando
 
 jobs:
   executar:
@@ -53,12 +55,14 @@ jobs:
       COMPOSIO_API_KEY: ${{ secrets.COMPOSIO_API_KEY }}
       COMPOSIO_USER_ID: ${{ secrets.COMPOSIO_USER_ID }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       BIBLIOTECA_ID: ${{ inputs.biblioteca_id || vars.BIBLIOTECA_ID }}
       PASTA_PAI_ID: ${{ vars.PASTA_PAI_ID }}
       PASTA_PDFS_ID: ${{ vars.PASTA_PDFS_ID }}
       PASTA_DUPLICADOS_ID: ${{ vars.PASTA_DUPLICADOS_ID }}
       PASTA_CONTROLE_ID: ${{ vars.PASTA_CONTROLE_ID }}
       BIBLIOTECA_CONFIG: config.exemplo.yaml
+      GITHUB_TOKEN: ${{ github.token }}
       ACAO: ${{ inputs.acao }}
       MAX_LOTES: ${{ inputs.max_lotes }}
       INCLUIR_LOTES: ${{ inputs.incluir_lotes }}
@@ -83,6 +87,7 @@ jobs:
           case "$ACAO" in
             "Localizar Biblioteca Pessoal") python -m biblioteca localizar ;;
             "Verificar conexões")           python -m biblioteca verificar ;;
+            "Conectar Google Drive")        python -m biblioteca conectar ;;
             "Simular organização")
               if [ "$INCLUIR_LOTES" = "true" ]; then python -m biblioteca simular --com-lotes; else python -m biblioteca simular; fi ;;
             "Mover duplicados para revisão") exige_confirmacao; python -m biblioteca mover-duplicados ;;

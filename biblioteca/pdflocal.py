@@ -2,7 +2,9 @@
 sem créditos e sem transferência pelo Composio. Mesma interface do ILovePDFComposio."""
 import io
 
-from pypdf import PdfReader, PdfWriter
+from pypdf import PdfWriter
+
+from .pdfs import abrir_leitor
 
 
 class PdfLocal:
@@ -18,7 +20,7 @@ class PdfLocal:
         w = PdfWriter()
         for nome, dados in arquivos:
             inicio = len(w.pages)
-            leitor = PdfReader(io.BytesIO(dados))
+            leitor, _ = abrir_leitor(dados)          # abre também PDFs só com restrições ou com defeitos leves
             for pagina in leitor.pages:
                 w.add_page(pagina)
             w.add_outline_item(nome.rsplit(".", 1)[0][:120], inicio)   # marcador com o nome do original

@@ -13,17 +13,19 @@ PADRAO = {
         "controle_nome": "Biblioteca Pessoal — Controle do Agente", "controle_id": "",
     },
     "composio": {"base_url": "https://backend.composio.dev", "versao_ferramentas": "latest",
-                 "contas": {"googledrive": "", "i_love_pdf": ""}},
+                 "contas": {"googledrive": "", "i_love_pdf": ""},
+                 "auth_configs": {"googledrive": ""}},
     "arquivos": {"estabilidade_minutos": 30,
                  "ignorar_nomes": [".DS_Store", "Thumbs.db", "desktop.ini"],
                  "pastas_de_copias": ["cópia", "copia", "copias", "cópias", "backup", "duplicad", "old"]},
     "pdf": {"motor": "local"},
     "ilovepdf": {"max_arquivos_por_chamada": 20, "reservar_creditos": 0},
-    "lotes": {"max_documentos": 25, "meta_mb": 90, "meta_palavras": 450000,
+    "pessoal": {"padroes": [], "codigo_data_hora": True, "pasta": "00 - Arquivos pessoais"},
+    "lotes": {"agrupar_por": "pasta", "grupo_sem_tema": "Sem tema", "max_documentos": 25, "meta_mb": 90, "meta_palavras": 450000,
               "limite_mb": 200, "limite_palavras": 500000,
               "paginas_amostra_texto": 20, "palavras_por_pagina_padrao": 300,
               "minimo_caracteres_por_pagina": 25},
-    "execucao": {"tempo_max_minutos": 300, "pasta_trabalho": "trabalho"},
+    "execucao": {"tempo_max_minutos": 300, "pasta_trabalho": "trabalho", "paralelismo_listagem": 6},
     "organizacao": {"destino": "dentro", "mover_nao_classificados": False,
                     "pasta_nao_classificados": "A classificar", "pasta_sem_autor": "_Sem autor identificado",
                     "confianca_minima": 0.7, "classificador": "regras",
@@ -59,6 +61,7 @@ class Config:
     api_key: str = ""
     user_id: str = ""
     anthropic_key: str = ""
+    openai_key: str = ""
 
     def __getitem__(self, k):
         return self.d[k]
@@ -79,7 +82,8 @@ def carregar(caminho: str | None = None) -> Config:
             d[sec][chave] = os.environ[env].strip()
     return Config(d=d, api_key=os.environ.get("COMPOSIO_API_KEY", ""),
                   user_id=os.environ.get("COMPOSIO_USER_ID", ""),
-                  anthropic_key=os.environ.get("ANTHROPIC_API_KEY", ""))
+                  anthropic_key=os.environ.get("ANTHROPIC_API_KEY", ""),
+                  openai_key=os.environ.get("OPENAI_API_KEY", ""))
 
 
 def exigir_credenciais(cfg: Config):

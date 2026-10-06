@@ -20,6 +20,8 @@ composio:
   contas:                        # opcional: connected_account_id de cada toolkit
     googledrive: ""
     i_love_pdf: ""
+  auth_configs:                  # opcional: só se 'conectar' avisar que há mais de uma auth config
+    googledrive: ""
 
 arquivos:
   estabilidade_minutos: 30       # ignora arquivos alterados há menos que isso (ainda subindo)
@@ -35,9 +37,17 @@ ilovepdf:                        # só vale com pdf.motor: ilovepdf
   max_arquivos_por_chamada: 20   # limite real do esquema I_LOVE_PDF_MERGE_PDFS (maxItems=20)
   reservar_creditos: 0
 
+pessoal:                         # arquivos do dono: ficam juntos e separados, para poder vender a biblioteca sem eles
+  codigo_data_hora: true         # pessoal = o NOME tem o código de data e hora do dono (ddmmaaaahhmm, ex.: 0510202615h21)
+  padroes: []                    # (opcional) nomes que também tornam o arquivo pessoal; vazio: nome do dono sem o código NÃO conta
+  pasta: "00 - Arquivos pessoais (Elvis Pimentel)"   # pasta criada dentro da biblioteca; os lotes dela também ficam à parte
+
 lotes:
-  max_documentos: 25             # com motor local pode subir (ex.: 50); as metas de MB/palavras ainda valem
-  meta_mb: 90                    # meta (margem de segurança) abaixo do teto; pode subir, ex.: 180
+  agrupar_por: "tema"            # tema = junta todos os autores de um tema (lotes cheios); pasta = um grupo por pasta
+  grupo_sem_tema: "Sem tema"     # onde entram os livros fora das pastas de tema
+  max_documentos: 0              # 0 = sem limite de quantidade: junta o máximo que couber nas metas de MB e de palavras
+                                 # (o limite de 25 era só do iLovePDF; com o motor local não existe)
+  meta_mb: 180                   # meta (margem de segurança) abaixo do teto de 200 MB do NotebookLM
   meta_palavras: 450000
   limite_mb: 200                 # teto do NotebookLM por fonte (200 MB); nada acima disso é gerado
   limite_palavras: 500000        # teto do NotebookLM por fonte (500 mil palavras)
@@ -48,6 +58,7 @@ lotes:
 execucao:
   tempo_max_minutos: 300         # para com segurança antes do limite de 6 h do job
   pasta_trabalho: "trabalho"
+  paralelismo_listagem: 6        # pastas listadas ao mesmo tempo no inventário (1 = uma por vez)
 
 organizacao:                     # fase "temas e autores"
   destino: "dentro"              # dentro = <Biblioteca>/<Tema>/<Autor>/arquivo
@@ -55,12 +66,18 @@ organizacao:                     # fase "temas e autores"
   pasta_nao_classificados: "A classificar"
   pasta_sem_autor: "_Sem autor identificado"
   confianca_minima: 0.7
-  classificador: "regras"        # regras | claude  (claude exige ANTHROPIC_API_KEY)
+  classificador: "openai"        # regras | claude | openai  (exigem ANTHROPIC_API_KEY / OPENAI_API_KEY)
+  modelo_openai: "gpt-4o-mini"
   modelo_claude: "claude-haiku-4-5-20251001"
+  formatos_livro: ["pdf", "epub", "mobi", "azw3", "doc", "docx", "txt", "rtf", "odt"]  # o resto (imagens, html, psd, .icloud) não é movido
   temas:                         # edite livremente; palavras-chave em minúsculas
-    "Hermetismo e Esoterismo": ["hermet", "kybalion", "alquimia", "esoter", "tarot", "ocult", "gnose"]
-    "Cabala e Misticismo": ["cabala", "kabbal", "zohar", "sefirot", "místic", "mistic"]
-    "Psicologia e Arquétipos": ["arquétipo", "arquetipo", "jung", "psicolog", "inconsciente", "mito"]
-    "Física Quântica e Ciência": ["quânt", "quant", "física", "fisica", "cosmos", "neuro"]
-    "Vendas e Negócios": ["vendas", "negoci", "marketing", "empreend", "lideran", "gestão", "gestao"]
-    "Desenvolvimento Pessoal": ["hábito", "habito", "mindset", "produtiv", "autoconhec", "propósito", "proposito"]
+    "Hermetismo e Esoterismo": ["hermet", "kybalion", "alquimia", "esoter", "tarot", "ocult", "gnose", "astrolog", "magia", "teosof", "rosacruz", "maçon", "macon", "numerolog", "thoth", "trismegist"]
+    "Cabala e Misticismo": ["cabala", "kabbal", "zohar", "sefirot", "místic", "mistic", "sufi", "upanishad", "budis", "yoga", "vedan", "espiritual"]
+    "Psicologia e Arquétipos": ["arquétipo", "arquetipo", "jung", "psicolog", "inconsciente", "mito", "freud", "terapia", "emoç", "emoc", "comportament", "sonho", "psique"]
+    "Física Quântica e Ciência": ["quânt", "quant", "física", "fisica", "cosmos", "neuro", "universo", "ciência", "ciencia", "biolog", "matemática", "matematica", "relatividade", "astronomia"]
+    "Vendas e Negócios": ["vendas", "negoci", "marketing", "empreend", "lideran", "gestão", "gestao", "copywriting", "finança", "financ", "investi", "startup", "persuas", "negocia", "milion"]
+    "Desenvolvimento Pessoal": ["hábito", "habito", "mindset", "produtiv", "autoconhec", "propósito", "proposito", "autoestima", "motiva", "disciplina", "sucesso", "inteligência emocional"]
+    "Filosofia": ["filosof", "platão", "platao", "aristót", "aristot", "nietzsche", "sócrates", "socrates", "estoic", "sêneca", "seneca", "república", "republica", "ética", "etica", "metafísica", "metafisica", "kant", "schopenhauer"]
+    "História e Sociedade": ["históri", "histori", "sociolog", "política", "politica", "guerra", "civiliza", "antropolog", "império", "imperio", "revolução", "revolucao", "economia"]
+    "Religião e Teologia": ["bíblia", "biblia", "teolog", "cristian", "evangelho", "alcorão", "alcorao", "judaísmo", "judaismo", "igreja", "espírita", "espirita", "kardec"]
+    "Saúde e Corpo": ["saúde", "saude", "nutri", "dieta", "medicin", "fitness", "jejum", "terapêut"]

@@ -14,6 +14,45 @@ class Info:
     detalhe: str = ""
 
 
+MARCA_V2 = "[v2]"      # resultados 'protegido'/'invalido' sem esta marca vêm do analisador antigo e são refeitos
+
+
+class ProtegidoPorSenha(Exception):
+    pass
+
+
+def abrir_leitor(dados: bytes):
+    """Abre o PDF do jeito mais tolerante possível. Devolve (leitor, nota).
+    - criptografado só com restrições (sem senha para abrir): abre com senha vazia;
+    - estrutura meio quebrada: tenta de novo em modo tolerante (strict=False).
+    Levanta ProtegidoPorSenha se realmente exige senha, ou a exceção original se não abre de jeito nenhum."""
+    nota = ""
+    try:
+        leitor = PdfReader(io.BytesIO(dados))
+        if leitor.is_encrypted:
+            if leitor.decrypt("") == 0:
+                raise ProtegidoPorSenha()
+            nota = "aberto com senha vazia (só tinha restrições)"
+        len(leitor.pages)
+        leitor.pages[0]
+        return leitor, nota
+    except ProtegidoPorSenha:
+        raise
+    except Exception as primeiro:
+        try:
+            leitor = PdfReader(io.BytesIO(dados), strict=False)
+            if leitor.is_encrypted and leitor.decrypt("") == 0:
+                raise ProtegidoPorSenha()
+            if len(leitor.pages) == 0:
+                raise ValueError("sem páginas")
+            leitor.pages[0]
+            return leitor, (nota + "; " if nota else "") + "lido em modo tolerante (estrutura com defeitos)"
+        except ProtegidoPorSenha:
+            raise
+        except Exception:
+            raise primeiro
+
+
 def _amostra(n_paginas: int, k: int) -> list[int]:
     if n_paginas <= k:
         return list(range(n_paginas))
@@ -23,14 +62,14 @@ def _amostra(n_paginas: int, k: int) -> list[int]:
 
 def analisar(dados: bytes, cfg) -> Info:
     try:
-        leitor = PdfReader(io.BytesIO(dados))
-        if leitor.is_encrypted:
-            return Info("protegido", detalhe="PDF criptografado/protegido por senha; não foi mesclado")
+        leitor, nota = abrir_leitor(dados)
         n = len(leitor.pages)
+    except ProtegidoPorSenha:
+        return Info("protegido", detalhe=f"PDF exige senha para abrir; não foi mesclado {MARCA_V2}")
     except Exception as e:
-        return Info("invalido", detalhe=f"não abre: {type(e).__name__}: {str(e)[:120]}")
+        return Info("invalido", detalhe=f"não abre: {type(e).__name__}: {str(e)[:120]} {MARCA_V2}")
     if n == 0:
-        return Info("invalido", detalhe="PDF sem páginas")
+        return Info("invalido", detalhe=f"PDF sem páginas {MARCA_V2}")
     L = cfg["lotes"]
     amostra, chars, palavras = _amostra(n, L["paginas_amostra_texto"]), 0, 0
     for i in amostra:
@@ -43,14 +82,16 @@ def analisar(dados: bytes, cfg) -> Info:
     cpp = chars / len(amostra)
     if cpp < L["minimo_caracteres_por_pagina"]:
         return Info("ocr", n, n * L["palavras_por_pagina_padrao"], cpp,
-                    "provável digitalização sem texto extraível: precisa de OCR (palavras estimadas por padrão)")
-    return Info("ok", n, round(palavras / len(amostra) * n), cpp)
+                    "provável digitalização sem texto extraível: precisa de OCR (palavras estimadas por padrão)"
+                    + (f"; {nota}" if nota else ""))
+    return Info("ok", n, round(palavras / len(amostra) * n), cpp, nota)
 
 
 def formar_lotes(itens, cfg):
     """itens: dicts com tamanho e palavras, JÁ em ordem natural. Devolve (lotes, avulsos).
     Fecha o lote antes de estourar qualquer meta; documento que sozinho excede vai para 'avulsos'
-    (subir separadamente no NotebookLM). Nunca reordena."""
+    (subir separadamente no NotebookLM). Nunca reordena. max_documentos 0 = sem limite de quantidade
+    (só valem as metas de MB e de palavras)."""
     L = cfg["lotes"]
     meta_b, meta_p, max_d = cfg.meta_bytes, L["meta_palavras"], L["max_documentos"]
     lotes, atual, b, p, avulsos = [], [], 0, 0, []
@@ -66,7 +107,7 @@ def formar_lotes(itens, cfg):
                               "não cabe nem sozinho, precisa ser dividido")
             avulsos.append({**it, "motivo": "; ".join(motivo)})
             continue
-        if atual and (len(atual) >= max_d or b + it["tamanho"] > meta_b or p + it["palavras"] > meta_p):
+        if atual and ((max_d and len(atual) >= max_d) or b + it["tamanho"] > meta_b or p + it["palavras"] > meta_p):
             lotes.append(atual)
             atual, b, p = [], 0, 0
         atual.append(it)

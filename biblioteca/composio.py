@@ -21,6 +21,10 @@ PASTA = "application/vnd.google-apps.folder"
 ATALHO = "application/vnd.google-apps.shortcut"
 
 
+ESPERAS_COTA_S = (15, 30, 60, 60, 90, 120)
+MARCAS_COTA = ("rateLimitExceeded", "RATE_LIMIT_EXCEEDED", "userRateLimitExceeded", "Quota exceeded")
+
+
 class ComposioError(Exception):
     pass
 
@@ -61,13 +65,44 @@ class Composio:
         if toolkit and self.contas.get(toolkit):
             corpo["connected_account_id"] = self.contas[toolkit]
         self.chamadas[slug] += 1
-        resp = self._req("POST", f"/api/v3.1/tools/execute/{slug}", tentativas=5 if repetir else 1, json=corpo)
-        if not resp.get("successful"):
-            raise ComposioError(f"{slug}: {resp.get('error')}")
-        return resp.get("data") or {}
+        for t in range(ESPERAS_COTA_S.__len__() + 1):
+            resp = self._req("POST", f"/api/v3.1/tools/execute/{slug}", tentativas=5 if repetir else 1, json=corpo)
+            if resp.get("successful"):
+                return resp.get("data") or {}
+            erro = str(resp.get("error"))
+            # cota por minuto do Google (projeto compartilhado do Composio): a chamada foi recusada antes de
+            # executar, então esperar e repetir é seguro mesmo para uploads
+            if t < len(ESPERAS_COTA_S) and any(m in erro for m in MARCAS_COTA):
+                self.dormir(ESPERAS_COTA_S[t])
+                continue
+            raise ComposioError(f"{slug}: {erro}")
 
     def esquema_ferramenta(self, slug):
         return self._req("GET", f"/api/v3.1/tools/{slug}", params={"toolkit_versions": self.versao})
+
+    def auth_config_gerenciada(self, toolkit, id_configurado=""):
+        """Auth config gerenciada pelo Composio para o toolkit (reaproveita a existente; cria se não houver).
+        Retorna (id, criada). Mais de uma gerenciada ativa = ambíguo: não escolhe, pede o ID na configuração."""
+        if id_configurado:
+            return id_configurado, False
+        itens = self._req("GET", "/api/v3.1/auth_configs", params={"toolkit_slug": toolkit, "limit": 100}).get("items", [])
+        ativas = [i for i in itens if i.get("status") == "ENABLED" and i.get("is_composio_managed")]
+        if len(ativas) > 1:
+            raise ComposioError("Há mais de uma auth config gerenciada ativa para %s (%s). Informe o ID em "
+                                "composio.auth_configs.%s." % (toolkit, ", ".join(i["id"] for i in ativas), toolkit))
+        if ativas:
+            return ativas[0]["id"], False
+        novo = self._req("POST", "/api/v3.1/auth_configs", json={
+            "toolkit": {"slug": toolkit}, "auth_config": {"type": "use_composio_managed_auth"}})
+        return novo["auth_config"]["id"], True
+
+    def criar_link(self, auth_config_id):
+        """Connect Link para o user_id configurado. Devolve {redirect_url, connected_account_id, expires_at}."""
+        r = self._req("POST", "/api/v3.1/connected_accounts/link",
+                      json={"auth_config_id": auth_config_id, "user_id": self.user_id})
+        if not r.get("redirect_url"):
+            raise ComposioError("resposta do link sem redirect_url: %s" % list(r))
+        return r
 
     def contas_ativas(self, toolkit):
         r = self._req("GET", "/api/v3.1/connected_accounts",
@@ -79,10 +114,21 @@ class Composio:
         pre = self._req("POST", "/api/v3.1/files/upload/request", json={
             "filename": nome, "md5": md5_bytes(dados), "mimetype": mimetype,
             "tool_slug": tool_slug, "toolkit_slug": toolkit_slug})
-        r = self.http.put(pre["new_presigned_url"], data=dados, headers={"Content-Type": mimetype},
-                          timeout=(15, 600))
-        if r.status_code != 200:
-            raise ComposioError(f"upload para armazenamento falhou: HTTP {r.status_code}")
+        # timeout único (não tupla): no requests/urllib3 o ENVIO do corpo usa o timeout de conexão; com (15, 600)
+        # um upload de alguns MB estourava "The write operation timed out". Tenta até 3 vezes.
+        for t in range(3):
+            try:
+                r = self.http.put(pre["new_presigned_url"], data=dados, headers={"Content-Type": mimetype}, timeout=600)
+            except requests.RequestException as e:
+                if t == 2:
+                    raise ComposioError(f"upload para armazenamento falhou: {type(e).__name__}") from e
+                self.dormir(2 ** (t + 1))
+                continue
+            if r.status_code == 200:
+                break
+            if t == 2 or r.status_code < 500:
+                raise ComposioError(f"upload para armazenamento falhou: HTTP {r.status_code}")
+            self.dormir(2 ** (t + 1))
         return {"name": nome, "mimetype": mimetype, "s3key": pre["key"]}
 
     def baixar_s3url(self, s3url) -> bytes:
@@ -90,6 +136,23 @@ class Composio:
         if r.status_code != 200:
             raise ComposioError(f"download falhou: HTTP {r.status_code}")
         return r.content
+
+
+def achar_email(obj) -> str | None:
+    """Procura um e-mail (emailAddress) em qualquer ponto da resposta de uma conta conectada."""
+    if isinstance(obj, dict):
+        if isinstance(obj.get("emailAddress"), str):
+            return obj["emailAddress"]
+        for v in obj.values():
+            r = achar_email(v)
+            if r:
+                return r
+    elif isinstance(obj, list):
+        for v in obj:
+            r = achar_email(v)
+            if r:
+                return r
+    return None
 
 
 def _norm(f: dict) -> dict:
@@ -176,10 +239,14 @@ class DriveComposio:
             slug = "GOOGLEDRIVE_UPLOAD_FILE"
             ref = self.c.enviar_arquivo(dados, nome, mimetype, slug, self.TK)
             args = {"file_to_upload": ref, "folder_to_upload_to": pasta_id}
-        d = self.c.executar(slug, args, self.TK, repetir=False)
-        if not d.get("id"):
+        # atualizar um arquivo existente é idempotente (pode repetir); criar um novo não é (duplicaria)
+        d = self.c.executar(slug, args, self.TK, repetir=bool(atualizar_id))
+        # RESUMABLE_UPLOAD devolve {display_url, file, link_label, sessionUri}: o id pode estar em 'file'
+        # (criação) ou não vir (atualização, onde o id já é conhecido).
+        fid = d.get("id") or (d.get("file") or {}).get("id") or atualizar_id
+        if not fid:
             raise ComposioError(f"{slug} sem id na resposta: {list(d)}")
-        return d["id"]
+        return fid
 
 
 class ILovePDFComposio:

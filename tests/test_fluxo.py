@@ -3,7 +3,7 @@ import io
 from datetime import datetime, timezone
 
 import pytest
-from pypdf import PdfReader
+from pypdf import PdfReader, PdfWriter
 
 from biblioteca import cli
 from biblioteca import duplicados as dup
@@ -329,7 +329,7 @@ def test_temas_simulacao_nao_move_e_aplicacao_organiza(mundo):
     por_nome = {p["nome"]: p for p in plano}
     j = por_nome["Carl Jung - Os Arquétipos e o Inconsciente Coletivo.pdf"]
     assert (j["tema"], j["autor"], j["acao"]) == ("Psicologia e Arquétipos", "Carl Jung", "mover")
-    assert por_nome["Planilha qualquer.xlsx"]["acao"] == "manter_nao_classificado"
+    assert por_nome["Planilha qualquer.xlsx"]["acao"] == "fora_do_escopo_nao_livro"
     r = org.aplicar_temas(ctx, plano)
     assert r["movidos"] == 3 and r["erros"] == 0
     antes = mundo.drive.chamadas["mover"]
@@ -361,3 +361,254 @@ def test_lixo_de_sistema_fica_fora_do_inventario(mundo):
     r = inventariar(ctx)
     assert r["ignorados"] == 2
     assert [x["nome"] for x in ctx.estado.q("SELECT nome FROM arquivos")] == ["livro.pdf"]
+
+
+def test_inventario_em_paralelo_equivale_ao_serial(mundo):
+    d = mundo.drive
+    for i in range(12):
+        p = d.pasta(f"P{i}", mundo.lib)
+        sub = d.pasta("sub", p)
+        d.arquivo(f"a{i}.pdf", pdf_texto(1, f"a{i}"), p)
+        d.arquivo(f"b{i}.pdf", pdf_texto(1, f"b{i}"), sub)
+    resultados = []
+    for n in (1, 6):
+        mundo.cfg.d["execucao"]["paralelismo_listagem"] = n
+        ctx = mundo.abrir(run=f"r{n}")
+        r = inventariar(ctx)
+        resultados.append((r, [tuple(x) for x in ctx.estado.q("SELECT nome, caminho FROM arquivos ORDER BY caminho, nome")]))
+        mundo.ctrl.liberar_trava()
+    assert resultados[0] == resultados[1] and resultados[0][0]["pastas"] == 25 and resultados[0][0]["arquivos"] == 24
+
+
+def test_trava_e_liberada_mesmo_se_a_gravacao_do_estado_falhar(mundo):
+    from biblioteca import cli as c
+
+    class Cont:
+        chamadas = {}
+    ctx = mundo.abrir(run="rZ")
+    ctx.salvar = lambda: (_ for _ in ()).throw(RuntimeError("queda ao gravar estado"))
+    c.encerrar(ctx, mundo.ctrl, Cont())      # não levanta, e libera a trava
+    mundo.abrir(run="rW")                    # se a trava tivesse ficado presa, levantaria BibliotecaOcupada
+
+
+def _trava_ocupada(mundo, dono="rDONO"):
+    mundo.abrir(run=dono)          # grava a trava como ocupada e "cai" sem liberar
+
+
+def test_trava_de_execucao_terminada_e_assumida_sem_esperar_o_prazo(mundo):
+    from biblioteca.controle import Controle
+    _trava_ocupada(mundo)
+    c = Controle(mundo.drive, mundo.ctrl.pasta, mundo.tmp / "t2", "rNOVA", run_ativa=lambda r: False)
+    c.adquirir_trava()             # não levanta: o dono já terminou
+
+
+def test_trava_de_execucao_em_andamento_continua_valendo(mundo):
+    from biblioteca.controle import Controle
+    _trava_ocupada(mundo)
+    c = Controle(mundo.drive, mundo.ctrl.pasta, mundo.tmp / "t3", "rNOVA", run_ativa=lambda r: True)
+    with pytest.raises(BibliotecaOcupada):
+        c.adquirir_trava()
+
+
+def test_trava_sem_como_confirmar_usa_o_prazo(mundo):
+    from biblioteca.controle import Controle
+    _trava_ocupada(mundo)
+    c = Controle(mundo.drive, mundo.ctrl.pasta, mundo.tmp / "t4", "rNOVA", run_ativa=lambda r: None)
+    with pytest.raises(BibliotecaOcupada):      # trava recente e sem confirmação: respeita o prazo
+        c.adquirir_trava()
+
+
+def test_exemplar_usa_a_data_original_quando_a_criacao_e_a_do_upload(mundo):
+    d = mundo.drive
+    a, b = d.pasta("A", mundo.lib), d.pasta("B", mundo.lib)
+    x = b"MESMO-CONTEUDO" * 20
+    upload = "2026-10-04T15:51:00+00:00"          # criação = upload em lote (igual para todos)
+    d.arquivo("69e4d9be-codigo.pdf", x, a, criado=upload, modificado="2026-09-01T10:00:00+00:00")
+    d.arquivo("Autor - Titulo Original.pdf", x, b, criado=upload, modificado="2025-01-15T10:00:00+00:00")
+    ctx = mundo.abrir(saidas=False)
+    inventariar(ctx)
+    (g,) = dup.detectar(ctx)
+    assert g["exemplar"]["nome"] == "Autor - Titulo Original.pdf"        # a data original mais antiga vence
+    assert "data mais antiga" in g["motivo"]
+
+
+def test_exemplar_sem_datas_nao_vira_o_mais_antigo():
+    from biblioteca.duplicados import escolher_exemplar
+    sem = dict(id="z", nome="sem-data.pdf", caminho="", criado=None, modificado=None)
+    com = dict(id="a", nome="com-data.pdf", caminho="", criado="2024-01-01T00:00:00+00:00", modificado=None)
+    assert escolher_exemplar([sem, com], [])[0]["id"] == "a"
+
+
+def test_nao_livros_ficam_fora_do_plano_de_temas():
+    assert org.eh_livro("Platão - A republica.pdf", ["pdf", "epub"])
+    assert not org.eh_livro("index.html", ["pdf", "epub"])
+    assert not org.eh_livro("125x125.jpg", ["pdf"])
+    assert not org.eh_livro("Livro.pdf.icloud", ["pdf"])
+    temas = {"Filosofia": ["platão", "república", "republica"], "Vendas": ["vendas"]}
+    tema, _, conf = org.classificar_regras({"caminho": "", "nome": "Platão - A republica.pdf"}, temas)
+    assert tema == "Filosofia" and conf >= 0.7
+
+
+def test_classificador_openai_le_resposta_e_descarta_tema_fora_da_lista(mundo, monkeypatch):
+    ctx = mundo.abrir()
+    ctx.cfg.d["organizacao"]["classificador"] = "openai"
+    ctx.cfg.d["organizacao"]["temas"] = {"Filosofia": ["x"], "Saúde e Corpo": ["y"]}
+    ctx.cfg.openai_key = "sk-teste"
+    chamadas = []
+
+    class R:
+        def raise_for_status(self): pass
+        def json(self):
+            return {"choices": [{"message": {"content":
+                '```json\n[{"id":"a","tema":"Filosofia","autor":"Platão","confianca":0.9},'
+                '{"id":"b","tema":"Inventado","autor":null,"confianca":0.9}]\n```'}}]}
+
+    def fake_post(url, **kw):
+        chamadas.append((url, kw["headers"]["Authorization"]))
+        return R()
+
+    monkeypatch.setattr(org.requests, "post", fake_post)
+    out = org.classificar_ia(ctx, [{"id": "a", "nome": "A República.pdf", "caminho": ""},
+                                   {"id": "b", "nome": "Outro.pdf", "caminho": ""}])
+    assert chamadas == [("https://api.openai.com/v1/chat/completions", "Bearer sk-teste")]
+    assert out["a"] == ("Filosofia", "Platão", 0.9)
+    assert out["b"] == (None, None, 0.0)
+
+
+def test_retry_repete_429_e_nao_repete_401(monkeypatch):
+    monkeypatch.setattr(org.time, "sleep", lambda s: None)
+
+    class Resp: 
+        def __init__(self, c): self.status_code = c
+
+    n = {"v": 0}
+    def instavel():
+        n["v"] += 1
+        if n["v"] < 3:
+            raise org.requests.HTTPError(response=Resp(429))
+        return "ok"
+    assert org._com_retry(instavel) == "ok" and n["v"] == 3
+
+    def negado():
+        raise org.requests.HTTPError(response=Resp(401))
+    try:
+        org._com_retry(negado)
+        assert False
+    except org.requests.HTTPError:
+        pass
+
+
+def test_agrupar_por_tema_junta_autores_e_manda_o_resto_para_sem_tema(mundo):
+    d = mundo.drive
+    h = d.pasta("Hermetismo", mundo.lib)
+    a1, a2 = d.pasta("Autor Um", h), d.pasta("Autor Dois", h)
+    solta = d.pasta("Curso antigo", mundo.lib)
+    d.arquivo("a.pdf", pdf_texto(2, "a"), a1)
+    d.arquivo("b.pdf", pdf_texto(2, "b"), a2)
+    d.arquivo("c.pdf", pdf_texto(2, "c"), solta)
+    d.arquivo("d.pdf", pdf_texto(2, "d"), mundo.lib)
+    ctx = mundo.abrir()
+    ctx.cfg.d["organizacao"]["temas"] = {"Hermetismo": ["x"]}
+    ctx.cfg.d["lotes"]["agrupar_por"] = "tema"
+    inventariar(ctx)
+    plano = lt.planejar(ctx)
+    por_grupo = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in plano}
+    assert por_grupo == {"Hermetismo": ["a.pdf", "b.pdf"], "Sem tema": ["c.pdf", "d.pdf"]}
+
+
+def test_max_documentos_zero_nao_limita_a_quantidade_so_mb_e_palavras():
+    from biblioteca.config import carregar
+    from biblioteca.pdfs import formar_lotes
+    cfg = carregar("/nao/existe.yaml")
+    cfg.d["lotes"].update({"max_documentos": 0, "meta_mb": 100, "meta_palavras": 1000})
+    itens = [{"id": str(i), "nome": f"{i}.pdf", "tamanho": 1000, "palavras": 10} for i in range(60)]
+    lotes, avulsos = formar_lotes(itens, cfg)
+    assert [len(l) for l in lotes] == [60] and not avulsos          # 60 livros num arquivo só
+    cfg.d["lotes"]["meta_palavras"] = 250                           # a meta de palavras ainda fecha o lote
+    lotes, _ = formar_lotes(itens, cfg)
+    assert [len(l) for l in lotes] == [25, 25, 10]
+
+
+def test_so_o_codigo_de_data_e_hora_torna_o_arquivo_pessoal():
+    from biblioteca.config import carregar
+    from biblioteca import pessoal
+    cfg = carregar("/nao/existe.yaml")
+    for nome in ["Elvis Pimentel 0510202615h21 - Mentoria.pdf", "Elvis Pimentel 1709198917h56 - Análise dos insights.pdf",
+                 "Elvis Pimentel 1708202615h46C1RTFLNSC - Investigando.pdf", "0709202521h00 - RELATÓRIO.pdf",
+                 "Ajay Elvish - 17h3219052025 Protocolo Holográfico.pdf"]:
+        assert pessoal.eh_pessoal_nome(cfg, nome), nome
+    for nome in ["Dossie Elvis Pimentel.pdf", "Desenho Humano - elvis-pimentel.pdf", "Ajay Elvish - Despertando Sentidos.pdf",
+                 "doc-[Elvis-Pimentel-18022026C1RTFLNSC---Voz-do-Autor_Marca]-2026-08-26.pdf",
+                 "Livro 12345678901.pdf", "Plano 3213202615h21.pdf", "Hipnose 0510202625h21.pdf"]:
+        assert not pessoal.eh_pessoal_nome(cfg, nome), nome         # sem código válido de data e hora
+    assert pessoal.eh_pessoal_caminho(cfg, "00 - Arquivos pessoais/x")             # já está na pasta pessoal
+    assert not pessoal.eh_pessoal_caminho(cfg, "Livros/Curso Elvis Pimentel")      # nome do dono numa pasta não basta
+    cfg.d["pessoal"]["padroes"] = ["ajay elvish"]
+    assert pessoal.eh_pessoal_nome(cfg, "Ajay Elvish - Despertando Sentidos.pdf")  # nomes opcionais continuam possíveis
+
+
+def test_arquivos_pessoais_vao_para_pasta_propria_e_para_lote_a_parte(mundo):
+    d = mundo.drive
+    d.arquivo("Carl Jung - Os Arquétipos.pdf", pdf_texto(2, "j"), mundo.lib)
+    d.arquivo("Dossie Elvis Pimentel.pdf", pdf_texto(2, "d"), mundo.lib)                      # nome sem código: NÃO é pessoal
+    d.arquivo("Elvis Pimentel 0510202615h21 - Mentoria Kybalion.pdf", pdf_texto(2, "m"), mundo.lib)
+    ctx = mundo.abrir()
+    ctx.cfg.d["organizacao"]["temas"] = {"Psicologia": ["jung"], "Hermetismo": ["kybalion"]}
+    ctx.cfg.d["pessoal"] = {"padroes": [], "codigo_data_hora": True, "pasta": "00 - Pessoais"}
+    ctx.cfg.d["lotes"]["agrupar_por"] = "tema"
+    inventariar(ctx); dup.detectar(ctx)
+    plano = org.planejar_temas(ctx)
+    por = {p["nome"]: p for p in plano}
+    m = por["Elvis Pimentel 0510202615h21 - Mentoria Kybalion.pdf"]
+    assert (m["destino"], m["acao"], m["fonte"]) == ("00 - Pessoais", "mover", "pessoal")   # o código vence o tema
+    assert por["Dossie Elvis Pimentel.pdf"]["destino"] != "00 - Pessoais"
+    assert por["Carl Jung - Os Arquétipos.pdf"]["destino"].startswith("Psicologia/")
+    org.aplicar_temas(ctx, plano)
+    inventariar(ctx)
+    lotes = {pl["pasta"]: sorted(i["nome"] for i in pl["itens"]) for pl in lt.planejar(ctx)}
+    assert lotes["00 - Pessoais"] == ["Elvis Pimentel 0510202615h21 - Mentoria Kybalion.pdf"]
+    assert all("0510202615h21" not in n for g, ns in lotes.items() if g != "00 - Pessoais" for n in ns)
+
+
+def _pdf_com_restricao_sem_senha_para_abrir(paginas=2, marca="r") -> bytes:
+    """Criptografado (AES) só com senha de dono: abre normalmente com senha vazia."""
+    w = PdfWriter()
+    w.append(PdfReader(io.BytesIO(pdf_texto(paginas, marca))))
+    w.encrypt(user_password="", owner_password="dono", algorithm="AES-256")
+    b = io.BytesIO()
+    w.write(b)
+    return b.getvalue()
+
+
+def test_pdf_so_com_restricoes_abre_com_senha_vazia_e_entra_no_lote():
+    from biblioteca.config import carregar
+    from biblioteca.pdfs import analisar, abrir_leitor, ProtegidoPorSenha
+    from biblioteca.pdflocal import PdfLocal
+    cfg = carregar("/nao/existe.yaml")
+    restrito = _pdf_com_restricao_sem_senha_para_abrir(3, "restrito")
+    i = analisar(restrito, cfg)
+    assert i.situacao == "ok" and i.paginas == 3 and "senha vazia" in i.detalhe
+    final = PdfLocal().juntar([("a.pdf", restrito), ("b.pdf", pdf_texto(2, "normal"))], "lote.pdf")
+    assert len(PdfReader(io.BytesIO(final)).pages) == 5
+    com_senha = pdf_protegido()                                    # senha de abertura de verdade
+    assert analisar(com_senha, cfg).situacao == "protegido"
+    try:
+        abrir_leitor(com_senha)
+        assert False
+    except ProtegidoPorSenha:
+        pass
+
+
+def test_protegido_do_analisador_antigo_e_reanalisado(mundo):
+    d = mundo.drive
+    pasta = d.pasta("Livros", mundo.lib)
+    d.arquivo("restrito.pdf", _pdf_com_restricao_sem_senha_para_abrir(2, "re"), pasta)
+    d.arquivo("normal.pdf", pdf_texto(2, "no"), pasta)
+    ctx = mundo.abrir()
+    inventariar(ctx)
+    f = [r for r in ctx.estado.q("SELECT * FROM arquivos") if r["nome"] == "restrito.pdf"][0]
+    ctx.estado.x("INSERT OR REPLACE INTO pdf_info VALUES(?,?,?,?,?,?,?)", f["id"], f["md5"] or "", 0, 0, 0.0,
+                 "protegido", "PDF criptografado/protegido por senha; não foi mesclado")      # resultado antigo, sem [v2]
+    plano = lt.planejar(ctx)
+    nomes = sorted(i["nome"] for pl in plano for i in pl["itens"])
+    assert nomes == ["normal.pdf", "restrito.pdf"]

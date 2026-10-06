@@ -4,10 +4,12 @@ import csv
 import io
 import json
 import re
+import time
 import unicodedata
 
 import requests
 
+from . import pessoal
 from .controle import achar_ou_criar_pasta
 from .util import agora, nome_seguro, natural_key
 
@@ -49,6 +51,11 @@ def extrair_autor(nome: str) -> str | None:
     return None
 
 
+def eh_livro(nome: str, formatos) -> bool:
+    ext = nome.rsplit(".", 1)[-1].lower() if "." in nome else ""
+    return ext in {x.lower().lstrip(".") for x in formatos}
+
+
 def classificar_regras(f, temas: dict[str, list[str]]):
     texto = _norm(f"{f['caminho']} {_sem_ext(f['nome'])}")
     pontos = {t: sum(texto.count(_norm(k)) for k in kws) for t, kws in temas.items()}
@@ -62,31 +69,72 @@ def classificar_regras(f, temas: dict[str, list[str]]):
     return tema, extrair_autor(f["nome"]), conf
 
 
-def classificar_claude(ctx, arquivos):
-    """Classificador opcional: tema fechado (lista do config) + autor, em lotes de 40 nomes por chamada."""
+def _prompt(temas, bloco):
+    itens = [{"id": f["id"], "arquivo": f["nome"], "pasta_atual": f["caminho"]} for f in bloco]
+    return ("Classifique cada livro/arquivo da lista abaixo. Escolha 'tema' EXATAMENTE entre: "
+            + json.dumps(temas, ensure_ascii=False) + " ou null se não houver encaixe claro. "
+            "'autor' é o autor do livro se o nome do arquivo permitir identificar com segurança "
+            "(ignore prefixos numéricos de download, hífens no lugar de espaços e sufixos como z-lib, pdf, free); "
+            "senão null; não invente. 'confianca' vai de 0 a 1. Responda SOMENTE um array JSON de objetos "
+            "{id, tema, autor, confianca}.\n" + json.dumps(itens, ensure_ascii=False))
+
+
+def _ler_resposta(ctx, texto, temas, out):
+    try:
+        dado = json.loads(texto[texto.index("["): texto.rindex("]") + 1])
+        for o in dado:
+            tema = o.get("tema") if o.get("tema") in temas else None
+            out[o["id"]] = (tema, o.get("autor") or None, float(o.get("confianca") or 0) if tema else 0.0)
+    except (ValueError, KeyError, TypeError, AttributeError):
+        ctx.log("AVISO: resposta do classificador ilegível para um bloco; esses arquivos ficam sem classificação")
+
+
+def _chamar_claude(cfg, prompt):
+    r = requests.post("https://api.anthropic.com/v1/messages", timeout=120, headers={
+        "x-api-key": cfg.anthropic_key, "anthropic-version": "2023-06-01", "content-type": "application/json"},
+        json={"model": cfg["organizacao"]["modelo_claude"], "max_tokens": 4000,
+              "messages": [{"role": "user", "content": prompt}]})
+    r.raise_for_status()
+    return r.json()["content"][0]["text"]
+
+
+def _com_retry(fn, tentativas=4):
+    """Repete em 429/5xx/queda de rede com espera crescente; erro definitivo (401, 400…) sobe na hora."""
+    for i in range(tentativas):
+        try:
+            return fn()
+        except requests.HTTPError as e:
+            cod = e.response.status_code if e.response is not None else 0
+            if cod not in (429, 500, 502, 503, 504) or i == tentativas - 1:
+                raise
+        except (requests.ConnectionError, requests.Timeout):
+            if i == tentativas - 1:
+                raise
+        time.sleep(5 * 2 ** i)
+
+
+def _chamar_openai(cfg, prompt):
+    r = requests.post("https://api.openai.com/v1/chat/completions", timeout=120, headers={
+        "Authorization": f"Bearer {cfg.openai_key}", "content-type": "application/json"},
+        json={"model": cfg["organizacao"].get("modelo_openai", "gpt-4o-mini"), "temperature": 0,
+              "messages": [{"role": "user", "content": prompt}]})
+    r.raise_for_status()
+    return r.json()["choices"][0]["message"]["content"]
+
+
+def classificar_ia(ctx, arquivos, ao_bloco=None):
+    """Classificador opcional (claude ou openai): tema fechado (lista do config) + autor, 40 nomes por chamada."""
     cfg = ctx.cfg
     temas = list(cfg["organizacao"]["temas"])
+    chamar = _chamar_openai if cfg["organizacao"]["classificador"] == "openai" else _chamar_claude
     out = {}
     for i in range(0, len(arquivos), 40):
         bloco = arquivos[i:i + 40]
-        itens = [{"id": f["id"], "arquivo": f["nome"], "pasta_atual": f["caminho"]} for f in bloco]
-        prompt = ("Classifique cada livro/arquivo da lista abaixo. Escolha 'tema' EXATAMENTE entre: "
-                  + json.dumps(temas, ensure_ascii=False) + " ou null se não houver encaixe claro. "
-                  "'autor' é o autor do livro se o nome do arquivo permitir identificar com segurança, senão null; "
-                  "não invente. 'confianca' vai de 0 a 1. Responda SOMENTE um array JSON de objetos "
-                  "{id, tema, autor, confianca}.\n" + json.dumps(itens, ensure_ascii=False))
-        r = requests.post("https://api.anthropic.com/v1/messages", timeout=120, headers={
-            "x-api-key": cfg.anthropic_key, "anthropic-version": "2023-06-01", "content-type": "application/json"},
-            json={"model": cfg["organizacao"]["modelo_claude"], "max_tokens": 4000,
-                  "messages": [{"role": "user", "content": prompt}]})
-        r.raise_for_status()
-        texto = r.json()["content"][0]["text"]
-        try:
-            for o in json.loads(texto[texto.index("["): texto.rindex("]") + 1]):
-                tema = o.get("tema") if o.get("tema") in temas else None
-                out[o["id"]] = (tema, o.get("autor") or None, float(o.get("confianca") or 0) if tema else 0.0)
-        except (ValueError, KeyError, TypeError):
-            ctx.log("AVISO: resposta do classificador ilegível para um bloco; esses arquivos ficam sem classificação")
+        antes = set(out)
+        _ler_resposta(ctx, _com_retry(lambda: chamar(cfg, _prompt(temas, bloco))), temas, out)
+        ctx.log(f"classificador: {min(i + 40, len(arquivos))}/{len(arquivos)}")
+        if ao_bloco:
+            ao_bloco(bloco, {k: out[k] for k in out if k not in antes})
     return out
 
 
@@ -115,33 +163,63 @@ def planejar_temas(ctx) -> list[dict]:
     arqs.sort(key=lambda f: natural_key(f["caminho"] + "/" + f["nome"]))
     manual = carregar_manual(ctx)
     cache = {r["file_id"]: r for r in est.q("SELECT * FROM classif")}
-    novos = [f for f in arqs if f["id"] not in manual and
-             not (f["id"] in cache and cache[f["id"]]["md5"] == (f["md5"] or ""))]
-    claude = {}
-    if org["classificador"] == "claude":
-        if not cfg.anthropic_key:
-            raise RuntimeError("classificador 'claude' exige o Secret ANTHROPIC_API_KEY")
-        claude = classificar_claude(ctx, novos)
+    usa_ia = org["classificador"] in ("claude", "openai")
+    formatos = org.get("formatos_livro") or ["pdf", "epub", "mobi", "azw3", "doc", "docx", "txt", "rtf", "odt"]
+    # cache só vale para o classificador pago; regras são baratas e mudam com o config
+    novos = [f for f in arqs if f["id"] not in manual and eh_livro(f["nome"], formatos)
+             and not pessoal.eh_pessoal_nome(cfg, f["nome"]) and
+             not (usa_ia and f["id"] in cache and cache[f["id"]]["md5"] == (f["md5"] or "")
+                  and cache[f["id"]]["fonte"] == org["classificador"])]
+    ia = {}
+    if org["classificador"] == "claude" and not cfg.anthropic_key:
+        raise RuntimeError("classificador 'claude' exige o Secret ANTHROPIC_API_KEY")
+    if org["classificador"] == "openai" and not cfg.openai_key:
+        raise RuntimeError("classificador 'openai' exige o Secret OPENAI_API_KEY")
+    if usa_ia:
+        contagem = {"blocos": 0}
+
+        def guardar(bloco, resp):          # grava local a cada lote e sobe ao Drive a cada 10 (e não derruba a execução)
+            for f in bloco:
+                t, a, c = resp.get(f["id"], (None, None, 0.0))
+                est.x("INSERT OR REPLACE INTO classif VALUES(?,?,?,?,?,?)", f["id"], f["md5"] or "", t, a,
+                      org["classificador"], c)
+            contagem["blocos"] += 1
+            if contagem["blocos"] % 10 == 0:
+                try:
+                    ctx.salvar()
+                except Exception as e:
+                    ctx.log(f"AVISO: não consegui subir o estado ao Drive agora ({type(e).__name__}); sigo e tento no fim")
+        ia = classificar_ia(ctx, novos, guardar)
     for f in novos:
-        if org["classificador"] == "claude":
-            tema, autor, conf = claude.get(f["id"], (None, None, 0.0))
-            fonte = "claude"
+        if usa_ia:
+            tema, autor, conf = ia.get(f["id"], (None, None, 0.0))
+            fonte = org["classificador"]
         else:
             tema, autor, conf = classificar_regras(f, org["temas"])
             fonte = "regras"
         est.x("INSERT OR REPLACE INTO classif VALUES(?,?,?,?,?,?)", f["id"], f["md5"] or "", tema, autor, fonte, conf)
     canon: dict[str, str] = {}      # variações de grafia do mesmo autor viram uma só pasta
     plano = []
+    pasta_pessoal = nome_seguro(cfg["pessoal"]["pasta"])
     for f in arqs:
+        pess = f["id"] not in manual and pessoal.eh_pessoal_nome(cfg, f["nome"])
         if f["id"] in manual:
             tema, autor, fonte, conf = manual[f["id"]][0], manual[f["id"]][1], "manual", 1.0
+        elif pess:                       # o nome do dono no arquivo: vai para a pasta pessoal, sem tema nem autor
+            tema, autor, fonte, conf = cfg["pessoal"]["pasta"], None, "pessoal", 1.0
         else:
-            c = est.q("SELECT * FROM classif WHERE file_id=?", f["id"])[0]
+            c = est.q("SELECT * FROM classif WHERE file_id=?", f["id"])
+            c = c[0] if c else {"tema": None, "autor": None, "fonte": "formato", "confianca": 0.0}
             tema, autor, fonte, conf = c["tema"], c["autor"], c["fonte"], c["confianca"]
         if autor:
             autor = canon.setdefault(_norm(autor), nome_seguro(autor))
-        if f["situacao"] != "ok":
+        if f["id"] not in manual and not pess and not eh_livro(f["nome"], formatos):
+            acao, destino, tema, autor, fonte, conf = "fora_do_escopo_nao_livro", "", None, None, "formato", 0.0
+        elif f["situacao"] != "ok":
             acao, destino = "aguardar_upload_terminar", ""
+        elif pess:
+            destino = pasta_pessoal
+            acao = "ja_organizado" if f["caminho"] == destino else "mover"
         elif not tema or conf < org["confianca_minima"]:
             if org["mover_nao_classificados"]:
                 acao, destino = "mover", nome_seguro(org["pasta_nao_classificados"])

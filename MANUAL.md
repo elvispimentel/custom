@@ -24,7 +24,7 @@ A conexão com o Google Drive passa pelo **Composio**. Os PDFs são **juntados d
 | **Restaurar duplicados / Restaurar temas e autores** | Devolve os arquivos aos locais originais. | Sim (mover de volta) |
 
 **Ordem recomendada** (a ordem importa — veja a seção 6):
-`Verificar → Localizar → Simular organização → Mover duplicados → Simular temas e autores → Aplicar temas e autores → Testar um lote → Processar lotes`.
+`Conectar Google Drive → Verificar → Localizar → Simular organização → Mover duplicados → Simular temas e autores → Aplicar temas e autores → Testar um lote → Processar lotes`.
 
 Os PDFs finais ficam em `Biblioteca Pessoal — PDFs para NotebookLM`, espelhando as subpastas.
 Os originais nunca são alterados nem renomeados.
@@ -36,9 +36,9 @@ Os originais nunca são alterados nem renomeados.
 ### 2.1 Composio
 1. Entre em https://dashboard.composio.dev e use o produto **Platform** (para desenvolvedores). **Este agente usa a chave de projeto do Platform, que começa com `ak_`** — e não a chave `ck_...` do produto "For You", que é para clientes de IA pessoais e não serve aqui. Segundo a skill oficial do Composio: no Platform, abra o seu projeto → **Getting Started** → passo 1 e copie a chave `ak_...`. (Se o painel mostrar só o "For You", crie um projeto Platform.)
 2. Defina um **User ID**: um texto fixo, por exemplo `elvis`. No Platform ele é um identificador seu; as conexões ficam atreladas a ele. Use **o mesmo User ID** em todas as conexões abaixo e no Secret `COMPOSIO_USER_ID`.
-3. No painel do Composio, conecte para esse User ID:
-   - **Google Drive** (autorize a conta dona da Biblioteca Pessoal);
-   - *(só se for usar `pdf.motor: ilovepdf`)* **iLovePDF** — o Composio pedirá as chaves de um projeto da API do iLovePDF. **Com o motor padrão (`local`) isto não é necessário.**
+3. **Conecte o Google Drive a esse User ID pelo próprio GitHub** (depois de criar os Secrets da seção 2.2): aba **Actions → Biblioteca Pessoal → Run workflow → "Conectar Google Drive"**. O resumo da execução mostra um **link**. Abra o link, autorize com a conta dona da Biblioteca Pessoal e **marque todas as permissões do Drive** (se alguma ficar desmarcada, dá erro 403). Em seguida rode **Verificar conexões**, que mostra o e-mail da conta autorizada — confira que é o seu.
+   - *(só se for usar `pdf.motor: ilovepdf`)* **iLovePDF** — o Composio pedirá as chaves de um projeto da API do iLovePDF, direto no painel. **Com o motor padrão (`local`) isto não é necessário.**
+   - O link vale poucos minutos. Se o repositório for **público**, o log da execução também é público: abra o link logo e confira o e-mail na verificação. Em repositório privado não há esse risco.
 4. Anote: `COMPOSIO_API_KEY` e `COMPOSIO_USER_ID`.
 
 > Se você tiver mais de uma conta conectada para o mesmo toolkit, preencha também `composio.contas` em `config.exemplo.yaml` com o `connected_account_id` desejado (não é segredo).
@@ -50,6 +50,7 @@ No repositório: **Settings → Secrets and variables → Actions → aba *Secre
 |---|---|---|
 | `COMPOSIO_API_KEY` | sua API key do Composio | Sim |
 | `COMPOSIO_USER_ID` | o User ID das conexões | Sim |
+| `OPENAI_API_KEY` | chave da API OpenAI — classifica temas/autores com IA (classificador `openai`, padrão) | Não |
 | `ANTHROPIC_API_KEY` | chave da API Claude — só para classificar temas/autores com IA | Não |
 
 ### 2.3 Variables no GitHub (IDs de pastas — não são segredos)
@@ -111,7 +112,7 @@ Não apague `estado.db`: sem ele o agente esquece o que já fez (ainda é seguro
 ## 5. Regras de duplicidade (exatas)
 - Candidatos: mesmo **checksum do Drive**. Confirmação: **SHA-256 dos arquivos baixados**. Só o SHA-256 igual vale como duplicado.
 - **Nome igual, tamanho igual ou título parecido não provam nada.** Edições diferentes, versões anotadas e digitalizações diferentes têm conteúdo diferente → **são preservadas**.
-- **Exemplar mantido** (regra fixa): 1º um arquivo **fora** de pastas de cópias (nomes de pasta contendo `cópia`, `copias`, `backup`, `duplicad`, `old` — ajustável em `arquivos.pastas_de_copias`); no empate, o de **criação mais antiga**; depois caminho e ID. O motivo fica registrado.
+- **Exemplar mantido** (regra fixa): 1º um arquivo **fora** de pastas de cópias (nomes de pasta contendo `cópia`, `copias`, `backup`, `duplicad`, `old` — ajustável em `arquivos.pastas_de_copias`); no empate, o de **data mais antiga** — a menor entre criação e modificação, porque a criação no Drive é a data do upload (igual para um lote inteiro) e a modificação preserva a data original do arquivo; depois caminho e ID. O motivo fica registrado.
 - Duplicados vão para subpastas `conteudo-<hash>` dentro de `Biblioteca Pessoal — Duplicados para Revisão`.
 - Sem permissão para mover algum arquivo → vira **pendência** e o resto continua.
 - Atalhos do Drive **não** são tratados como cópias e **não** são seguidos. Arquivos nativos do Google (Docs/Sheets) não entram na duplicidade.
@@ -125,17 +126,23 @@ Não apague `estado.db`: sem ele o agente esquece o que já fez (ainda é seguro
 2. Revise. Para corrigir, crie `classificacao_manual.csv` na pasta de controle (`id_drive,tema,autor`) — o manual **vence** qualquer regra. Para ajustar os temas e palavras-chave, edite `organizacao.temas` em `config.exemplo.yaml` (no GitHub: arquivo → ícone de lápis → *Commit changes*).
 3. Rode **Aplicar temas e autores** (digite `CONFIRMAR`). Estrutura: `Biblioteca Pessoal/<Tema>/<Autor>/arquivo`.
 
-Como classifica: por padrão, **regras** sobre o nome do arquivo e as pastas atuais (`Autor - Título`, `Título (Autor)`). Com `organizacao.classificador: claude` e o Secret `ANTHROPIC_API_KEY`, o Claude sugere o tema (sempre escolhido **dentro da sua lista**) e o autor (sem inventar). Só o **nome do arquivo e a pasta atual** são enviados — o conteúdo dos livros não é lido.
+Como classifica: por padrão, **regras** sobre o nome do arquivo e as pastas atuais (`Autor - Título`, `Título (Autor)`). Com `organizacao.classificador: openai` (ou `claude`) e o Secret `OPENAI_API_KEY` (ou `ANTHROPIC_API_KEY`), a IA sugere o tema (sempre escolhido **dentro da sua lista**) e o autor (sem inventar). Só o **nome do arquivo e a pasta atual** são enviados — o conteúdo dos livros não é lido.
+
+Só **livros** entram no plano (`organizacao.formatos_livro`: pdf, epub, mobi, azw3, doc, docx, txt, rtf, odt). Imagens, HTML, `.psd` e `.icloud` aparecem como `fora_do_escopo_nao_livro` e não são movidos. Os temas padrão agora são 10 (inclui Filosofia, História, Religião, Saúde); edite as palavras-chave no config.
 
 Garantias: quem não for classificado com confiança (`confianca_minima`) **fica onde está** e aparece no plano como `manter_nao_classificado`. Autores com grafias diferentes só em maiúsculas/acentos viram **uma** pasta. Arquivos ainda subindo e duplicados não são movidos.
 
-> **Por que antes dos lotes?** Os lotes são formados por pasta. Se você reorganizar depois de gerar PDFs, os lotes mudam de composição; os PDFs antigos ficam **marcados como `obsoleto`** no índice (nunca apagados) e novos são gerados. Reorganize primeiro e processe depois.
+> **Arquivos pessoais (`pessoal`).** São pessoais os arquivos cujo **nome tem o código de data e hora que você mesmo gera** (`ddmmaaaahhmm`, ex.: `0510202615h21`; a variante invertida `17h3219052025` também vale). Eles vão para uma pasta só, `pessoal.pasta` ("00 - Arquivos pessoais (Elvis Pimentel)"), sem tema nem autor, e os **lotes** deles ficam num grupo à parte, nunca misturados aos temas, numa subpasta própria da pasta de PDFs. Para vender a biblioteca, basta deixar essa pasta e esse grupo de fora. **Seu nome sem o código não torna o arquivo pessoal** (ex.: "Dossie Elvis Pimentel.pdf" é tratado como livro comum). Para casos especiais há `pessoal.padroes` (nomes opcionais, vazio por padrão).
+>
+> **Como os lotes são agrupados (`lotes.agrupar_por`).** Com `tema` (padrão do config de exemplo), todos os autores de um mesmo tema entram juntos, em ordem de autor e título, e os lotes saem cheios (até 25 livros). Tudo que está **fora das pastas de tema** (os livros sem tema) vai para o grupo **Sem tema** (`lotes.grupo_sem_tema`). Com `pasta`, cada pasta forma seu próprio grupo. Os originais **nunca saem do lugar**: os PDFs agrupados vão para a pasta "Biblioteca Pessoal — PDFs para NotebookLM", em uma subpasta por tema, e o índice diz de qual original e de quais páginas cada livro veio.
+>
+> **Por que antes dos lotes?** Os lotes são formados por pasta/tema. Se você reorganizar depois de gerar PDFs, os lotes mudam de composição; os PDFs antigos ficam **marcados como `obsoleto`** no índice (nunca apagados) e novos são gerados. Reorganize primeiro e processe depois.
 
 ---
 
 ## 7. Lotes de PDF para o NotebookLM
 - Apenas **PDFs únicos** (sem os duplicados), por pasta, em **ordem natural** (`cap 2` antes de `cap 10`). Um lote nunca mistura pastas.
-- Até **25** documentos por lote, ajustados às metas `lotes.meta_mb` (90) e `lotes.meta_palavras` (450 000 estimadas). Os **tetos do NotebookLM por fonte** (200 MB ou 500 mil palavras — informados por você) ficam em `lotes.limite_mb` e `lotes.limite_palavras`: as metas são a margem de segurança (a contagem de palavras é uma estimativa por amostragem) e podem subir, ex.: `meta_mb: 180`; um PDF final acima do teto **nunca é gravado**. O lote é **reduzido** quando necessário; não precisa ter 25.
+- **Sem limite de quantidade** de documentos por lote (`lotes.max_documentos: 0`; o limite de 25 era só do iLovePDF — com o motor local não existe, e se você usar o iLovePDF, ponha `25`). O lote fecha quando bate nas metas `lotes.meta_mb` (180) ou `lotes.meta_palavras` (450 000 estimadas). Os **tetos do NotebookLM por fonte** (200 MB ou 500 mil palavras — informados por você) ficam em `lotes.limite_mb` e `lotes.limite_palavras`: as metas são a margem de segurança (a contagem de palavras é uma estimativa por amostragem) e podem subir, ex.: `meta_mb: 180`; um PDF final acima do teto **nunca é gravado**. O lote é **reduzido** quando necessário. Para manter margem, a meta de palavras fica 10% abaixo do teto de 500 mil, porque a contagem é estimada por amostragem.
 - **Motor de merge (`pdf.motor` em `config.exemplo.yaml`):**
   - `local` *(padrão)*: junta no próprio runner com `pypdf`. **Não há limite de arquivos por chamada** — dá para botar `lotes.max_documentos: 50` (ou mais) e juntar tudo numa só passada, sem depender do plano do iLovePDF. Cada documento original vira um **marcador** (bookmark) com o nome dele dentro do PDF final. Os limites que continuam valendo são as metas `meta_mb` e `meta_palavras`.
   - `ilovepdf`: usa o iLovePDF via Composio. **Limite real da integração: 20 arquivos por chamada** (`maxItems` do esquema de `I_LOVE_PDF_MERGE_PDFS`), e cada merge consome crédito. Com 25 documentos: junta os 20 primeiros, junta os 5 restantes e une os dois resultados, mantendo a ordem. Atenção: o plano premium do site (50 arquivos) **não muda** o limite de 20 desta integração, que vem do esquema da ferramenta.
@@ -173,7 +180,8 @@ Cada execução imprime as **chamadas ao Composio por ferramenta** e o estado ac
 | Sintoma | Causa provável | Ação |
 |---|---|---|
 | `COMPOSIO_API_KEY` / `COMPOSIO_USER_ID` ausentes | Secret com nome diferente | Conferir nomes exatos (seção 2.2) |
-| *Verificar* mostra “SEM CONEXÃO ATIVA” | Toolkit não conectado para esse User ID | Reconectar no painel do Composio |
+| *Verificar* mostra “SEM CONEXÃO ATIVA” ou erro 404 `ConnectedAccountNotFound` | O projeto Platform não tem conta do Drive para esse User ID | Rodar **Conectar Google Drive**, abrir o link e depois **Verificar conexões** |
+| *Verificar* avisa “N contas ativas” | Mais de uma conta do Drive para o mesmo User ID | Fixar a correta em `composio.contas.googledrive` ou remover as outras no painel |
 | *Verificar* mostra ferramenta INDISPONÍVEL / HTTP 4xx na versão | `versao_ferramentas: latest` recusada | Trocar pela versão que o painel indicar em `config.exemplo.yaml` |
 | “Há N pastas chamadas…” | Nome ambíguo | Escolher um ID e gravar na variável indicada |
 | “BIBLIOTECA OCUPADA” | Outra execução em andamento ou queda recente | Aguardar; a trava expira sozinha em 6 h |
@@ -208,3 +216,11 @@ O workflow **Testes** roda a cada alteração de código; local não é necessá
 - Os tetos do **NotebookLM** (200 MB / 500 mil palavras por fonte) vieram de você, não de uma consulta minha à documentação; no motor `ilovepdf`, o limite de tamanho por tarefa também não foi confirmado. O merge local mantém o texto e o número de páginas (validados), mas não otimiza nem comprime o tamanho do arquivo.
 - Autor/tema por **nome do arquivo**; metadados internos do PDF não são lidos (exigiria baixar todos os livros).
 - Não há OCR nesta versão (apenas sinalização).
+
+
+## PDFs protegidos, com defeito e escaneados
+- **Protegidos:** muitos PDFs são "criptografados" só para impedir edição, sem senha para abrir. O agente tenta abrir com **senha vazia** e, se der, junta normalmente (anotado no índice). Só fica de fora, como `protegido`, o PDF que exige senha de verdade. Se você souber a senha, tire a proteção e reenvie.
+- **Com defeito:** se o PDF não abre no modo normal, o agente tenta o **modo tolerante** do `pypdf`. O que ainda assim não abre fica como `invalido`.
+- **Escaneados (`ocr`):** entram no lote, mas sinalizados, porque não têm texto selecionável. Rode um OCR neles antes, se quiser que o NotebookLM leia melhor.
+- **Grandes demais (`enviar_separadamente`):** acima do teto de palavras/MB de uma fonte; suba esses sozinhos no NotebookLM.
+- Resultados antigos de `protegido`/`invalido` são **refeitos automaticamente** quando o analisador melhora.
