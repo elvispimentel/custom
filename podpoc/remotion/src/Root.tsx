@@ -11,8 +11,9 @@ import {BradenMapa} from './diagrams/BradenMapa';
 import {Zayn} from './diagrams/Zayn';
 import {Tetragrama} from './diagrams/Tetragrama';
 import {Helice} from './diagrams/Helice';
+import {GenesisHebraico} from './diagrams/GenesisHebraico';
 
-const DIAGRAMS: Record<string, React.FC<any>> = {fases: Fases, 'braden-mapa': BradenMapa, zayn: Zayn, tetragrama: Tetragrama, helice: Helice};
+const DIAGRAMS: Record<string, React.FC<any>> = {fases: Fases, 'braden-mapa': BradenMapa, zayn: Zayn, tetragrama: Tetragrama, helice: Helice, 'genesis-hebraico': GenesisHebraico};
 
 const pick = (rec: Rec): React.FC<any> => {
   if (rec.kind === 'quote' || rec.kind === 'invite') return Quote;

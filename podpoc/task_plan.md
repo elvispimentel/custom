@@ -18,12 +18,12 @@ Executar PROMPT.md: overlays Remotion com alfa, composições de autor, timeline
 ### Phase 3 — Render + checagem de frames (contraste, zona segura)
 **Status:** complete
 ### Phase 4 — Downloader de imagens, credits.json, PEDIR AUTORIZAÇÃO, créditos na descrição
-**Status:** complete (download não executado: rede)
+**Status:** complete (rede liberada; imagens baixadas e conferidas)
 ### Phase 5 — RELATORIO.md, commit, push
 **Status:** complete
 
 ## Next Step
-Aguardar liberação de rede e rodar fetch_assets + render dos arq-*
+Aguardar aprovações do Elvis (capas, fotos, V01-V11)
 
 ## Errors Encountered
 | Error | Attempt | Resolution |

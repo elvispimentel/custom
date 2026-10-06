@@ -31,7 +31,7 @@ L += ["", "Para aprovar uma capa já baixada: `python3 tools/fetch_assets.py --a
 (ROOT / "assets" / "PEDIR-AUTORIZACAO.md").write_text("\n".join(L) + "\n", encoding="utf-8")
 
 # ---- bloco de créditos
-ok = [i for i in items if i["status"] in ("ok", "propria")]
+ok = [i for i in items if i["status"] in ("ok", "propria") and not i.get("fora_do_video")]
 B = ["Créditos das imagens"]
 for i in ok:
     if i["status"] == "propria":

@@ -48,7 +48,7 @@ const common = {serveUrl, ...(browserExecutable ? {browserExecutable} : {}), log
 const status = [];
 
 for (const rec of data) {
-  if (only && rec.id !== only) continue;
+  if (only && !only.split(',').includes(rec.id)) continue;
   const missing = needsImages(rec);
   if (missing.length) {
     status.push({id: rec.id, ok: false, why: `imagem ausente: ${missing.join(', ')}`});

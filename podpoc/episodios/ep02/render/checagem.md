@@ -7,8 +7,8 @@ Contraste medido contra o pior caso (placa sobre fundo branco). Zona do rosto: x
 | q-mecanismo | quote | 9.6:1 | 5.9:1 | livre | ok |
 | convite-1 | invite | 9.6:1 | 5.9:1 | livre | ok |
 | q-codigo | quote | 9.6:1 | 5.9:1 | livre | ok |
-| arq-zohar | archive | sem pôster |  |  | pendente |
-| arq-genesis | archive | sem pôster |  |  | pendente |
+| arq-zohar | archive | 11.5:1 | 7.1:1 | cobre (corte) | ok |
+| genesis-hebraico | diagram | 13.3:1 | 8.2:1 | cobre (corte) | ok |
 | q-forca | quote | 9.6:1 | 5.9:1 | livre | ok |
 | fases | diagram | 13.3:1 | 8.2:1 | cobre (corte) | ok |
 | q-camadas | quote | 9.6:1 | 5.9:1 | livre | ok |
@@ -20,19 +20,19 @@ Contraste medido contra o pior caso (placa sobre fundo branco). Zona do rosto: x
 | q-restricao | quote | 9.6:1 | 5.9:1 | livre | ok |
 | blavatsky | author | 10.1:1 | 6.2:1 | livre | ok |
 | goddard | author | 10.1:1 | 6.2:1 | livre | ok |
-| arq-adao | archive | sem pôster |  |  | pendente |
+| arq-adao | archive | 14.1:1 | 8.7:1 | cobre (corte) | ok |
 | q-adao | quote | 9.6:1 | 5.9:1 | livre | ok |
 | q-esquecer | quote | 9.6:1 | 5.9:1 | livre | ok |
 | levi | author | 10.2:1 | 6.3:1 | livre | ok |
 | q-queda | quote | 9.6:1 | 5.9:1 | livre | ok |
 | bailey | author | 9.9:1 | 6.1:1 | livre | ok |
-| arq-astronauta | archive | sem pôster |  |  | pendente |
+| arq-astronauta | archive | 15.2:1 | 9.4:1 | cobre (corte) | ok |
 | q-traje | quote | 9.6:1 | 5.9:1 | livre | ok |
 | zayn | diagram | 13.3:1 | 8.2:1 | cobre (corte) | ok |
 | q-lamina | quote | 9.6:1 | 5.9:1 | livre | ok |
 | deldebbio | author | 10.2:1 | 6.3:1 | livre | ok |
 | q-credenciais | quote | 9.6:1 | 5.9:1 | livre | ok |
-| arq-raziel | archive | sem pôster |  |  | pendente |
+| arq-raziel | archive | 15.1:1 | 9.3:1 | cobre (corte) | ok |
 | deepak | author | 10.1:1 | 6.2:1 | livre | ok |
 | q-teclado | quote | 9.6:1 | 5.9:1 | livre | ok |
 | q-fechadura | quote | 9.6:1 | 5.9:1 | livre | ok |

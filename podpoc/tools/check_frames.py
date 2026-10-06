@@ -51,8 +51,8 @@ for pid, rec in data.items():
         # procura a placa mais escura do quadro (pior caso = a mais clara sobre branco)
         sample = over_white.getpixel((int(x0) + 14, int(y0) + 6)) if rec["kind"] != "author" else None
         if sample is None:  # autor: placa do lower third
-            ys2, xs2 = np.nonzero(a[600:, :] > 200)
-            sample = over_white.getpixel((int(xs2.min()) + 14, int(ys2.min()) + 600 + 6))
+            ys2, xs2 = np.nonzero(a[820:, :] > 200)  # só a placa do lower third, abaixo das fotos
+            sample = over_white.getpixel((int(xs2.min()) + 14, int(ys2.min()) + 820 + 6))
     else:
         sample = over_white.getpixel((60, 60))
     c1, c2 = ratio(PAPER, sample), ratio(GOLD, sample)

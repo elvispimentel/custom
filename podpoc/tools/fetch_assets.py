@@ -17,6 +17,7 @@ import json
 import re
 import shutil
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -31,10 +32,18 @@ MAX_EDGE = 2400
 
 
 def get(url, binary=False):
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=60) as r:
-        data = r.read()
-    return data if binary else data.decode("utf-8", "replace")
+    import time
+    for wait in (0, 6, 15, 30):  # 429 do Commons: espera e tenta de novo
+        time.sleep(wait)
+        try:
+            req = urllib.request.Request(url, headers=UA)
+            with urllib.request.urlopen(req, timeout=60) as r:
+                data = r.read()
+            return data if binary else data.decode("utf-8", "replace")
+        except urllib.error.HTTPError as ex:
+            if ex.code != 429:
+                raise
+    raise RuntimeError("HTTP 429 persistente")
 
 
 def jget(url):
@@ -47,6 +56,19 @@ def strip_html(s):
 
 # ------------------------------------------------------------------ handlers: devolvem (url_da_imagem, meta)
 def h_commons(e):
+    if e.get("commons_file"):  # arquivo escolhido à mão; ainda confere a licença pela API
+        q = urllib.parse.urlencode({"action": "query", "format": "json", "titles": e["commons_file"], "prop": "imageinfo",
+                                    "iiprop": "extmetadata|url|size", "iiurlwidth": MAX_EDGE})
+        pages = jget("https://commons.wikimedia.org/w/api.php?" + q)["query"]["pages"]
+        p = next(iter(pages.values()))
+        ii = p["imageinfo"][0]
+        md = ii.get("extmetadata", {})
+        lic = md.get("LicenseShortName", {}).get("value", "")
+        if not FREE.match(lic):
+            raise RuntimeError(f"licença não livre no Commons: {lic}")
+        return ii.get("thumburl") or ii["url"], {
+            "autor": strip_html(md.get("Artist", {}).get("value")), "licenca": lic,
+            "url": ii.get("descriptionurl", ""), "titulo": p.get("title", e["titulo"]), "livre": True}
     q = urllib.parse.urlencode({
         "action": "query", "format": "json", "generator": "search", "gsrnamespace": 6, "gsrsearch": e["busca"],
         "gsrlimit": 10, "prop": "imageinfo", "iiprop": "extmetadata|url|size", "iiurlwidth": MAX_EDGE})
@@ -110,13 +132,24 @@ def h_og(e):
     return urllib.parse.urljoin(e["url"], html.unescape(m.group(1))), {"licenca": e["licenca"], "url": e["url"], "livre": True}
 
 
-HANDLERS = {"commons": h_commons, "met": h_met, "nasa": h_nasa, "ia": h_ia, "og": h_og}
+def h_iiif(e):
+    m = jget(e["manifest"])
+    cv = m["sequences"][0]["canvases"][e.get("canvas", 0)]
+    svc = cv["images"][0]["resource"]["service"]["@id"]
+    return f"{svc}/full/!{MAX_EDGE},{MAX_EDGE}/0/default.jpg", {"licenca": e["licenca"], "url": e["url"], "titulo": e["titulo"], "livre": True}
 
 
-def save(data, dest):
+HANDLERS = {"iiif": h_iiif, "commons": h_commons, "met": h_met, "nasa": h_nasa, "ia": h_ia, "og": h_og}
+
+
+def save(data, dest, crop_white=False):
     try:
-        from PIL import Image
+        from PIL import Image, ImageChops
         im = Image.open(io.BytesIO(data)).convert("RGB")
+        if crop_white:  # imagens de loja vêm com margem branca ao redor da capa
+            box = ImageChops.difference(im, Image.new("RGB", im.size, (255, 255, 255))).point(lambda v: 255 if v > 14 else 0).getbbox()
+            if box:
+                im = im.crop(box)
         im.thumbnail((MAX_EDGE, MAX_EDGE))
         im.save(dest, "JPEG", quality=92)
     except ImportError:
@@ -148,16 +181,19 @@ def main():
     for e in doc["itens"]:
         if a.only and e["id"] != a.only:
             continue
-        if e["status"] != "planejado" or e["origem"] not in HANDLERS:
+        if e["status"] != "planejado" or (e["origem"] not in HANDLERS and not e.get("img_url")):
             continue
         try:
-            url, meta = HANDLERS[e["origem"]](e)
+            if e.get("img_url"):  # URL direta já verificada à mão
+                url, meta = e["img_url"], {"licenca": e["licenca"], "url": e["url"], "livre": True}
+            else:
+                url, meta = HANDLERS[e["origem"]](e)
             if a.dry_run:
                 print("DRY", e["id"], url, meta.get("licenca"))
                 continue
             gate = e.get("gate")
             dest_dir = PEND if gate else IMG
-            save(get(url, binary=True), dest_dir / f"{e['id']}.jpg")
+            save(get(url, binary=True), dest_dir / f"{e['id']}.jpg", e.get("crop_white", False))
             e.update({k: v for k, v in meta.items() if v and k != "livre"})
             e["arquivo_origem"] = url
             e["arquivo"] = f"assets/{'img-pendente' if gate else 'img'}/{e['id']}.jpg"

@@ -32,7 +32,7 @@ export const ArchiveCard: React.FC<Props> = ({rec, available}) => {
       )}
       <AbsoluteFill style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: 48, paddingBottom: 90, opacity: inn}}>
         {srcs.map((s) => (
-          <div key={s} style={{boxShadow: '0 24px 70px rgba(0,0,0,0.6)', transform: `translateY(${(1 - inn) * 26}px)`}}>
+          <div key={s} style={{transform: `translateY(${(1 - inn) * 26}px)`}}>
             <Duotone src={s} width={w} height={760} fit="contain" drift={2} />
           </div>
         ))}

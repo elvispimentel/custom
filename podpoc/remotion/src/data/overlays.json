@@ -38,15 +38,11 @@
   "caption": "Sefer ha-Zohar, Mântua, 1558"
  },
  {
-  "id": "arq-genesis",
-  "kind": "archive",
-  "start_s": 289.03,
-  "dur_s": 5.0,
-  "frames": 150,
-  "images": [
-   "leningrado"
-  ],
-  "caption": "Códice de Leningrado"
+  "id": "genesis-hebraico",
+  "kind": "diagram",
+  "start_s": 290.53,
+  "dur_s": 6.0,
+  "frames": 180
  },
  {
   "id": "q-forca",
@@ -158,9 +154,9 @@
   "dur_s": 5.0,
   "frames": 150,
   "images": [
-   "delaune-1569"
+   "leyden-1529"
   ],
-  "caption": "Étienne Delaune, 1569"
+  "caption": "Lucas van Leyden, A Criação de Eva, 1529"
  },
  {
   "id": "q-adao",

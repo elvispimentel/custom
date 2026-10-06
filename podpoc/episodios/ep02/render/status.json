@@ -1,81 +1,10 @@
 [
  {
-  "id": "q-mecanismo",
-  "ok": true
- },
- {
-  "id": "convite-1",
-  "ok": true
- },
- {
-  "id": "q-codigo",
-  "ok": true
- },
- {
   "id": "arq-zohar",
-  "ok": false,
-  "why": "imagem ausente: zohar-1558"
- },
- {
-  "id": "arq-genesis",
-  "ok": false,
-  "why": "imagem ausente: leningrado"
- },
- {
-  "id": "q-forca",
-  "ok": true
- },
- {
-  "id": "fases",
-  "ok": true
- },
- {
-  "id": "q-camadas",
-  "ok": true
- },
- {
-  "id": "braden",
-  "ok": true
- },
- {
-  "id": "tetragrama",
-  "ok": true
- },
- {
-  "id": "braden-mapa",
-  "ok": true
- },
- {
-  "id": "helice",
-  "ok": true
- },
- {
-  "id": "q-bases",
-  "ok": true
- },
- {
-  "id": "q-restricao",
-  "ok": true
- },
- {
-  "id": "blavatsky",
-  "ok": true
- },
- {
-  "id": "goddard",
   "ok": true
  },
  {
   "id": "arq-adao",
-  "ok": false,
-  "why": "imagem ausente: delaune-1569"
- },
- {
-  "id": "q-adao",
-  "ok": true
- },
- {
-  "id": "q-esquecer",
   "ok": true
  },
  {
@@ -83,65 +12,11 @@
   "ok": true
  },
  {
-  "id": "q-queda",
-  "ok": true
- },
- {
-  "id": "bailey",
-  "ok": true
- },
- {
   "id": "arq-astronauta",
-  "ok": false,
-  "why": "imagem ausente: nasa-as11-40-5903, gray-1918"
- },
- {
-  "id": "q-traje",
-  "ok": true
- },
- {
-  "id": "zayn",
-  "ok": true
- },
- {
-  "id": "q-lamina",
-  "ok": true
- },
- {
-  "id": "deldebbio",
-  "ok": true
- },
- {
-  "id": "q-credenciais",
   "ok": true
  },
  {
   "id": "arq-raziel",
-  "ok": false,
-  "why": "imagem ausente: sefer-raziel-1700"
- },
- {
-  "id": "deepak",
-  "ok": true
- },
- {
-  "id": "q-teclado",
-  "ok": true
- },
- {
-  "id": "q-fechadura",
-  "ok": true
- },
- {
-  "id": "cta-acesso",
-  "ok": true
- },
- {
-  "id": "convite-2",
-  "ok": true
- },
- {
-  "id": "q-operar",
   "ok": true
  }
 ]

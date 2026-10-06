@@ -1,5 +1,6 @@
-import React from 'react';
-import {Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import React, {useEffect, useState} from 'react';
+import {continueRender, delayRender, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {getImageDimensions} from '@remotion/media-utils';
 import {C, SMOOTH} from '../theme';
 
 export const useFadeOut = (frames = 12) => {
@@ -53,6 +54,18 @@ export const FilmLook: React.FC<{grain?: number}> = ({grain = 0.07}) => {
   );
 };
 
+const useImageSize = (src: string) => {
+  const [dims, setDims] = useState<{width: number; height: number} | null>(null);
+  const [handle] = useState(() => delayRender('dimensões da imagem'));
+  useEffect(() => {
+    getImageDimensions(src)
+      .then(setDims)
+      .catch(() => undefined)
+      .finally(() => continueRender(handle));
+  }, [src, handle]);
+  return dims;
+};
+
 // duotone azul/ouro + Ken Burns + parallax leve
 export const Duotone: React.FC<{
   src: string;
@@ -63,24 +76,37 @@ export const Duotone: React.FC<{
 }> = ({src, width, height, fit = 'cover', drift = 1}) => {
   const f = useCurrentFrame();
   const {durationInFrames} = useVideoConfig();
-  const scale = interpolate(f, [0, durationInFrames], [1.04, 1.12]);
+  const dims = useImageSize(src);
+  const scale = interpolate(f, [0, durationInFrames], [1.0, fit === 'cover' ? 1.1 : 1.06]);
   const tx = interpolate(f, [0, durationInFrames], [-10 * drift, 10 * drift]);
-  return (
-    <div style={{position: 'relative', width, height, overflow: 'hidden', background: C.ink}}>
-      <div style={{position: 'absolute', inset: 0, transform: `translateX(${tx}px) scale(${scale})`}}>
-        <Img
-          src={src}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: fit,
-            filter: 'grayscale(1) contrast(1.12) brightness(1.02)',
-          }}
-        />
-      </div>
+  const look = 'grayscale(1) contrast(1.12) brightness(1.02)';
+  const layers = (
+    <>
       <div style={{position: 'absolute', inset: 0, background: C.goldText, mixBlendMode: 'multiply'}} />
       <div style={{position: 'absolute', inset: 0, background: C.blue, mixBlendMode: 'lighten'}} />
       <FilmLook />
+    </>
+  );
+  if (fit === 'contain') {
+    // o duotone e o grain acompanham o tamanho real da imagem, sem barras coloridas ao redor
+    const k = dims ? Math.min(width / dims.width, height / dims.height) * 0.94 : 0;
+    const w = dims ? dims.width * k : width;
+    const h = dims ? dims.height * k : height;
+    return (
+      <div style={{width, height, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
+        <div style={{position: 'relative', width: w, height: h, transform: `translateX(${tx}px) scale(${scale})`}}>
+          <Img src={src} style={{width: w, height: h, display: 'block', filter: look}} />
+          {layers}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div style={{position: 'relative', width, height, overflow: 'hidden', background: C.ink}}>
+      <div style={{position: 'absolute', inset: 0, transform: `translateX(${tx}px) scale(${scale})`}}>
+        <Img src={src} style={{width: '100%', height: '100%', objectFit: 'cover', filter: look}} />
+      </div>
+      {layers}
     </div>
   );
 };

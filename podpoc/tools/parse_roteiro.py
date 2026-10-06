@@ -83,8 +83,7 @@ VIDEO_ANCHORS = {
 
 # ---------------------------------------------------------------- imagens de arquivo (cards) por tag
 ARCHIVE_TAGS = [  # (trecho da tag, id do overlay, [ids de imagem], legenda curta)
-    ("texto hebraico de Gênesis 1:1", "arq-genesis", ["leningrado"], "Códice de Leningrado"),
-    ("pintura clássica de Adão adormecido", "arq-adao", ["delaune-1569"], "Étienne Delaune, 1569"),
+    ("pintura clássica de Adão adormecido", "arq-adao", ["leyden-1529"], "Lucas van Leyden, A Criação de Eva, 1529"),
     ("ilustração do anjo Raziel", "arq-raziel", ["sefer-raziel-1700"], "Sefer Raziel HaMalakh, 1700"),
     ("astronauta em traje espacial", "arq-astronauta", ["nasa-as11-40-5903", "gray-1918"],
      "NASA, Apollo 11 · Gray's Anatomy, 1918"),
@@ -96,6 +95,7 @@ DIAGRAM_TAGS = [
     ("diagrama da Árvore da Vida com Chokmah", "fases", "diagram"),
     ("esquema com H, N, O e C", "braden-mapa", "diagram"),
     ("Árvore da Vida com o caminho de Zayn", "zayn", "diagram"),
+    ("texto hebraico de Gênesis 1:1", "genesis-hebraico", "diagram"),
     ("o tetragrama em hebraico", "tetragrama", "diagram"),
     ("dupla hélice de DNA", "helice", "diagram"),
 ]
@@ -242,7 +242,9 @@ def main():
                     dur = min(max(par_dur + 1.0, 8.0), 20.0)
                     if oid in ("tetragrama", "helice"):
                         dur = 5.0
-                    add_ov(oid, "diagram", par_start if oid != "tetragrama" else max(t_after - 1.5, COLD_OPEN_S), dur)
+                    if oid == "genesis-hebraico":
+                        dur = 6.0
+                    add_ov(oid, "diagram", par_start if oid not in ("tetragrama", "genesis-hebraico") else max(t_after - 1.5, COLD_OPEN_S), dur)
                     handled = True
             for key, oid, imgs, cap in ARCHIVE_TAGS:
                 if key in rest:
