@@ -1,37 +1,42 @@
 # Relatório final — Biblioteca Pessoal para o NotebookLM
 
-Gerado após o run 26 (Retomar), sem interrupção.
+Atualizado após a conversão de documentos para PDF e o Retomar final.
 
 ## 1. Arquivos gerados
-**287 arquivos mesclados** contendo **2598 livros**.
+**306 arquivos mesclados** contendo **3087 livros** (dos quais **465** foram convertidos de docx, doc, txt, rtf, epub etc.).
 
 ## 2. Livros por arquivo (por grupo)
-| Grupo | Arquivos | Livros | Média livros/arquivo |
-|---|---|---|---|
-| 00 - Arquivos pessoais (Elvis Pimentel) | 2 | 29 | 14.5 |
-| Cabala e Misticismo | 49 | 295 | 6.0 |
-| Desenvolvimento Pessoal | 27 | 228 | 8.4 |
-| Filosofia | 7 | 53 | 7.6 |
-| Física Quântica e Ciência | 10 | 40 | 4.0 |
-| Hermetismo e Esoterismo | 36 | 301 | 8.4 |
-| História e Sociedade | 16 | 57 | 3.6 |
-| Psicologia e Arquétipos | 16 | 71 | 4.4 |
-| Religião e Teologia | 9 | 109 | 12.1 |
-| Saúde e Corpo | 6 | 54 | 9.0 |
-| Sem tema | 101 | 1216 | 12.0 |
-| Vendas e Negócios | 8 | 145 | 18.1 |
+| Grupo | Arquivos | Livros | Convertidos | Média livros/arquivo |
+|---|---|---|---|---|
+| 00 - Arquivos pessoais (Elvis Pimentel) | 2 | 29 | 0 | 14.5 |
+| Cabala e Misticismo | 52 | 328 | 33 | 6.3 |
+| Desenvolvimento Pessoal | 28 | 251 | 23 | 9.0 |
+| Filosofia | 8 | 59 | 6 | 7.4 |
+| Física Quântica e Ciência | 10 | 44 | 4 | 4.4 |
+| Hermetismo e Esoterismo | 39 | 326 | 25 | 8.4 |
+| História e Sociedade | 16 | 57 | 0 | 3.6 |
+| Psicologia e Arquétipos | 16 | 71 | 0 | 4.4 |
+| Religião e Teologia | 10 | 111 | 2 | 11.1 |
+| Saúde e Corpo | 7 | 58 | 4 | 8.3 |
+| Sem tema | 110 | 1486 | 246 | 13.5 |
+| Vendas e Negócios | 8 | 267 | 122 | 33.4 |
 
 Detalhe de cada arquivo: `arquivos_por_lote.csv`. Quais livros estão em cada arquivo e em quais páginas: `livros_por_arquivo.csv`.
 
 ## 3. NotebookLM
-O upload é manual (não há conector de NotebookLM verificado). Fontes: 287 mesclados + 34 enviados separadamente = 321.
-Plano gratuito: 50 fontes por caderno, ou seja, no mínimo 7 cadernos. Plus: 300 fontes por caderno, ou seja, 2 cadernos.
+O upload é manual (nenhum conector de NotebookLM foi encontrado). Fontes: 306 mesclados + 34 livros grandes a enviar separadamente = 340.
+Plano gratuito: 50 fontes por caderno, ou seja, no mínimo 7 cadernos. Plus: 300 por caderno, ou seja, 2 cadernos.
+Atenção: só use os arquivos de lote cujo status no `indice_pdfs.csv` é `done`. Lotes antigos marcados `obsoleto` (o último de cada grupo, refeito com os convertidos) continuam na pasta de saída do Drive; não envie esses ao NotebookLM.
 
-## Pendências
-- 34 livros grandes demais para o lote (27 excedem 500 mil palavras ou 200 MB e precisam ser divididos antes do upload).
-- 139 PDFs escaneados (OCR).
-- 15 PDFs inválidos (`NullObject`) — o modo tolerante não resolveu.
-- 3 PDFs protegidos por senha.
-- 19 com erro de leitura (`DictionaryObject >= int`), 14 com erro 403 de download, 10 com erro 502 de upload (transitório; um Retomar tenta de novo).
-- 29 arquivos vazios (0 byte) — reenviar ao Drive.
-- Livros em docx, doc, txt, epub e rtf não entraram nos lotes.
+## Pendências (`livros_nao_incluidos.csv`: 103 livros)
+- Grande demais para um lote — enviar separado ou dividir: 34
+- Arquivo vazio (0 byte) — reenviar: 29
+- Lote com erro — rodar Retomar de novo: 18
+- PDF defeituoso (não abre): 15
+- PDF com senha: 3
+- PDF escaneado (precisa de OCR): 3
+- Falha na conversão para PDF: 1
+
+## Atenção: livros escaneados já estão dentro dos lotes
+137 PDFs escaneados (imagem, sem texto) **entraram nos lotes**, mas o NotebookLM não consegue ler o conteúdo deles sem OCR.
+Lista: `livros_escaneados_dentro_dos_lotes.csv` (livro → arquivo final). Rodar OCR neles melhora o resultado; sem isso, ficam como páginas em branco para a IA.

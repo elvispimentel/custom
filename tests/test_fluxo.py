@@ -700,3 +700,28 @@ def test_converte_epub_de_verdade_com_calibre(tmp_path):
                    capture_output=True, timeout=180, check=True)
     pdf = conv.converter_bytes((tmp_path / "a.epub").read_bytes(), "epub", 250)
     assert "Capitulo" in PdfReader(io.BytesIO(pdf)).pages[0].extract_text()
+
+
+def test_pdf_que_quebra_a_uniao_e_isolado_e_o_lote_sai_sem_ele(mundo, monkeypatch):
+    from biblioteca.pdflocal import PdfLocal
+    d = mundo.drive
+    livros = d.pasta("Livros", mundo.lib)
+    for n in ("a", "b", "c"):
+        d.arquivo(f"{n}.pdf", pdf_texto(2, n), livros)
+    ruim_dados = d.itens[next(i for i, f in d.itens.items() if f["name"] == "b.pdf")]["dados"]
+    original = PdfLocal.juntar
+
+    def juntar(self, arquivos, nome_saida):
+        if any(dados == ruim_dados for _, dados in arquivos):
+            raise TypeError("'>=' not supported between instances of 'DictionaryObject' and 'int'")
+        return original(self, arquivos, nome_saida)
+    monkeypatch.setattr(PdfLocal, "juntar", juntar)
+    ctx = mundo.abrir()
+    ctx.pdf = PdfLocal()
+    inventariar(ctx); dup.detectar(ctx)
+    r1 = lt.processar(ctx, lt.planejar(ctx))
+    assert r1["erros"] == 1 and "defeituoso" in ctx.estado.q("SELECT erro FROM lotes WHERE status='erro'")[0]["erro"]
+    assert [p["tipo"] for p in ctx.estado.q("SELECT * FROM pendencias WHERE tipo='invalido'")] == ["invalido"]
+    plano2 = lt.planejar(ctx)
+    assert [i["nome"] for i in plano2[0]["itens"]] == ["a.pdf", "c.pdf"]       # refeito sem o PDF defeituoso
+    assert lt.processar(ctx, plano2)["concluidos"] == 1

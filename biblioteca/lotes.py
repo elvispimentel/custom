@@ -3,7 +3,7 @@ import io
 
 from .controle import achar_ou_criar_pasta
 from . import pessoal
-from .pdfs import MARCA_V2, Info, analisar, chamadas_merge, formar_lotes, juntar_ordenado, validar_final
+from .pdfs import MARCA_V2, Info, abrir_leitor, analisar, chamadas_merge, formar_lotes, juntar_ordenado, validar_final
 from .util import agora, md5_bytes, natural_key, nome_seguro, sha256_bytes
 
 
@@ -167,6 +167,27 @@ def verificar_ilovepdf(ctx, uso) -> dict:
     return info
 
 
+def isolar_defeituosos(ctx, p, arquivos) -> list[str]:
+    """Quando a união falha, testa cada PDF sozinho (unido a uma cópia de si mesmo). Os que não resistem viram
+    'invalido' e saem do próximo plano; o restante do lote é refeito sem eles. Só no motor local (sem créditos)."""
+    if getattr(ctx.pdf, "consome_creditos", True):
+        return []
+    ruins = []
+    for it, (nome, dados) in zip(p["itens"], arquivos):
+        try:
+            teste = ctx.pdf.juntar([(nome, dados), (nome, dados)], "teste.pdf")
+            leitor, _ = abrir_leitor(teste)
+            for pagina in leitor.pages:
+                pagina.mediabox
+        except Exception as e:
+            detalhe = f"falha ao juntar: {type(e).__name__}: {str(e)[:150]} {MARCA_V2}"
+            ctx.estado.x("INSERT OR REPLACE INTO pdf_info VALUES(?,?,?,?,?,?,?)", it["id"], it["md5"] or "",
+                         it.get("paginas") or 0, 0, 0, "invalido", detalhe)
+            ctx.estado.pendencia(it.get("origem_id") or it["id"], "invalido", detalhe)
+            ruins.append(it["nome"])
+    return ruins
+
+
 def executar_lote(ctx, p) -> dict:
     est, cfg = ctx.estado, ctx.cfg
     mx = ctx.pdf.max_arquivos
@@ -178,7 +199,14 @@ def executar_lote(ctx, p) -> dict:
         arquivos.append((it["nome"], dados))
     if p["palavras"] > cfg["lotes"]["limite_palavras"]:
         raise ErroLote(f"lote com ~{p['palavras']} palavras excede o teto do NotebookLM ({cfg['lotes']['limite_palavras']})")
-    final = juntar_ordenado(ctx.pdf, arquivos, p["nome"], mx)
+    try:
+        final = juntar_ordenado(ctx.pdf, arquivos, p["nome"], mx)
+    except Exception as e:
+        isolados = isolar_defeituosos(ctx, p, arquivos)
+        if not isolados:
+            raise
+        raise ErroLote(f"{len(isolados)} PDF(s) defeituoso(s) isolado(s) ({'; '.join(isolados)[:200]}); "
+                       f"rode Retomar para refazer o lote sem eles (erro original: {type(e).__name__}: {str(e)[:120]})") from e
     v = validar_final(final, p["paginas"], cfg)
     if not v["ok"]:
         raise ErroLote("validação do PDF final falhou: " + "; ".join(v["avisos"]))
