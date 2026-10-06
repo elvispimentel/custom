@@ -16,14 +16,14 @@ Executar PROMPT.md: overlays Remotion com alfa, composições de autor, timeline
 ### Phase 2 — Projeto Remotion (composições + render alfa)
 **Status:** complete
 ### Phase 3 — Render + checagem de frames (contraste, zona segura)
-**Status:** in_progress
+**Status:** complete
 ### Phase 4 — Downloader de imagens, credits.json, PEDIR AUTORIZAÇÃO, créditos na descrição
 **Status:** complete (download não executado: rede)
 ### Phase 5 — RELATORIO.md, commit, push
-**Status:** pending
+**Status:** complete
 
 ## Next Step
-Phase 3: esperar render completo, rodar tools/check_frames.py, testar ProRes 4444, rerender das falhas
+Aguardar liberação de rede e rodar fetch_assets + render dos arq-*
 
 ## Errors Encountered
 | Error | Attempt | Resolution |
