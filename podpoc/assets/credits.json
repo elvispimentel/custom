@@ -139,13 +139,14 @@
    "titulo": "O Código de Deus, Gregg Braden (Cultrix, 2011), imagem da loja",
    "url": "https://www.martinsfontespaulista.com.br/o-codigo-de-deus-218441/p",
    "licenca": "Protegida; uso por citação, crédito à editora",
-   "status": "uso-por-citacao",
+   "status": "ok",
    "gate": "uso-por-citacao",
    "obs": "Elvis precisa aprovar.",
    "arquivo_origem": "https://martinsfontespaulista.vteximg.com.br/arquivos/ids/1088255-1000-1000/218441_vitrine.jpg?v=637266434137170000",
    "arquivo": "assets/img-pendente/capa-braden-pt.jpg",
    "img_url": "https://martinsfontespaulista.vteximg.com.br/arquivos/ids/1088255-1000-1000/218441_vitrine.jpg?v=637266434137170000",
-   "crop_white": true
+   "crop_white": true,
+   "aprovado": true
   },
   {
    "id": "capa-levi-pt",
@@ -154,9 +155,9 @@
    "titulo": "Dogma e Ritual de Alta Magia (edição brasileira, ISBN 9788537004173)",
    "url": "",
    "licenca": "Protegida; uso por citação, crédito à editora",
-   "status": "pendente",
+   "status": "dispensado",
    "gate": "uso-por-citacao",
-   "obs": "Editora não confirmada; achar a imagem oficial na loja ou na editora e salvar em assets/img-pendente/capa-levi-pt.jpg."
+   "obs": "Elvis: se não achar, pode ser em inglês. Usada a capa-levi-en; esta fica opcional."
   },
   {
    "id": "helice",
@@ -248,6 +249,21 @@
    "autor": "Lucas van Leyden",
    "arquivo_origem": "https://images.metmuseum.org/CRDImages/dp/original/DP818817.jpg",
    "arquivo": "assets/img/leyden-1529.jpg"
+  },
+  {
+   "id": "capa-levi-en",
+   "uso": "levi (capa, edição em inglês)",
+   "origem": "ia",
+   "ia_id": "b24884339",
+   "page": "cover",
+   "titulo": "Transcendental Magic: Its Doctrine and Ritual (capa da edição em inglês, 1896)",
+   "url": "https://archive.org/details/b24884339",
+   "licenca": "Public Domain Mark 1.0",
+   "status": "ok",
+   "obs": "Capa em inglês porque a capa em português não foi encontrada (Elvis autorizou). Domínio público, sem necessidade de citação.",
+   "autor": "Éliphas Lévi, trad. Arthur Edward Waite",
+   "arquivo_origem": "https://archive.org/download/b24884339/page/cover_w2000.jpg",
+   "arquivo": "assets/img/capa-levi-en.jpg"
   }
  ]
 }

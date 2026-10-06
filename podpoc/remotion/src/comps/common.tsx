@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {continueRender, delayRender, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {getImageDimensions} from '@remotion/media-utils';
-import {C, SMOOTH} from '../theme';
+import {C, ChromaCtx, SMOOTH} from '../theme';
 
 export const useFadeOut = (frames = 12) => {
   const f = useCurrentFrame();
@@ -111,10 +111,12 @@ export const Duotone: React.FC<{
   );
 };
 
-export const Plate: React.FC<{children: React.ReactNode; style?: React.CSSProperties}> = ({children, style}) => (
+export const Plate: React.FC<{children: React.ReactNode; style?: React.CSSProperties}> = ({children, style}) => {
+  const chroma = React.useContext(ChromaCtx);
+  return (
   <div
     style={{
-      background: 'linear-gradient(90deg, rgba(26,26,46,0.86), rgba(26,26,46,0.70))',
+      background: chroma ? 'linear-gradient(90deg, #1F1F33, #2A2B3D)' : 'linear-gradient(90deg, rgba(26,26,46,0.86), rgba(26,26,46,0.70))',
       borderLeft: `6px solid ${C.gold}`,
       padding: '30px 52px 34px 44px',
       ...style,
@@ -122,4 +124,5 @@ export const Plate: React.FC<{children: React.ReactNode; style?: React.CSSProper
   >
     {children}
   </div>
-);
+  );
+};

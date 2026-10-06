@@ -1,0 +1,299 @@
+1
+00:00:00,000 --> 00:00:08,000
+[VÍDEO] V01 cold open turbulento
+
+2
+00:00:08,000 --> 00:00:10,000
+[BLOCO] HOOK
+
+3
+00:00:19,586 --> 00:00:25,406
+[OVERLAY] q-mecanismo
+
+4
+00:00:23,310 --> 00:00:25,310
+[REF] mesa antiga de madeira maciça, câmera deslizando até uma ranhura sob o
+
+5
+00:00:23,310 --> 00:00:25,310
+[BLOCO] IDENTIDADE
+
+6
+00:00:23,310 --> 00:00:25,310
+[ABERTURA] P1 Entra vídeo P1
+
+7
+00:01:04,690 --> 00:01:06,690
+[ABERTURA] P2 Entra vídeo P2
+
+8
+00:01:29,517 --> 00:01:31,517
+[BLOCO] CONVITE — Toque 1
+
+9
+00:01:44,000 --> 00:01:48,580
+[OVERLAY] convite-1
+
+10
+00:01:46,483 --> 00:01:48,483
+[BLOCO] BLOCO 1 — A mesa e a ranhura
+
+11
+00:02:08,414 --> 00:02:18,414
+[VÍDEO] V02 Bloco 1: a mesa se abre
+
+12
+00:02:23,724 --> 00:02:25,724
+[REF] a mesa se abrindo e revelando o relógio astronômico
+
+13
+00:02:39,862 --> 00:02:41,862
+[QUEBRA] corta pra plano mais fechado, tom mais baixo, pausa curta depois de "c
+
+14
+00:03:15,207 --> 00:03:19,377
+[OVERLAY] q-codigo
+
+15
+00:03:42,931 --> 00:03:44,931
+[REF] montagem rápida, 1 segundo cada: manuscrito do Zohar, foto de Helena B
+
+16
+00:03:42,931 --> 00:03:47,931
+[OVERLAY] arq-zohar
+
+17
+00:04:17,690 --> 00:04:19,690
+[BLOCO] BLOCO 2 — Bereshit: emanação, não cronologia
+
+18
+00:04:50,534 --> 00:04:56,534
+[OVERLAY] genesis-hebraico
+
+19
+00:05:17,690 --> 00:05:25,690
+[VÍDEO] V03 Bloco 2: Bereshit como emanação
+
+20
+00:05:25,966 --> 00:05:34,686
+[OVERLAY] q-forca
+
+21
+00:05:52,862 --> 00:06:12,072
+[OVERLAY] fases
+
+22
+00:06:31,345 --> 00:06:36,345
+[OVERLAY] q-camadas
+
+23
+00:06:42,103 --> 00:06:44,103
+[QUEBRA] corte seco pra tela escura, só o número 4 por um segundo, e volta pro 
+
+24
+00:06:42,103 --> 00:06:44,103
+[BLOCO] BLOCO 3 — O quatro dentro de você: Gregg Braden e o DNA
+
+25
+00:06:54,500 --> 00:06:59,500
+[OVERLAY] braden
+
+26
+00:07:02,534 --> 00:07:07,534
+[OVERLAY] tetragrama
+
+27
+00:07:22,241 --> 00:07:42,241
+[OVERLAY] braden-mapa
+
+28
+00:07:49,552 --> 00:07:54,552
+[OVERLAY] helice
+
+29
+00:07:49,552 --> 00:07:57,552
+[VÍDEO] V04 Bloco 3: quatro elementos, quatro letras, quatro bases
+
+30
+00:07:57,828 --> 00:08:02,408
+[OVERLAY] q-bases
+
+31
+00:08:21,414 --> 00:08:23,414
+[QUEBRA] respira, olha pra câmera, silêncio de 2 segundos antes de "Como ler a 
+
+32
+00:08:23,414 --> 00:08:25,414
+[BLOCO] BLOCO 4 — A luz que foi ocultada
+
+33
+00:08:42,862 --> 00:08:48,862
+[VÍDEO] V05 Bloco 4: a luz ocultada
+
+34
+00:09:05,207 --> 00:09:10,617
+[OVERLAY] q-restricao
+
+35
+00:09:08,517 --> 00:09:10,517
+[REF] luz intensa sendo filtrada por um véu
+
+36
+00:09:36,655 --> 00:09:38,655
+[BLOCO] BLOCO 5 — Dois relatos e o Adão que não acordou
+
+37
+00:09:37,655 --> 00:09:42,655
+[OVERLAY] blavatsky
+
+38
+00:10:16,552 --> 00:10:21,552
+[OVERLAY] goddard
+
+39
+00:10:46,483 --> 00:10:51,483
+[OVERLAY] arq-adao
+
+40
+00:11:05,207 --> 00:11:08,967
+[OVERLAY] q-adao
+
+41
+00:11:06,862 --> 00:11:08,862
+[QUEBRA] pausa de 2 segundos depois de "Adão ainda está dormindo."
+
+42
+00:11:08,862 --> 00:11:18,862
+[VÍDEO] V06 Bloco 5: o Adão que não acordou
+
+43
+00:12:22,931 --> 00:12:27,511
+[OVERLAY] q-esquecer
+
+44
+00:12:25,414 --> 00:12:27,414
+[BLOCO] BLOCO 6 — A queda e a serpente
+
+45
+00:12:25,414 --> 00:12:35,414
+[VÍDEO] V07 Bloco 6 e 7: a descida da consciência e o traje biológico
+
+46
+00:13:23,741 --> 00:13:28,741
+[OVERLAY] levi
+
+47
+00:13:39,897 --> 00:13:47,787
+[OVERLAY] q-queda
+
+48
+00:13:43,190 --> 00:13:48,190
+[OVERLAY] bailey
+
+49
+00:13:45,690 --> 00:13:47,690
+[BLOCO] BLOCO 7 — As túnicas de pele e a espada flamejante
+
+50
+00:14:51,379 --> 00:14:56,379
+[OVERLAY] arq-astronauta
+
+51
+00:14:51,483 --> 00:14:56,483
+[OVERLAY] q-traje
+
+52
+00:14:54,379 --> 00:15:02,379
+[VÍDEO] V08 Bloco 7: a espada flamejante e o caminho
+
+53
+00:15:08,862 --> 00:15:28,862
+[OVERLAY] zayn
+
+54
+00:15:43,207 --> 00:15:49,857
+[OVERLAY] q-lamina
+
+55
+00:15:45,259 --> 00:15:50,259
+[OVERLAY] deldebbio
+
+56
+00:15:47,759 --> 00:15:49,759
+[BLOCO] BLOCO 8 — Caim e Abel: a dualidade na mente
+
+57
+00:16:34,517 --> 00:16:36,517
+[QUEBRA] tom mais baixo e mais lento; a luz da cena abaixa antes de entrar no T
+
+58
+00:16:34,517 --> 00:16:36,517
+[BLOCO] TEN — virada principal: a chave é a emoção coerente
+
+59
+00:16:46,103 --> 00:16:54,103
+[VÍDEO] V09 TEN: o livro de Raziel
+
+60
+00:17:09,690 --> 00:17:15,930
+[OVERLAY] q-credenciais
+
+61
+00:17:10,828 --> 00:17:15,828
+[OVERLAY] arq-raziel
+
+62
+00:17:35,328 --> 00:17:40,328
+[OVERLAY] deepak
+
+63
+00:17:37,828 --> 00:17:47,828
+[VÍDEO] V10 TEN: a emoção coerente e o lado sombrio, Qlippoth
+
+64
+00:18:04,724 --> 00:18:11,374
+[OVERLAY] q-teclado
+
+65
+00:18:47,759 --> 00:18:49,759
+[REF] Árvore da Vida com o lado sombrio
+
+66
+00:19:24,586 --> 00:19:31,656
+[OVERLAY] q-fechadura
+
+67
+00:19:29,552 --> 00:19:31,552
+[QUEBRA] silêncio de 3 segundos depois da frase, plano fechado, sem música
+
+68
+00:19:32,552 --> 00:19:34,552
+[BLOCO] CTA — logo depois da virada
+
+69
+00:19:51,172 --> 00:19:59,062
+[OVERLAY] cta-acesso
+
+70
+00:20:25,517 --> 00:20:27,517
+[BLOCO] CONVITE — Toque 2
+
+71
+00:20:55,724 --> 00:20:59,064
+[OVERLAY] convite-2
+
+72
+00:20:56,966 --> 00:20:58,966
+[BLOCO] KETSU — fechamento
+
+73
+00:20:56,966 --> 00:21:02,966
+[VÍDEO] V11 Ketsu: a mesa aberta e o logo
+
+74
+00:21:46,621 --> 00:21:50,791
+[OVERLAY] q-operar
+
+75
+00:21:48,690 --> 00:21:50,690
+[REF] a mesa aberta, engrenagens girando, fade para o logo do canal

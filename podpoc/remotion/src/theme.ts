@@ -1,3 +1,5 @@
+import React from 'react';
+
 // Paleta e movimento do canal (CLAUDE.md). Nada de cor fora daqui.
 export const C = {
   blue: '#1A3A5C',
@@ -38,3 +40,6 @@ export type Rec = {
 };
 
 export type Props = {rec: Rec; available: string[]};
+
+// true quando renderizamos o MP4 em fundo verde para chroma key (CapCut): sem transparência parcial nas placas
+export const ChromaCtx = React.createContext(false);

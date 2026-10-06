@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
-import {C, SANS, SERIF, Rec} from '../theme';
+import {C, ChromaCtx, SANS, SERIF, Rec} from '../theme';
 import {useFadeOut, useIn} from './common';
 
 // entra em 0,4 s (12 quadros), fica, sai com fade
 export const LowerThird: React.FC<{rec: Rec; left?: number; bottom?: number}> = ({rec, left = 96, bottom = 110}) => {
   const f = useCurrentFrame();
+  const chroma = useContext(ChromaCtx);
   const inn = useIn(0, 12);
   const out = useFadeOut(12);
   const bar = interpolate(f, [0, 12], [0, 1], {extrapolateRight: 'clamp'});
@@ -18,7 +19,7 @@ export const LowerThird: React.FC<{rec: Rec; left?: number; bottom?: number}> = 
           left,
           bottom,
           display: 'flex',
-          background: 'linear-gradient(90deg, rgba(26,26,46,0.88), rgba(26,26,46,0.72))',
+          background: chroma ? 'linear-gradient(90deg, #1F1F33, #2A2B3D)' : 'linear-gradient(90deg, rgba(26,26,46,0.88), rgba(26,26,46,0.72))',
           opacity: inn,
           transform: `translateX(${(1 - inn) * -36}px)`,
         }}

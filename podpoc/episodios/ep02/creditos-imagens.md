@@ -5,6 +5,9 @@ Créditos das imagens
 • Gray's Anatomy (1918), prancha 675: medula espinhal e raízes nervosas (Wikimedia Commons) — Henry Vandyke Carter, Public domain — https://commons.wikimedia.org/wiki/File:Gray675.png
 • Helena Blavatsky, c. 1889 (Wikimedia Commons) — autor desconhecido, Public domain — https://commons.wikimedia.org/wiki/File:Helena-Blavatsky-c.1889.jpg
 • Éliphas Lévi, fotografia (Wikimedia Commons) — Eliphas Lévi, Public domain — https://commons.wikimedia.org/wiki/File:Eliphas_Levi.png
+• O Código de Deus, Gregg Braden (Cultrix, 2011), imagem da loja — Protegida; uso por citação, crédito à editora — https://www.martinsfontespaulista.com.br/o-codigo-de-deus-218441/p
 • Dupla hélice com A, C, T, G: desenho próprio (recriação ilustrativa).
 • Tetragrama YHVH em fonte hebraica livre (Frank Ruhl Libre, SIL OFL).
 • Lucas van Leyden, A Criação de Eva, 1529 (Met Museum) — Lucas van Leyden, Public Domain (Met Open Access) — https://www.metmuseum.org/art/collection/search/364712
+• Transcendental Magic: Its Doctrine and Ritual (capa da edição em inglês, 1896) — Éliphas Lévi, trad. Arthur Edward Waite, Public Domain Mark 1.0 — https://archive.org/details/b24884339
+• Capa de O Código de Deus, Gregg Braden (Cultrix, 2011), imagem da loja: uso por citação, crédito à editora — https://www.martinsfontespaulista.com.br/o-codigo-de-deus-218441/p

@@ -1,6 +1,7 @@
 // Renderiza todos os overlays com canal alfa.
 //   node scripts/render.mjs                 -> WebM VP9 com alfa + pôster PNG (leve, vai no git)
 //   node scripts/render.mjs --prores        -> MOV ProRes 4444 com alfa (grande, fica fora do git)
+//   node scripts/render.mjs --chroma       -> MP4 em fundo verde #00FF00 para chroma key (CapCut)
 //   node scripts/render.mjs --only braden   -> um overlay só
 //   node scripts/render.mjs --posters-only  -> só os PNG
 import {bundle} from '@remotion/bundler';
@@ -17,6 +18,7 @@ const assetsDir = process.env.ASSETS_DIR || path.resolve(root, '..', 'assets');
 const imgDir = path.join(assetsDir, 'img');
 const args = process.argv.slice(2);
 const prores = args.includes('--prores');
+const chroma = args.includes('--chroma');
 const postersOnly = args.includes('--posters-only');
 const only = args.includes('--only') ? args[args.indexOf('--only') + 1] : null;
 
@@ -55,12 +57,15 @@ for (const rec of data) {
     console.log(`SKIP ${rec.id}: faltam ${missing.join(', ')}`);
     continue;
   }
-  const inputProps = {rec, available};
+  const inputProps = {rec, available, chroma};
   const comp = await selectComposition({...common, id: rec.id, inputProps});
-  await renderStill({...common, composition: comp, inputProps, frame: posterFrame(rec), imageFormat: 'png', output: path.join(outDir, `${rec.id}.png`)});
+  if (!chroma) await renderStill({...common, composition: comp, inputProps, frame: posterFrame(rec), imageFormat: 'png', output: path.join(outDir, `${rec.id}.png`)});
   if (!postersOnly) {
     const base = {...common, composition: comp, inputProps, imageFormat: 'png', concurrency: 2};
-    if (prores) {
+    if (chroma) {
+      fs.mkdirSync(path.join(outDir, 'capcut'), {recursive: true});
+      await renderMedia({...base, codec: 'h264', pixelFormat: 'yuv420p', crf: 12, outputLocation: path.join(outDir, 'capcut', `${rec.id}.mp4`)});
+    } else if (prores) {
       await renderMedia({...base, codec: 'prores', proResProfile: '4444', pixelFormat: 'yuva444p10le', outputLocation: path.join(outDir, `${rec.id}.mov`)});
     } else {
       await renderMedia({...base, codec: 'vp9', pixelFormat: 'yuva420p', outputLocation: path.join(outDir, `${rec.id}.webm`)});
@@ -69,4 +74,4 @@ for (const rec of data) {
   status.push({id: rec.id, ok: true});
   console.log(`ok   ${rec.id}`);
 }
-fs.writeFileSync(path.join(outDir, prores ? 'status-prores.json' : 'status.json'), JSON.stringify(status, null, 1));
+fs.writeFileSync(path.join(outDir, chroma ? 'status-capcut.json' : prores ? 'status-prores.json' : 'status.json'), JSON.stringify(status, null, 1));

@@ -16,7 +16,6 @@ Nada abaixo entra no vídeo sem autorização por escrito (ou licença confirmad
 
 | Capa | Origem | Status |
 |---|---|---|
-| O Código de Deus, Gregg Braden (Cultrix, 2011), imagem da loja | https://www.martinsfontespaulista.com.br/o-codigo-de-deus-218441/p | uso-por-citacao. Elvis precisa aprovar. |
-| Dogma e Ritual de Alta Magia (edição brasileira, ISBN 9788537004173) | editora a confirmar | pendente. Editora não confirmada; achar a imagem oficial na loja ou na editora e salvar em assets/img-pendente/capa-levi-pt.jpg. |
+| Dogma e Ritual de Alta Magia (edição brasileira, ISBN 9788537004173) | editora a confirmar | dispensado. Elvis: se não achar, pode ser em inglês. Usada a capa-levi-en; esta fica opcional. |
 
 Para aprovar uma capa já baixada: `python3 tools/fetch_assets.py --approve capa-braden-pt`.

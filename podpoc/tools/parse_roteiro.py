@@ -51,7 +51,7 @@ AUTHORS = {
     "braden": dict(name="Gregg Braden", work="O Código de Deus", year="2004",
                    photo="braden", cover="capa-braden-pt", living=True),
     "levi": dict(name="Éliphas Lévi", work="Dogma e Ritual de Alta Magia", year="",
-                 photo="levi-retrato", cover="capa-levi-pt", living=False),
+                 photo="levi-retrato", cover="capa-levi-en", living=False),
     "bailey": dict(name="Alice Bailey", work="", year="", photo="bailey", cover="", living=False),
     "deldebbio": dict(name="Marcelo Del Debbio", work="Árvore da Vida cabalística", year="",
                       photo="deldebbio", cover="", living=True),
@@ -298,9 +298,29 @@ def main():
         lines.append("")
     (EPDIR / "timeline.edl").write_text("\n".join(lines), encoding="utf-8")
 
+    write_capcut_srt(ev, extract_prompts())
     write_cues(items, ev)
     write_prompts_md(prompts, ev)
     print(f"{len(ov)} overlays, {len(ev)} marcadores, duração estimada {mmss(total_s)}")
+
+
+# ---------------------------------------------------------------- CapCut: o CapCut não importa EDL
+def srt_t(sec):
+    ms = int(round(sec * 1000))
+    return f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}"
+
+
+def write_capcut_srt(ev, prompts):
+    """Um bloco de legenda por marcador. No CapCut: Texto > Legendas > Importar legendas. A trilha de texto vira
+    uma régua de marcadores com tempo e nome, começando em 0:00 (sem o offset de 01:00:00:00 do EDL)."""
+    dur_of = {r["id"]: r["dur_s"] for r in json.loads((ROOT / "remotion/src/data/overlays.json").read_text())}
+    tag = {"overlay": "OVERLAY", "video": "VÍDEO", "abertura-fixa": "ABERTURA", "estrutura": "BLOCO", "quebra": "QUEBRA", "ref-visual": "REF"}
+    out = []
+    for k, e in enumerate(ev, 1):
+        d = dur_of.get(e["id"]) if e["tipo"] == "overlay" else (prompts[e["id"]]["dur"] if e["id"] in prompts else 2.0)
+        name = f"[{tag.get(e['tipo'], e['tipo'].upper())}] " + (f"{e['id']} " if e["id"] and not e["desc"].startswith(e["id"]) else "") + e["desc"].split(" (")[0][:70]
+        out.append(f"{k}\n{srt_t(e['t'])} --> {srt_t(e['t'] + d)}\n{name}\n")
+    (EPDIR / "timeline-capcut.srt").write_text("\n".join(out), encoding="utf-8")
 
 
 # ---------------------------------------------------------------- prompts de vídeo

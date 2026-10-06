@@ -1,8 +1,8 @@
 import React from 'react';
-import {Composition} from 'remotion';
+import {AbsoluteFill, Composition} from 'remotion';
 import './fonts';
 import data from './data/overlays.json';
-import {Rec, W, H} from './theme';
+import {ChromaCtx, Rec, W, H} from './theme';
 import {Quote} from './comps/Quote';
 import {AuthorCard} from './comps/AuthorCard';
 import {ArchiveCard} from './comps/ArchiveCard';
@@ -22,18 +22,33 @@ const pick = (rec: Rec): React.FC<any> => {
   return DIAGRAMS[rec.id];
 };
 
+// um componente por overlay, criado uma vez; com chroma=true desenha fundo verde #00FF00 por baixo
+const WRAPPED = new Map<string, React.FC<any>>();
+const wrapped = (rec: Rec) => {
+  if (!WRAPPED.has(rec.id)) {
+    const Comp = pick(rec);
+    WRAPPED.set(rec.id, (p: any) => (
+      <ChromaCtx.Provider value={!!p.chroma}>
+        {p.chroma && <AbsoluteFill style={{background: '#00FF00'}} />}
+        <Comp {...p} />
+      </ChromaCtx.Provider>
+    ));
+  }
+  return WRAPPED.get(rec.id)!;
+};
+
 export const Root: React.FC = () => (
   <>
     {(data as Rec[]).map((rec) => (
       <Composition
         key={rec.id}
         id={rec.id}
-        component={pick(rec)}
+        component={wrapped(rec)}
         durationInFrames={rec.frames}
         fps={30}
         width={W}
         height={H}
-        defaultProps={{rec, available: [] as string[]}}
+        defaultProps={{rec, available: [] as string[], chroma: false}}
       />
     ))}
   </>

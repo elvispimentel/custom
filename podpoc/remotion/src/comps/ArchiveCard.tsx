@@ -45,7 +45,7 @@ export const ArchiveCard: React.FC<Props> = ({rec, available}) => {
             bottom: 70,
             padding: '16px 32px 18px 28px',
             borderLeft: `6px solid ${C.gold}`,
-            background: 'rgba(26,26,46,0.88)',
+            background: '#1F1F33',
             fontFamily: SANS,
             fontWeight: 500,
             fontSize: 40,

@@ -105,7 +105,7 @@ def h_nasa(e):
 def h_ia(e):
     meta = jget(f"https://archive.org/metadata/{e['ia_id']}")
     m = meta.get("metadata", {})
-    lic = m.get("licenseurl") or m.get("rights") or e["licenca"]
+    lic = strip_html(m.get("licenseurl") or m.get("rights") or "") or e["licenca"]
     page = e.get("page", "cover")
     jpgs = sorted(f["name"] for f in meta.get("files", []) if f["name"].lower().endswith((".jpg", ".jpeg")) and f.get("source") != "derivative")
     if e.get("arquivo_ia"):
