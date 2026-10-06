@@ -16,6 +16,7 @@ on:
           - "Mover duplicados para revisão"
           - "Simular temas e autores"
           - "Aplicar temas e autores"
+          - "Converter documentos para PDF"
           - "Testar um lote"
           - "Processar lotes"
           - "Retomar"
@@ -25,6 +26,10 @@ on:
         description: "Processar lotes: quantos lotes nesta execução (0 = todos)"
         type: string
         default: "5"
+      max_conversoes:
+        description: "Converter documentos para PDF: quantos livros nesta execução (0 = todos)"
+        type: string
+        default: "10"
       incluir_lotes:
         description: "Simular organização: também analisar PDFs e estimar lotes e uso de API (baixa os PDFs)"
         type: boolean
@@ -65,6 +70,7 @@ jobs:
       GITHUB_TOKEN: ${{ github.token }}
       ACAO: ${{ inputs.acao }}
       MAX_LOTES: ${{ inputs.max_lotes }}
+      MAX_CONVERSOES: ${{ inputs.max_conversoes }}
       INCLUIR_LOTES: ${{ inputs.incluir_lotes }}
       CONFIRMAR: ${{ inputs.confirmar }}
     steps:
@@ -75,6 +81,11 @@ jobs:
           cache: pip
       - name: Instalar dependências
         run: pip install -r requirements.txt
+      - name: Instalar conversores (LibreOffice e Calibre)
+        if: inputs.acao == 'Converter documentos para PDF'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends libreoffice-writer fonts-liberation fonts-dejavu-core calibre
       - name: Executar
         run: |
           set -euo pipefail
@@ -93,6 +104,7 @@ jobs:
             "Mover duplicados para revisão") exige_confirmacao; python -m biblioteca mover-duplicados ;;
             "Simular temas e autores")       python -m biblioteca simular-temas ;;
             "Aplicar temas e autores")       exige_confirmacao; python -m biblioteca aplicar-temas ;;
+            "Converter documentos para PDF") python -m biblioteca converter-documentos --max-conversoes "$MAX_CONVERSOES" ;;
             "Testar um lote")                python -m biblioteca testar-lote ;;
             "Processar lotes")               python -m biblioteca processar-lotes --max-lotes "$MAX_LOTES" ;;
             "Retomar")                       python -m biblioteca retomar ;;

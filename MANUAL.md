@@ -19,12 +19,13 @@ A conexão com o Google Drive passa pelo **Composio**. Os PDFs são **juntados d
 | **Simular temas e autores** | Gera o plano `Tema / Autor / arquivo` para você revisar. | Não |
 | **Aplicar temas e autores** | Move os arquivos para `Biblioteca Pessoal/Tema/Autor/`. | Sim (mover) |
 | **Testar um lote** | Processa **um único lote real** (para você conferir o resultado). | Cria 1 PDF na pasta de saída |
+| **Converter documentos para PDF** | Converte docx, doc, txt, rtf, odt, epub, mobi e azw3 em PDF (LibreOffice e Calibre, instalados na hora). Use `max_conversoes` pequeno (ex.: 10) para testar; `0` = todos. Os originais ficam onde estão; os PDFs vão para a pasta `_convertidos` da saída. | Cria PDFs em `_convertidos`; **depois rode Processar lotes/Retomar** para incluí-los nos lotes |
 | **Processar lotes** | Processa N lotes (ou todos). | Cria PDFs na pasta de saída |
 | **Retomar** | Continua de onde parou, sem refazer o que já foi feito. | Cria PDFs |
 | **Restaurar duplicados / Restaurar temas e autores** | Devolve os arquivos aos locais originais. | Sim (mover de volta) |
 
 **Ordem recomendada** (a ordem importa — veja a seção 6):
-`Conectar Google Drive → Verificar → Localizar → Simular organização → Mover duplicados → Simular temas e autores → Aplicar temas e autores → Testar um lote → Processar lotes`.
+`Conectar Google Drive → Verificar → Localizar → Simular organização → Mover duplicados → Simular temas e autores → Aplicar temas e autores → Converter documentos para PDF → Testar um lote → Processar lotes`.
 
 Os PDFs finais ficam em `Biblioteca Pessoal — PDFs para NotebookLM`, espelhando as subpastas.
 Os originais nunca são alterados nem renomeados.

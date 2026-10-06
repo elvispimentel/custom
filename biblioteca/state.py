@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS avulsos(file_id TEXT PRIMARY KEY, caminho TEXT, motiv
 CREATE TABLE IF NOT EXISTS classif(file_id TEXT, md5 TEXT, tema TEXT, autor TEXT, fonte TEXT, confianca REAL,
   PRIMARY KEY(file_id, md5));
 CREATE TABLE IF NOT EXISTS pendencias(file_id TEXT, tipo TEXT, detalhe TEXT, em TEXT, PRIMARY KEY(file_id, tipo));
+CREATE TABLE IF NOT EXISTS conversoes(file_id TEXT, md5 TEXT, formato TEXT, pdf_id TEXT, pdf_md5 TEXT, pdf_tamanho INTEGER,
+  pdf_nome TEXT, status TEXT, detalhe TEXT, atualizado TEXT, PRIMARY KEY(file_id, md5));
 CREATE TABLE IF NOT EXISTS uso_api(chave TEXT PRIMARY KEY, n INTEGER);
 """
 

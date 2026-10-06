@@ -5,6 +5,7 @@ import time
 import traceback
 from pathlib import Path
 
+from . import conversao as conv
 from . import duplicados as dup
 from . import lotes as lt
 from . import organizar as org
@@ -18,7 +19,7 @@ from .inventario import inventariar
 from .util import humano
 
 COMANDOS = ["verificar", "conectar", "localizar", "simular", "mover-duplicados", "simular-temas", "aplicar-temas",
-            "testar-lote", "processar-lotes", "retomar", "restaurar", "status"]
+            "converter-documentos", "testar-lote", "processar-lotes", "retomar", "restaurar", "status"]
 FERRAMENTAS = ["GOOGLEDRIVE_FIND_FILE", "GOOGLEDRIVE_FIND_FOLDER", "GOOGLEDRIVE_GET_FILE_METADATA",
                "GOOGLEDRIVE_DOWNLOAD_FILE", "GOOGLEDRIVE_CREATE_FOLDER", "GOOGLEDRIVE_MOVE_FILE",
                "GOOGLEDRIVE_UPLOAD_FILE", "GOOGLEDRIVE_RESUMABLE_UPLOAD", "I_LOVE_PDF_GET_ACCOUNT_INFO",
@@ -220,7 +221,7 @@ def executar(args):
         return cmd_conectar(cfg, c, args.novo)
     if args.comando == "verificar":
         return cmd_verificar(cfg, c, drive, pdf)
-    precisa_saidas = args.comando in ("mover-duplicados", "testar-lote", "processar-lotes", "retomar")
+    precisa_saidas = args.comando in ("mover-duplicados", "converter-documentos", "testar-lote", "processar-lotes", "retomar")
     ctx, ctrl = preparar(cfg, args, drive, pdf, precisa_saidas, os.environ.get("GITHUB_RUN_ID", "local"))
     try:
         return rodar(ctx, args, c)
@@ -287,6 +288,11 @@ def rodar(ctx, args, c):
         resumo_actions(f"Plano de temas/autores: `{contagem}` (veja plano_temas.csv na pasta de controle)")
         if cmd == "aplicar-temas":
             log(f"movimentação por tema/autor: {org.aplicar_temas(ctx, plano)}")
+    elif cmd == "converter-documentos":
+        r = conv.converter_pendentes(ctx, args.max_conversoes)
+        log(f"conversão: {r}")
+        resumo_actions(f"Conversão para PDF: `{r}`" + ("\n\nTempo esgotado: rode de novo." if r["interrompido"] else
+                       "\n\nAgora rode **Processar lotes** (ou **Retomar**) para incluir os convertidos nos lotes."))
     else:  # testar-lote | processar-lotes | retomar
         limite = 1 if cmd == "testar-lote" else args.max_lotes
         plano = lt.planejar(ctx, parar_em=limite or None)
@@ -310,6 +316,7 @@ def main(argv=None):
     ap.add_argument("comando", choices=COMANDOS)
     ap.add_argument("--config")
     ap.add_argument("--max-lotes", type=int, default=0, help="0 = todos")
+    ap.add_argument("--max-conversoes", type=int, default=0, help="em 'converter-documentos': 0 = todos")
     ap.add_argument("--com-lotes", action="store_true", help="em 'simular': analisa PDFs e estima lotes/uso de API")
     ap.add_argument("--novo", action="store_true", help="em 'conectar': gera link mesmo se já houver conta ativa")
     ap.add_argument("--tipo", choices=["duplicado", "tema"], default="duplicado")

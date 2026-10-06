@@ -19,6 +19,8 @@ PADRAO = {
                  "ignorar_nomes": [".DS_Store", "Thumbs.db", "desktop.ini"],
                  "pastas_de_copias": ["cópia", "copia", "copias", "cópias", "backup", "duplicad", "old"]},
     "pdf": {"motor": "local"},
+    "conversao": {"formatos": ["docx", "doc", "txt", "rtf", "odt", "epub", "mobi", "azw3"], "pasta": "_convertidos",
+                  "timeout_s": 300},
     "ilovepdf": {"max_arquivos_por_chamada": 20, "reservar_creditos": 0},
     "pessoal": {"padroes": [], "codigo_data_hora": True, "pasta": "00 - Arquivos pessoais"},
     "lotes": {"agrupar_por": "pasta", "grupo_sem_tema": "Sem tema", "max_documentos": 25, "meta_mb": 90, "meta_palavras": 450000,

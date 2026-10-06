@@ -612,3 +612,91 @@ def test_protegido_do_analisador_antigo_e_reanalisado(mundo):
     plano = lt.planejar(ctx)
     nomes = sorted(i["nome"] for pl in plano for i in pl["itens"])
     assert nomes == ["normal.pdf", "restrito.pdf"]
+
+
+# ---------- conversão de docx/epub/etc. para PDF ----------
+def test_converter_documentos_entra_nos_lotes_depois_dos_pdfs(mundo, monkeypatch):
+    from biblioteca import conversao as conv
+    d = mundo.drive
+    livros = d.pasta("Livros", mundo.lib)
+    d.arquivo("zeta.pdf", pdf_texto(2, "zeta"), livros)
+    docx = d.arquivo("alfa.docx", b"conteudo docx", livros, mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+    d.arquivo("beta.epub", b"conteudo epub", livros, mime="application/epub+zip")
+    d.arquivo("imagem.png", b"png", livros, mime="image/png")
+    d.arquivo("vazio.docx", b"", livros)
+    chamadas = []
+    monkeypatch.setattr(conv, "converter_bytes", lambda dados, ext, t=0: chamadas.append(ext) or pdf_texto(3, f"conv-{ext}"))
+    ctx = mundo.abrir()
+    inventariar(ctx); dup.detectar(ctx)
+    r = conv.converter_pendentes(ctx)
+    assert r == {"convertidos": 2, "falhas": 0, "erros": 0, "interrompido": False}
+    assert sorted(chamadas) == ["docx", "epub"]                       # png e arquivo vazio não são convertidos
+    saida = ctx.ids["pdfs"]
+    conv_dir = next(i for i in d.itens.values() if i["name"] == "_convertidos" and saida in i["parents"])["id"]
+    assert len(mundo.drive.na_pasta(next(i for i in d.itens.values() if i["name"] == "Livros" and conv_dir in i["parents"])["id"])) == 2
+    assert d.itens[docx]["parents"] == [livros]                       # original intacto
+    # idempotente: segunda execução não reconverte
+    assert conv.converter_pendentes(ctx)["convertidos"] == 0 and len(chamadas) == 2
+    plano = lt.planejar(ctx)
+    assert [i["nome"] for i in plano[0]["itens"]] == ["zeta.pdf", "alfa.docx", "beta.epub"]   # convertidos ao final
+    assert lt.processar(ctx, plano)["concluidos"] == 1
+    linhas = list(csv.DictReader(io.StringIO(lt.indice_csv(ctx))))
+    por = {l["arquivo_original"]: l for l in linhas}
+    assert por["alfa.docx"]["id_drive"] == docx and por["alfa.docx"]["observacao"] == "convertido de .docx"
+    assert por["alfa.docx"]["caminho_original"] == "Livros" and por["zeta.pdf"]["observacao"] == ""
+    (pdf,) = paginas(mundo)
+    assert len(pdf.pages) == 2 + 3 + 3
+
+
+def test_falha_de_conversao_vira_pendencia_e_nao_trava(mundo, monkeypatch):
+    from biblioteca import conversao as conv
+    d = mundo.drive
+    livros = d.pasta("Livros", mundo.lib)
+    ruim = d.arquivo("quebrado.docx", b"lixo", livros)
+    d.arquivo("bom.docx", b"ok", livros)
+
+    def falso(dados, ext, t=0):
+        if dados == b"lixo":
+            raise conv.ErroConversao("arquivo corrompido")
+        return pdf_texto(2, "bom")
+    monkeypatch.setattr(conv, "converter_bytes", falso)
+    ctx = mundo.abrir()
+    inventariar(ctx); dup.detectar(ctx)
+    r = conv.converter_pendentes(ctx, limite=0)
+    assert r["convertidos"] == 1 and r["falhas"] == 1
+    assert [p["tipo"] for p in ctx.estado.q("SELECT * FROM pendencias WHERE file_id=?", ruim)] == ["conversao"]
+    assert conv.converter_pendentes(ctx)["falhas"] == 0                # falha de conteúdo não é repetida
+
+
+def test_limite_de_conversoes_e_duplicados_ignorados(mundo, monkeypatch):
+    from biblioteca import conversao as conv
+    d = mundo.drive
+    a = d.pasta("A", mundo.lib)
+    for n in range(5):
+        d.arquivo(f"livro{n}.txt", f"texto {n}".encode(), a)
+    d.arquivo("copia.txt", b"texto 0", a, criado="2025-01-01T00:00:00+00:00")   # mesmo conteúdo: duplicado
+    monkeypatch.setattr(conv, "converter_bytes", lambda dados, ext, t=0: pdf_texto(1, "t"))
+    ctx = mundo.abrir()
+    inventariar(ctx); dup.detectar(ctx)
+    assert conv.converter_pendentes(ctx, limite=2)["convertidos"] == 2
+    assert conv.converter_pendentes(ctx)["convertidos"] == 3           # 5 únicos no total; a cópia não entra
+
+
+@pytest.mark.skipif(__import__("shutil").which("soffice") is None, reason="LibreOffice não instalado")
+def test_converte_txt_de_verdade_com_libreoffice():
+    from biblioteca import conversao as conv
+    pdf = conv.converter_bytes(("Olá mundo. " * 400).encode("utf-8"), "txt", 180)
+    r = PdfReader(io.BytesIO(pdf))
+    assert len(r.pages) >= 1 and "mundo" in r.pages[0].extract_text()
+
+
+@pytest.mark.skipif(__import__("shutil").which("ebook-convert") is None or __import__("shutil").which("soffice") is None,
+                    reason="Calibre/LibreOffice não instalados")
+def test_converte_epub_de_verdade_com_calibre(tmp_path):
+    import subprocess
+    from biblioteca import conversao as conv
+    (tmp_path / "a.txt").write_text("Capitulo um. " * 300, encoding="utf-8")
+    subprocess.run(["soffice", "--headless", "--convert-to", "epub", "--outdir", str(tmp_path), str(tmp_path / "a.txt")],
+                   capture_output=True, timeout=180, check=True)
+    pdf = conv.converter_bytes((tmp_path / "a.epub").read_bytes(), "epub", 250)
+    assert "Capitulo" in PdfReader(io.BytesIO(pdf)).pages[0].extract_text()

@@ -33,8 +33,16 @@ def pdfs_unicos(ctx) -> dict[str, list[dict]]:
     for r in ctx.estado.q("SELECT * FROM arquivos WHERE situacao='ok'"):
         if _eh_pdf(r) and r["id"] not in dups:
             por_grupo.setdefault(_grupo(ctx, r["caminho"], r["nome"]), []).append(dict(r))
+    # livros convertidos de docx/epub/etc.: entram como PDFs, depois dos PDFs nativos (mantém os lotes antigos estáveis)
+    for r in ctx.estado.q("""SELECT c.*, a.nome AS onome, a.caminho AS ocam FROM conversoes c
+                             JOIN arquivos a ON a.id=c.file_id AND COALESCE(a.md5,'')=c.md5
+                             WHERE c.status='done' AND a.situacao='ok'"""):
+        if r["file_id"] not in dups:
+            por_grupo.setdefault(_grupo(ctx, r["ocam"], r["onome"]), []).append(
+                dict(id=r["pdf_id"], nome=r["onome"], caminho=r["ocam"], mime="application/pdf", tamanho=r["pdf_tamanho"],
+                     md5=r["pdf_md5"], origem_id=r["file_id"], convertido=1, formato=r["formato"]))
     for lista in por_grupo.values():
-        lista.sort(key=lambda r: natural_key(r["caminho"] + "/" + r["nome"]))
+        lista.sort(key=lambda r: (r.get("convertido", 0), natural_key(r["caminho"] + "/" + r["nome"])))
     return dict(sorted(por_grupo.items(), key=lambda kv: natural_key(kv[0])))
 
 
@@ -67,32 +75,33 @@ def planejar(ctx, analisar_tudo=True, parar_em=None) -> list[dict]:
     for caminho, arqs in pdfs_unicos(ctx).items():
         elegiveis = []
         for f in arqs:
+            pid = f.get("origem_id") or f["id"]            # pendências ficam no id do livro original
             if ctx.orcamento.esgotado():
                 ctx.salvar()
                 raise TimeoutError("tempo esgotado durante a análise; execute 'retomar'")
             try:
                 i = info_de(ctx, f, baixar=analisar_tudo)
             except Exception as e:
-                est.pendencia(f["id"], "analise", str(e)[:300])
+                est.pendencia(pid, "analise", str(e)[:300])
                 continue
             if i is None:
                 continue
-            est.resolver_pendencia(f["id"], "analise")
+            est.resolver_pendencia(pid, "analise")
             if i.situacao in ("protegido", "invalido"):
-                est.pendencia(f["id"], i.situacao, i.detalhe)
+                est.pendencia(pid, i.situacao, i.detalhe)
                 continue
-            est.resolver_pendencia(f["id"], "protegido")
-            est.resolver_pendencia(f["id"], "invalido")
+            est.resolver_pendencia(pid, "protegido")
+            est.resolver_pendencia(pid, "invalido")
             if i.situacao == "ocr":
-                est.pendencia(f["id"], "ocr", i.detalhe)
+                est.pendencia(pid, "ocr", i.detalhe)
             else:
-                est.resolver_pendencia(f["id"], "ocr")
+                est.resolver_pendencia(pid, "ocr")
             elegiveis.append({**f, "tamanho": f["tamanho"], "palavras": i.palavras, "paginas": i.paginas,
                               "situacao_pdf": i.situacao})
         lotes, avulsos = formar_lotes(elegiveis, ctx.cfg)
         for a in avulsos:
-            est.x("INSERT OR REPLACE INTO avulsos VALUES(?,?,?)", a["id"], f"{caminho}/{a['nome']}".lstrip("/"), a["motivo"])
-            est.pendencia(a["id"], "enviar_separadamente", a["motivo"])
+            est.x("INSERT OR REPLACE INTO avulsos VALUES(?,?,?)", a.get("origem_id") or a["id"], f"{caminho}/{a['nome']}".lstrip("/"), a["motivo"])
+            est.pendencia(a.get("origem_id") or a["id"], "enviar_separadamente", a["motivo"])
         chaves = set()
         for seq, itens in enumerate(lotes, 1):
             k = chave_lote(itens)
@@ -217,15 +226,21 @@ def indice_csv(ctx) -> str:
     w = csv.writer(out)
     w.writerow(["arquivo_original", "id_drive", "caminho_original", "pdf_final", "id_pdf_final",
                 "pagina_inicial", "pagina_final", "status", "observacao"])
-    for r in est.q("""SELECT l.saida_nome, l.saida_id, l.status, l.obsoleto, l.erro, i.nome, i.file_id,
-                      i.pagina_ini, i.pagina_fim, a.caminho FROM lotes l JOIN lote_itens i ON i.chave=l.chave
-                      LEFT JOIN arquivos a ON a.id=i.file_id ORDER BY l.pasta, l.seq, i.ordem"""):
+    for r in est.q("""SELECT l.saida_nome, l.saida_id, l.status, l.obsoleto, l.erro, i.nome,
+                      COALESCE(c.file_id, i.file_id) AS file_id, i.pagina_ini, i.pagina_fim,
+                      COALESCE(a.caminho, o.caminho) AS caminho, c.formato
+                      FROM lotes l JOIN lote_itens i ON i.chave=l.chave
+                      LEFT JOIN arquivos a ON a.id=i.file_id
+                      LEFT JOIN conversoes c ON c.pdf_id=i.file_id AND c.status='done'
+                      LEFT JOIN arquivos o ON o.id=c.file_id
+                      ORDER BY l.pasta, l.seq, i.ordem"""):
         status = "obsoleto" if r["obsoleto"] else r["status"]
         w.writerow([r["nome"], r["file_id"], r["caminho"], r["saida_nome"] if r["status"] == "done" else "",
-                    r["saida_id"] or "", r["pagina_ini"], r["pagina_fim"], status, r["erro"] or ""])
+                    r["saida_id"] or "", r["pagina_ini"], r["pagina_fim"], status,
+                    r["erro"] or (f"convertido de .{r['formato']}" if r["formato"] else "")])
     for r in est.q("SELECT a.*, v.caminho AS cam, v.motivo FROM avulsos v JOIN arquivos a ON a.id=v.file_id"):
         w.writerow([r["nome"], r["id"], r["cam"], "", "", "", "", "enviar_separadamente", r["motivo"]])
     for r in est.q("SELECT p.*, a.nome, a.caminho FROM pendencias p JOIN arquivos a ON a.id=p.file_id "
-                   "WHERE p.tipo IN ('protegido','invalido','ocr')"):
+                   "WHERE p.tipo IN ('protegido','invalido','ocr','conversao')"):
         w.writerow([r["nome"], r["file_id"], r["caminho"], "", "", "", "", r["tipo"], r["detalhe"]])
     return out.getvalue()
