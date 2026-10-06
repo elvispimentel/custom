@@ -1,0 +1,11 @@
+remotion/node_modules/
+remotion/.remotion/
+*.mov
+episodios/*/render/status-prores.json
+assets/video/*.mp4
+assets/img/*.jpg
+assets/img/*.png
+assets/img-pendente/*
+!assets/img/.gitkeep
+!assets/img-pendente/.gitkeep
+!assets/video/.gitkeep

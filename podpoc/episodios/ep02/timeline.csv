@@ -1,0 +1,76 @@
+id,tempo_estimado,tipo,descricao
+V01,0:00.0,video,V01 cold open turbulento (8s) → depois o hook
+m002,0:08.0,estrutura,HOOK
+q-mecanismo,0:19.5,overlay,"q-mecanismo (quote, 5.8s)"
+m004,0:23.3,ref-visual,"mesa antiga de madeira maciça, câmera deslizando até uma ranhura sob o tampo"
+m005,0:23.3,estrutura,IDENTIDADE
+P1,0:23.3,abertura-fixa,Entra vídeo P1 (já existe)
+P2,1:04.6,abertura-fixa,Entra vídeo P2 (já existe)
+m008,1:29.5,estrutura,CONVITE — Toque 1
+convite-1,1:44.0,overlay,"convite-1 (invite, 4.6s)"
+m010,1:46.4,estrutura,BLOCO 1 — A mesa e a ranhura
+V02,2:08.4,video,V02 Bloco 1: a mesa se abre (10s)
+m012,2:23.7,ref-visual,a mesa se abrindo e revelando o relógio astronômico (vídeo gerado)
+m013,2:39.8,quebra,"corta pra plano mais fechado, tom mais baixo, pausa curta depois de ""como quem olha pra mesa"""
+q-codigo,3:15.2,overlay,"q-codigo (quote, 4.2s)"
+m015,3:42.9,ref-visual,"montagem rápida, 1 segundo cada: manuscrito do Zohar, foto de Helena Blavatsky, foto de Neville Goddard, foto de Gregg Braden (foto limpa, sem marca de terceiros)"
+arq-zohar,3:42.9,overlay,"arq-zohar (archive, 5.0s)"
+m017,4:17.6,estrutura,"BLOCO 2 — Bereshit: emanação, não cronologia"
+arq-genesis,4:49.0,overlay,"arq-genesis (archive, 5.0s)"
+V03,5:17.6,video,V03 Bloco 2: Bereshit como emanação (8s)
+q-forca,5:25.9,overlay,"q-forca (quote, 8.7s)"
+fases,5:52.8,overlay,"fases (diagram, 19.2s)"
+q-camadas,6:31.3,overlay,"q-camadas (quote, 5.0s)"
+m023,6:42.1,quebra,"corte seco pra tela escura, só o número 4 por um segundo, e volta pro seu rosto"
+m024,6:42.1,estrutura,BLOCO 3 — O quatro dentro de você: Gregg Braden e o DNA
+braden,6:54.5,overlay,"braden (author, 5.0s)"
+tetragrama,7:02.5,overlay,"tetragrama (diagram, 5.0s)"
+braden-mapa,7:22.2,overlay,"braden-mapa (diagram, 20.0s)"
+helice,7:49.5,overlay,"helice (diagram, 5.0s)"
+V04,7:49.5,video,"V04 Bloco 3: quatro elementos, quatro letras, quatro bases (8s)"
+q-bases,7:57.8,overlay,"q-bases (quote, 4.6s)"
+m031,8:21.4,quebra,"respira, olha pra câmera, silêncio de 2 segundos antes de ""Como ler a tela do programador do universo."""
+m032,8:23.4,estrutura,BLOCO 4 — A luz que foi ocultada
+V05,8:42.8,video,V05 Bloco 4: a luz ocultada (6s)
+q-restricao,9:05.2,overlay,"q-restricao (quote, 5.4s)"
+m035,9:08.5,ref-visual,luz intensa sendo filtrada por um véu (b-roll gerado)
+m036,9:36.6,estrutura,BLOCO 5 — Dois relatos e o Adão que não acordou
+blavatsky,9:37.6,overlay,"blavatsky (author, 5.0s)"
+goddard,10:16.5,overlay,"goddard (author, 5.0s)"
+arq-adao,10:46.4,overlay,"arq-adao (archive, 5.0s)"
+q-adao,11:05.2,overlay,"q-adao (quote, 3.8s)"
+m041,11:06.8,quebra,"pausa de 2 segundos depois de ""Adão ainda está dormindo."""
+V06,11:08.8,video,V06 Bloco 5: o Adão que não acordou (10s)
+q-esquecer,12:22.9,overlay,"q-esquecer (quote, 4.6s)"
+m044,12:25.4,estrutura,BLOCO 6 — A queda e a serpente
+V07,12:25.4,video,V07 Bloco 6 e 7: a descida da consciência e o traje biológico (10s)
+levi,13:23.7,overlay,"levi (author, 5.0s)"
+q-queda,13:39.8,overlay,"q-queda (quote, 7.9s)"
+bailey,13:43.1,overlay,"bailey (author, 5.0s)"
+m049,13:45.6,estrutura,BLOCO 7 — As túnicas de pele e a espada flamejante
+arq-astronauta,14:51.3,overlay,"arq-astronauta (archive, 5.0s)"
+q-traje,14:51.4,overlay,"q-traje (quote, 5.0s)"
+V08,14:54.3,video,V08 Bloco 7: a espada flamejante e o caminho (8s)
+zayn,15:08.8,overlay,"zayn (diagram, 20.0s)"
+q-lamina,15:43.2,overlay,"q-lamina (quote, 6.7s)"
+deldebbio,15:45.2,overlay,"deldebbio (author, 5.0s)"
+m056,15:47.7,estrutura,BLOCO 8 — Caim e Abel: a dualidade na mente
+m057,16:34.5,quebra,tom mais baixo e mais lento; a luz da cena abaixa antes de entrar no TEN
+m058,16:34.5,estrutura,TEN — virada principal: a chave é a emoção coerente
+V09,16:46.1,video,V09 TEN: o livro de Raziel (8s)
+q-credenciais,17:09.6,overlay,"q-credenciais (quote, 6.2s)"
+arq-raziel,17:10.8,overlay,"arq-raziel (archive, 5.0s)"
+deepak,17:35.3,overlay,"deepak (author, 5.0s)"
+V10,17:37.8,video,"V10 TEN: a emoção coerente e o lado sombrio, Qlippoth (10s)"
+q-teclado,18:04.7,overlay,"q-teclado (quote, 6.7s)"
+m065,18:47.7,ref-visual,Árvore da Vida com o lado sombrio (Qlippoth) em contraste
+q-fechadura,19:24.5,overlay,"q-fechadura (quote, 7.1s)"
+m067,19:29.5,quebra,"silêncio de 3 segundos depois da frase, plano fechado, sem música"
+m068,19:32.5,estrutura,CTA — logo depois da virada
+cta-acesso,19:51.1,overlay,"cta-acesso (invite, 7.9s)"
+m070,20:25.5,estrutura,CONVITE — Toque 2
+convite-2,20:55.7,overlay,"convite-2 (invite, 3.3s)"
+m072,20:56.9,estrutura,KETSU — fechamento
+V11,20:56.9,video,V11 Ketsu: a mesa aberta e o logo (6s)
+q-operar,21:46.6,overlay,"q-operar (quote, 4.2s)"
+m075,21:48.6,ref-visual,"a mesa aberta, engrenagens girando, fade para o logo do canal"

@@ -1,0 +1,30 @@
+{
+  "name": "podpoc-overlays",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts --public-dir=../assets",
+    "render": "node scripts/render.mjs",
+    "render:prores": "node scripts/render.mjs --prores",
+    "render:poster": "node scripts/render.mjs --posters-only",
+    "cobertura": "bash ../tools/cobertura.sh",
+    "parse": "python3 -I ../tools/parse_roteiro.py ep02",
+    "check": "python3 -I ../tools/check_frames.py ep02"
+  },
+  "dependencies": {
+    "@fontsource/frank-ruhl-libre": "5.2.5",
+    "@fontsource/inter": "5.2.5",
+    "@fontsource/instrument-serif": "5.2.5",
+    "@remotion/bundler": "4.0.533",
+    "@remotion/cli": "4.0.533",
+    "@remotion/renderer": "4.0.533",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.533"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "typescript": "5.8.3"
+  }
+}

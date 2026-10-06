@@ -1,0 +1,346 @@
+[
+ {
+  "id": "q-mecanismo",
+  "kind": "quote",
+  "start_s": 19.59,
+  "dur_s": 5.82,
+  "frames": 175,
+  "text": "ninguém nunca te mostrou o mecanismo que está embaixo",
+  "reveal_s": 3.72
+ },
+ {
+  "id": "convite-1",
+  "kind": "invite",
+  "start_s": 104.0,
+  "dur_s": 4.58,
+  "frames": 137,
+  "text": "Siga o canal. Deixe o like.",
+  "reveal_s": 2.48
+ },
+ {
+  "id": "q-codigo",
+  "kind": "quote",
+  "start_s": 195.21,
+  "dur_s": 4.17,
+  "frames": 125,
+  "text": "E se forem um código?",
+  "reveal_s": 2.07
+ },
+ {
+  "id": "arq-zohar",
+  "kind": "archive",
+  "start_s": 222.93,
+  "dur_s": 5.0,
+  "frames": 150,
+  "images": [
+   "zohar-1558"
+  ],
+  "caption": "Sefer ha-Zohar, Mântua, 1558"
+ },
+ {
+  "id": "arq-genesis",
+  "kind": "archive",
+  "start_s": 289.03,
+  "dur_s": 5.0,
+  "frames": 150,
+  "images": [
+   "leningrado"
+  ],
+  "caption": "Códice de Leningrado"
+ },
+ {
+  "id": "q-forca",
+  "kind": "quote",
+  "start_s": 325.97,
+  "dur_s": 8.72,
+  "frames": 262,
+  "text": "Não é o tempo começando a correr. É uma força organizadora começando a estruturar a energia.",
+  "reveal_s": 6.62
+ },
+ {
+  "id": "fases",
+  "kind": "diagram",
+  "start_s": 352.86,
+  "dur_s": 19.21,
+  "frames": 576
+ },
+ {
+  "id": "q-camadas",
+  "kind": "quote",
+  "start_s": 391.34,
+  "dur_s": 5.0,
+  "frames": 150,
+  "text": "Um fluxo de informação em quatro camadas.",
+  "reveal_s": 2.9
+ },
+ {
+  "id": "braden",
+  "kind": "author",
+  "start_s": 414.5,
+  "dur_s": 5.0,
+  "frames": 150,
+  "name": "Gregg Braden",
+  "work": "O Código de Deus",
+  "year": "2004",
+  "photo": "braden",
+  "cover": "capa-braden-pt",
+  "living": true
+ },
+ {
+  "id": "tetragrama",
+  "kind": "diagram",
+  "start_s": 422.53,
+  "dur_s": 5.0,
+  "frames": 150
+ },
+ {
+  "id": "braden-mapa",
+  "kind": "diagram",
+  "start_s": 442.24,
+  "dur_s": 20.0,
+  "frames": 600
+ },
+ {
+  "id": "helice",
+  "kind": "diagram",
+  "start_s": 469.55,
+  "dur_s": 5.0,
+  "frames": 150
+ },
+ {
+  "id": "q-bases",
+  "kind": "quote",
+  "start_s": 477.83,
+  "dur_s": 4.58,
+  "frames": 137,
+  "text": "Quatro letras, quatro elementos, quatro bases.",
+  "reveal_s": 2.48
+ },
+ {
+  "id": "q-restricao",
+  "kind": "quote",
+  "start_s": 545.21,
+  "dur_s": 5.41,
+  "frames": 162,
+  "text": "Não foi um erro. Foi uma restrição arquitetônica.",
+  "reveal_s": 3.31
+ },
+ {
+  "id": "blavatsky",
+  "kind": "author",
+  "start_s": 577.66,
+  "dur_s": 5.0,
+  "frames": 150,
+  "name": "Helena Blavatsky",
+  "work": "",
+  "year": "",
+  "photo": "blavatsky-nypl",
+  "cover": "",
+  "living": false
+ },
+ {
+  "id": "goddard",
+  "kind": "author",
+  "start_s": 616.55,
+  "dur_s": 5.0,
+  "frames": 150,
+  "name": "Neville Goddard",
+  "work": "",
+  "year": "",
+  "photo": "goddard",
+  "cover": "",
+  "living": false
+ },
+ {
+  "id": "arq-adao",
+  "kind": "archive",
+  "start_s": 646.48,
+  "dur_s": 5.0,
+  "frames": 150,
+  "images": [
+   "delaune-1569"
+  ],
+  "caption": "Étienne Delaune, 1569"
+ },
+ {
+  "id": "q-adao",
+  "kind": "quote",
+  "start_s": 665.21,
+  "dur_s": 3.76,
+  "frames": 113,
+  "text": "Adão ainda está dormindo.",
+  "reveal_s": 1.66
+ },
+ {
+  "id": "q-esquecer",
+  "kind": "quote",
+  "start_s": 742.93,
+  "dur_s": 4.58,
+  "frames": 137,
+  "text": "Ela teve que esquecer quem era.",
+  "reveal_s": 2.48
+ },
+ {
+  "id": "levi",
+  "kind": "author",
+  "start_s": 803.74,
+  "dur_s": 5.0,
+  "frames": 150,
+  "name": "Éliphas Lévi",
+  "work": "Dogma e Ritual de Alta Magia",
+  "year": "",
+  "photo": "levi-retrato",
+  "cover": "capa-levi-pt",
+  "living": false
+ },
+ {
+  "id": "q-queda",
+  "kind": "quote",
+  "start_s": 819.9,
+  "dur_s": 7.89,
+  "frames": 237,
+  "text": "A queda não foi um pecado: foi a descida voluntária do espírito pra matéria.",
+  "reveal_s": 5.79
+ },
+ {
+  "id": "bailey",
+  "kind": "author",
+  "start_s": 823.19,
+  "dur_s": 5.0,
+  "frames": 150,
+  "name": "Alice Bailey",
+  "work": "",
+  "year": "",
+  "photo": "bailey",
+  "cover": "",
+  "living": false
+ },
+ {
+  "id": "arq-astronauta",
+  "kind": "archive",
+  "start_s": 891.38,
+  "dur_s": 5.0,
+  "frames": 150,
+  "images": [
+   "nasa-as11-40-5903",
+   "gray-1918"
+  ],
+  "caption": "NASA, Apollo 11 · Gray's Anatomy, 1918"
+ },
+ {
+  "id": "q-traje",
+  "kind": "quote",
+  "start_s": 891.48,
+  "dur_s": 5.0,
+  "frames": 150,
+  "text": "O Espírito vestiu um traje espacial biológico.",
+  "reveal_s": 2.9
+ },
+ {
+  "id": "zayn",
+  "kind": "diagram",
+  "start_s": 908.86,
+  "dur_s": 20.0,
+  "frames": 600
+ },
+ {
+  "id": "q-lamina",
+  "kind": "quote",
+  "start_s": 943.21,
+  "dur_s": 6.65,
+  "frames": 200,
+  "text": "A lâmina fecha a porta rápida, mas mostra o caminho longo.",
+  "reveal_s": 4.55
+ },
+ {
+  "id": "deldebbio",
+  "kind": "author",
+  "start_s": 945.26,
+  "dur_s": 5.0,
+  "frames": 150,
+  "name": "Marcelo Del Debbio",
+  "work": "Árvore da Vida cabalística",
+  "year": "",
+  "photo": "deldebbio",
+  "cover": "",
+  "living": true
+ },
+ {
+  "id": "q-credenciais",
+  "kind": "quote",
+  "start_s": 1029.69,
+  "dur_s": 6.24,
+  "frames": 187,
+  "text": "Ele era o administrador do sistema, e perdeu as credenciais.",
+  "reveal_s": 4.14
+ },
+ {
+  "id": "arq-raziel",
+  "kind": "archive",
+  "start_s": 1030.83,
+  "dur_s": 5.0,
+  "frames": 150,
+  "images": [
+   "sefer-raziel-1700"
+  ],
+  "caption": "Sefer Raziel HaMalakh, 1700"
+ },
+ {
+  "id": "deepak",
+  "kind": "author",
+  "start_s": 1055.33,
+  "dur_s": 5.0,
+  "frames": 150,
+  "name": "Deepak Sankara Veda",
+  "work": "",
+  "year": "",
+  "photo": "deepak",
+  "cover": "",
+  "living": true
+ },
+ {
+  "id": "q-teclado",
+  "kind": "quote",
+  "start_s": 1084.72,
+  "dur_s": 6.65,
+  "frames": 200,
+  "text": "A emoção é o teclado que insere os comandos no código.",
+  "reveal_s": 4.55
+ },
+ {
+  "id": "q-fechadura",
+  "kind": "quote",
+  "start_s": 1164.59,
+  "dur_s": 7.07,
+  "frames": 212,
+  "text": "A gente veste a fechadura e gera as chaves ao mesmo tempo.",
+  "reveal_s": 4.97
+ },
+ {
+  "id": "cta-acesso",
+  "kind": "invite",
+  "start_s": 1191.17,
+  "dur_s": 7.89,
+  "frames": 237,
+  "text": "perder o acesso ao que sabe bem na hora que a conversa mais importa",
+  "reveal_s": 5.79
+ },
+ {
+  "id": "convite-2",
+  "kind": "invite",
+  "start_s": 1255.72,
+  "dur_s": 3.34,
+  "frames": 100,
+  "text": "Comenta aqui embaixo.",
+  "reveal_s": 1.24
+ },
+ {
+  "id": "q-operar",
+  "kind": "quote",
+  "start_s": 1306.62,
+  "dur_s": 4.17,
+  "frames": 125,
+  "text": "Só precisamos aprender a operar.",
+  "reveal_s": 2.07
+ }
+]
