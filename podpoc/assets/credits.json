@@ -237,8 +237,8 @@
    "titulo": "Deepak Sankara Veda",
    "url": "",
    "licenca": "Não verificado",
-   "status": "pedir-autorizacao",
-   "obs": "Elvis confirmou que ele é autor de Os 72 Nomes de Deus (O Poder de Criar Milagres). Texto que o Elvis colou (resposta do Google) não foi verificado e não foi usado. Foto não enviada."
+   "status": "sem-foto",
+   "obs": "Elvis confirmou o autor de Os 72 Nomes de Deus. Sem foto: o overlay usa a capa do livro (capa-deepak). O texto do Google que o Elvis colou não foi verificado nem usado."
   },
   {
    "id": "leyden-1529",
@@ -268,6 +268,20 @@
    "autor": "Éliphas Lévi, trad. Arthur Edward Waite",
    "arquivo_origem": "https://archive.org/download/b24884339/page/cover_w2000.jpg",
    "arquivo": "assets/img/capa-levi-en.jpg"
+  },
+  {
+   "id": "capa-deepak",
+   "uso": "deepak (capa do livro, no lugar da foto)",
+   "origem": "og",
+   "titulo": "Os 72 Nomes de Deus (Qadësh, Bën Mähren; e-book, Clube de Autores, 2023), imagem da loja",
+   "url": "https://livrosdigitais.martinsfontespaulista.com.br/library/publication/os-72-nomes-de-deus-1726877797",
+   "licenca": "Protegida; uso por citação, crédito à editora",
+   "status": "ok",
+   "gate": "uso-por-citacao",
+   "obs": "Elvis pediu para usar só a capa do livro, já que não há foto do Deepak.",
+   "arquivo_origem": "https://storage-aws-production.publica.la/bookwire-brazil/issues/2024/09/njcSWwpK2G90ciTd/5106ba13-fe16-4427-a671-f42656cf5429_cover.jpg",
+   "arquivo": "assets/img-pendente/capa-deepak.jpg",
+   "aprovado": true
   }
  ]
 }

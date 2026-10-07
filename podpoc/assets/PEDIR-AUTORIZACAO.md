@@ -6,7 +6,6 @@ Nada abaixo entra no vídeo sem autorização por escrito (ou licença confirmad
 
 | Quem | Onde pedir | Uso no vídeo | Status |
 |---|---|---|---|
-| Deepak Sankara Veda | a identificar | deepak (foto) | Elvis confirmou que ele é autor de Os 72 Nomes de Deus (O Poder de Criar Milagres). Texto que o Elvis colou (resposta do Google) não foi verificado e não foi usado. Foto não enviada. |
 
 ## Fotos recebidas do Elvis: confirmar origem e autorização antes de publicar
 

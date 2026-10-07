@@ -337,7 +337,9 @@ Créditos das imagens
 • Tetragrama YHVH em fonte hebraica livre (Frank Ruhl Libre, SIL OFL).
 • Lucas van Leyden, A Criação de Eva, 1529 (Met Museum) — Lucas van Leyden, Public Domain (Met Open Access) — https://www.metmuseum.org/art/collection/search/364712
 • Transcendental Magic: Its Doctrine and Ritual (capa da edição em inglês, 1896) — Éliphas Lévi, trad. Arthur Edward Waite, Public Domain Mark 1.0 — https://archive.org/details/b24884339
+• Os 72 Nomes de Deus (Qadësh, Bën Mähren; e-book, Clube de Autores, 2023), imagem da loja — Protegida; uso por citação, crédito à editora — https://livrosdigitais.martinsfontespaulista.com.br/library/publication/os-72-nomes-de-deus-1726877797
 • Capa de O Código de Deus, Gregg Braden (Cultrix, 2011), imagem da loja: uso por citação, crédito à editora — https://www.martinsfontespaulista.com.br/o-codigo-de-deus-218441/p
+• Capa de Os 72 Nomes de Deus (Qadësh, Bën Mähren; e-book, Clube de Autores, 2023), imagem da loja: uso por citação, crédito à editora — https://livrosdigitais.martinsfontespaulista.com.br/library/publication/os-72-nomes-de-deus-1726877797
 <!-- creditos:fim -->
 
 **Capítulos:** \[cole aqui a lista da seção Capítulos, com os tempos finais da edição\]

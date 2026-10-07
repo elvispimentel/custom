@@ -11,6 +11,7 @@ Canal estilo documentário (Discovery / History Channel) que desmistifica a real
 
 ## Voz e conteúdo (não negociar)
 - Use a skill `youtube-podcast-para-video-galifrael` para tudo que for roteiro, título, descrição, capítulos e thumbnail. Ela é a fonte da verdade.
+- Antes de escrever qualquer fala em primeira pessoa do Elvis, leia `referencias/manual-de-voz-e-estilo.md` (versão 2.0, de 27/09/2026; o `.docx` original está na mesma pasta).
 - Texto na tela = frase exata falada no roteiro. Nunca invente texto de tela.
 - Só adaptar a pesquisa do texto-fonte. Sem ressalvas ou opinião nossa dentro da fala.
 - Grafias fixas: Gregg Braden, Marcelo Del Debbio, Éliphas Lévi, Deepak Sankara Veda, Qlippoth, Ana Bekoach, Yod, Heh, Vav.

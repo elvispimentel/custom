@@ -7,7 +7,7 @@ Este arquivo é o "programa" em texto: o que perguntar, o que fazer, em que orde
 2. A transcrição vai para `episodios/epNN/transcricao.md`.
 3. A skill `youtube-podcast-para-video-galifrael` funde as duas vozes num **monólogo do Elvis** e entrega o pacote completo (roteiro, título, descrição, capítulos, thumbnail, plano visual e prompts de vídeo). Ela só adapta, não inventa dado.
 4. Daí em diante vale o §2 (overlays, marcadores, imagens, créditos). Pedido padrão do LEIA-ME: "Rode a skill para epNN e depois execute o PROMPT.md trocando ep02 por epNN".
-**Dependência que ainda falta no repositório:** a skill manda ler o *Manual de Voz e Estilo* e o `vocabulario-codigos.md` quando existirem no projeto. Eles NÃO estão em `podpoc/`. Sem eles a voz do Elvis sai genérica. Pedir ao Elvis e salvar em `podpoc/` antes do ep03.
+**Referências de voz:** o *Manual de Voz e Estilo* (v2.0) está em `referencias/manual-de-voz-e-estilo.md` e a skill deve lê-lo antes de escrever qualquer fala. O `vocabulario-codigos.md`, que a skill também cita, **ainda não foi enviado** pelo Elvis.
 
 ## 1. Perguntas iniciais (só as que a sessão não consegue resolver sozinha)
 Uma por vez, na ordem. Se a resposta já está nos arquivos, não pergunte.

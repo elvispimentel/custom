@@ -55,7 +55,7 @@ AUTHORS = {
     "bailey": dict(name="Alice Bailey", work="", year="", photo="bailey", cover="", living=False),
     "deldebbio": dict(name="Marcelo Del Debbio", work="Árvore da Vida cabalística", year="",
                       photo="deldebbio", cover="", living=True),
-    "deepak": dict(name="Deepak Sankara Veda", work="Os 72 Nomes de Deus", year="", photo="deepak", cover="", living=True),
+    "deepak": dict(name="Deepak Sankara Veda", work="Os 72 Nomes de Deus", year="2023", photo="deepak", cover="capa-deepak", living=True),
     "blavatsky": dict(name="Helena Blavatsky", work="", year="", photo="blavatsky-nypl", cover="", living=False),
     "goddard": dict(name="Neville Goddard", work="", year="", photo="goddard", cover="", living=False),
 }
