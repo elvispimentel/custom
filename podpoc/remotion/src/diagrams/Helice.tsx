@@ -12,11 +12,11 @@ const PAIRS = [
 export const Helice: React.FC<Props> = () => {
   const f = useCurrentFrame();
   const reveal = interpolate(f, [4, 40], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const x0 = 70;
-  const x1 = 1130;
-  const cy = 330;
-  const amp = 150;
-  const per = 360;
+  const x0 = 150;
+  const x1 = 1770;
+  const cy = 400;
+  const amp = 200;
+  const per = 540;
   const ph = f * 0.045;
   const yA = (x: number) => cy + amp * Math.sin(((x - x0) / per) * 2 * Math.PI + ph);
   const yB = (x: number) => cy - amp * Math.sin(((x - x0) / per) * 2 * Math.PI + ph);
@@ -25,7 +25,7 @@ export const Helice: React.FC<Props> = () => {
       const x = x0 + (i * (x1 - x0)) / 162;
       return `${x},${fn(x)}`;
     }).join(' ');
-  const rungs = Array.from({length: 29}, (_, i) => x0 + 18 + i * 36);
+  const rungs = Array.from({length: 30}, (_, i) => x0 + 30 + i * 54);
   return (
     <DiagramFrame>
       <svg width={1920} height={1080} style={{position: 'absolute', inset: 0}}>
@@ -53,15 +53,17 @@ export const Helice: React.FC<Props> = () => {
         </g>
         <g opacity={interpolate(f, [30, 50], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}>
           {[
-            ['A', C.goldText, 70, 'adenina'],
-            ['C', C.lilacSoft, 335, 'citosina'],
-            ['T', C.blueSoft, 600, 'timina'],
-            ['G', C.paper, 865, 'guanina'],
-          ].map(([l, col, x, name]) => (
-            <g key={l as string}>
-              <text x={x as number} y={800} fontFamily={SERIF} fontSize={130} fill={col as string}>{l}</text>
-              <text x={x as number} y={880} fontFamily={SANS} fontSize={52} fill={C.paper}>{name}</text>
-            </g>
+            ['A', C.goldText, 330],
+            ['C', C.lilacSoft, 650],
+            ['T', C.blueSoft, 970],
+            ['G', C.paper, 1290],
+          ].map(([l, col, x]) => (
+            <text key={l as string} x={x as number} y={900} fontFamily={SERIF} fontSize={150} fill={col as string}>{l}</text>
+          ))}
+          {[
+            ['adenina', 430], ['citosina', 750], ['timina', 1070], ['guanina', 1390],
+          ].map(([l, x]) => (
+            <text key={l as string} x={x as number} y={890} fontFamily={SANS} fontSize={52} fill={C.paper}>{l}</text>
           ))}
         </g>
       </svg>

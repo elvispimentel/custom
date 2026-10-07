@@ -19,9 +19,9 @@ const Col: React.FC<{i: number; at: number; x: number}> = ({i, at, x}) => {
       style={{
         position: 'absolute',
         left: x,
-        top: 60,
+        top: 300,
         width: 390,
-        height: 340,
+        height: 470,
         opacity: p,
         transform: `translateY(${(1 - p) * 40}px)`,
         background: 'rgba(26,58,92,0.55)',
@@ -54,8 +54,8 @@ export const Fases: React.FC<Props> = ({rec}) => {
           const x2 = xs[k + 1] - 6;
           return (
             <g key={k} opacity={p}>
-              <line x1={x1} y1={230} x2={x1 + (x2 - x1) * p} y2={230} stroke={C.goldText} strokeWidth={4} />
-              <path d={`M${x2 - 14} 216 L${x2} 230 L${x2 - 14} 244`} fill="none" stroke={C.goldText} strokeWidth={4} />
+              <line x1={x1} y1={535} x2={x1 + (x2 - x1) * p} y2={535} stroke={C.goldText} strokeWidth={4} />
+              <path d={`M${x2 - 14} 521 L${x2} 535 L${x2 - 14} 549`} fill="none" stroke={C.goldText} strokeWidth={4} />
             </g>
           );
         })}

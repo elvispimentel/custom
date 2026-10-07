@@ -36,7 +36,6 @@ export const Zayn: React.FC<Props> = ({rec}) => {
   return (
     <DiagramFrame>
       <svg width={1920} height={1080} style={{position: 'absolute', inset: 0}}>
-        <g transform="translate(-380,0)">
         <defs>
           <filter id="gl" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="8" />
@@ -63,7 +62,6 @@ export const Zayn: React.FC<Props> = ({rec}) => {
         <g opacity={interpolate(f, [50, 70], [0, 1], clamp)}>
           <text x={(bx + tx) / 2 + 150} y={(by + ty) / 2 - 6} textAnchor="start" fontFamily={HEBREW} fontSize={110} fill={C.goldText}>ז</text>
           <text x={(bx + tx) / 2 + 150} y={(by + ty) / 2 + 52} textAnchor="start" fontFamily={SANS} fontWeight={500} fontSize={52} fill={C.goldText}>Zayn</text>
-        </g>
         </g>
       </svg>
     </DiagramFrame>
