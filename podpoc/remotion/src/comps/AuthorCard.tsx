@@ -25,7 +25,7 @@ export const AuthorCard: React.FC<Props> = ({rec, available}) => {
           <div
             style={{
               position: 'absolute',
-              right: 96,
+              left: 96 + 380 + 40,
               top: 130,
               width: 340,
               height: 500,

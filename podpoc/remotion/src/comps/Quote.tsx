@@ -1,6 +1,6 @@
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
-import {C, SERIF, SMOOTH, Props} from '../theme';
+import {C, ELVIS, SERIF, SMOOTH, Props} from '../theme';
 import {Plate, useFadeOut, useIn} from './common';
 import {spring} from 'remotion';
 
@@ -40,9 +40,9 @@ export const Quote: React.FC<Props> = ({rec}) => {
       <Plate
         style={{
           position: 'absolute',
-          left: 140,
+          left: 96,
           bottom: 110,
-          maxWidth: 1600,
+          maxWidth: ELVIS.x - 96 - 40,
           display: 'flex',
           alignItems: 'center',
           gap: 36,
@@ -51,7 +51,7 @@ export const Quote: React.FC<Props> = ({rec}) => {
         }}
       >
         {hasIcon && <Icon id={rec.id} />}
-        <div style={{fontFamily: SERIF, fontSize: 72, lineHeight: 1.12, color: C.paper}}>
+        <div style={{fontFamily: SERIF, fontSize: 64, lineHeight: 1.12, color: C.paper}}>
           {words.map((w, i) => {
             const p = spring({frame: frame - (8 + i * per * fps), fps, config: SMOOTH, durationInFrames: 14});
             return (

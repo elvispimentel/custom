@@ -14,7 +14,7 @@ EP = sys.argv[1] if len(sys.argv) > 1 else "ep02"
 R = ROOT / "episodios" / EP / "render"
 data = {d["id"]: d for d in json.loads((ROOT / "remotion/src/data/overlays.json").read_text())}
 PAPER, GOLD = (0xF2, 0xEE, 0xE4), (0xE0, 0xB8, 0x4F)
-FACE = (600, 100, 1320, 700)  # x0, y0, x1, y1
+FACE = (1180, 460, 1920, 1080)  # canto inferior direito reservado ao Elvis (igual a ELVIS em theme.ts)
 
 
 def lum(c):
@@ -72,7 +72,7 @@ for pid, rec in data.items():
     thumbs.append(t)
 
 L = ["# Checagem dos overlays", "",
-     "Contraste medido contra o pior caso (placa sobre fundo branco). Zona do rosto: x 600-1320, y 100-700. Diagramas e cortes de arquivo cobrem o quadro de propósito.", "",
+     "Contraste medido contra o pior caso (placa sobre fundo branco). Zona do Elvis (canto inferior direito): x >= 1180, y >= 460. Diagramas e cortes de arquivo cobrem o quadro de propósito.", "",
      "| Overlay | Tipo | Texto claro | Ouro | Zona do rosto | Resultado |", "|---|---|---|---|---|---|"]
 L += [f"| {' | '.join(r)} |" for r in rows]
 (R / "checagem.md").write_text("\n".join(L) + "\n", encoding="utf-8")

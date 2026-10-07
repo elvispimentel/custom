@@ -20,7 +20,8 @@ Canal estilo documentário (Discovery / History Channel) que desmistifica a real
 - Tipografia: Instrument Serif (títulos) + Inter (apoio), via Google Fonts. Texto mínimo 48 px em tela cheia 1080p e 36 px em legendas.
 - Linguagem de movimento: cinematográfico e sóbrio. Easing suave (spring amortecido), entradas por máscara e revelação de palavra, parallax leve em imagens de arquivo, grain de filme sutil (3 a 6%), vinheta leve, tratamento duotone azul/ouro unificando as imagens de arquivo.
 - Lower third minimalista: nome em serifa, obra e ano em sans pequeno, barra fina ouro. Entra em 0,4 s, fica 3 a 4 s, sai com fade.
-- Textos na tela: palavra por palavra no ritmo da fala, no máximo 2 linhas, nunca cobrir o rosto de Elvis (zona segura: terço inferior e laterais).
+- Enquadramento: Elvis grava em fundo verde e fica no CANTO INFERIOR DIREITO do quadro (zona reservada x ≥ 1180, y ≥ 460 em 1920x1080; constante `ELVIS` em `remotion/src/theme.ts`). Textos, lower thirds, fotos e capas ficam à esquerda dessa zona.
+- Textos na tela: palavra por palavra no ritmo da fala, até 2 linhas (3 só nas frases muito longas), fora da zona do Elvis.
 - Ritmo: trocar o visual a cada 3 a 6 s, voltar ao rosto em 2 a 4 s após cada corte de referência. Heurística: calibrar pela retenção do YouTube Analytics.
 - Barra de capítulos discreta no rodapé como opção (desligável).
 - Formato: 1920x1080, 30 fps, overlays com canal alfa.

@@ -19,6 +19,10 @@ export const HEBREW = '"Frank Ruhl Libre", "Times New Roman", serif';
 // spring amortecido: sem ricochete
 export const SMOOTH = {damping: 200, stiffness: 100, mass: 1};
 
+// Elvis grava em fundo verde e fica no canto inferior direito. Nada de texto ou foto entra nesta zona.
+// Retângulo reservado: de (x, y) até o canto inferior direito. Ajuste aqui se ele ocupar mais ou menos.
+export const ELVIS = {x: 1180, y: 460};
+
 export const W = 1920;
 export const H = 1080;
 
