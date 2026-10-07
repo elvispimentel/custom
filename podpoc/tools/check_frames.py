@@ -54,16 +54,22 @@ for pid, rec in data.items():
             ys2, xs2 = np.nonzero(a[820:, :] > 200)  # só a placa do lower third, abaixo das fotos
             sample = over_white.getpixel((int(xs2.min()) + 14, int(ys2.min()) + 820 + 6))
     else:
-        sample = over_white.getpixel((60, 60))
+        sample = over_white.getpixel((12, 12))
     c1, c2 = ratio(PAPER, sample), ratio(GOLD, sample)
-    face = a[FACE[1]:FACE[3], FACE[0]:FACE[2]]
-    face_hit = int((face > 16).sum())
     full = rec["kind"] in ("diagram", "archive")
+    if full:
+        # painel de fundo cobre o quadro de propósito; o que não pode é haver CONTEÚDO (bordas nítidas) na zona do Elvis
+        lum_img = np.array(over_white.convert("L"), dtype=np.int16)[FACE[1]:FACE[3], FACE[0]:FACE[2]]
+        grad = np.abs(np.diff(lum_img, axis=1))[:-1, :] + np.abs(np.diff(lum_img, axis=0))[:, :-1]
+        face_hit = int((grad > 40).sum())
+    else:
+        face = a[FACE[1]:FACE[3], FACE[0]:FACE[2]]
+        face_hit = int((face > 16).sum())
     ok_c = c1 >= 4.5 and (c2 >= 4.5 or rec["kind"] in ("quote", "invite"))
-    ok_f = full or face_hit == 0
+    ok_f = face_hit == 0
     status = "ok" if ok_c and ok_f else "FALHA"
     bad += status != "ok"
-    rows.append((pid, rec["kind"], f"{c1:.1f}:1", f"{c2:.1f}:1", "livre" if face_hit == 0 else ("cobre (corte)" if full else "INVADE"), status))
+    rows.append((pid, rec["kind"], f"{c1:.1f}:1", f"{c2:.1f}:1", "livre" if face_hit == 0 else "INVADE", status))
     # miniatura sobre fundo de 'vídeo' neutro
     bg = Image.new("RGBA", im.size, (88, 96, 84, 255))
     bg.alpha_composite(im)
@@ -72,7 +78,7 @@ for pid, rec in data.items():
     thumbs.append(t)
 
 L = ["# Checagem dos overlays", "",
-     "Contraste medido contra o pior caso (placa sobre fundo branco). Zona do Elvis (canto inferior direito): x >= 1180, y >= 460. Diagramas e cortes de arquivo cobrem o quadro de propósito.", "",
+     "Contraste medido contra o pior caso (placa sobre fundo branco). Zona do Elvis (canto inferior direito): x >= 1180, y >= 460. Diagramas e cortes de arquivo têm painel de fundo em tela cheia (ficam sob o Elvis), mas sem conteúdo na zona dele.", "",
      "| Overlay | Tipo | Texto claro | Ouro | Zona do rosto | Resultado |", "|---|---|---|---|---|---|"]
 L += [f"| {' | '.join(r)} |" for r in rows]
 (R / "checagem.md").write_text("\n".join(L) + "\n", encoding="utf-8")
