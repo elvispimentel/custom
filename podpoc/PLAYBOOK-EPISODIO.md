@@ -2,9 +2,16 @@
 
 Este arquivo é o "programa" em texto: o que perguntar, o que fazer, em que ordem, e o que já deu errado. Num episódio novo, a sessão lê este arquivo e o `CLAUDE.md` e segue daqui, sem o Elvis precisar lembrar nada.
 
+## 0. Como o episódio nasce (fluxo do Elvis)
+1. O Elvis gera um áudio de dois hosts no **NotebookLM** a partir da pesquisa dele e transcreve (diálogo A/B).
+2. A transcrição vai para `episodios/epNN/transcricao.md`.
+3. A skill `youtube-podcast-para-video-galifrael` funde as duas vozes num **monólogo do Elvis** e entrega o pacote completo (roteiro, título, descrição, capítulos, thumbnail, plano visual e prompts de vídeo). Ela só adapta, não inventa dado.
+4. Daí em diante vale o §2 (overlays, marcadores, imagens, créditos). Pedido padrão do LEIA-ME: "Rode a skill para epNN e depois execute o PROMPT.md trocando ep02 por epNN".
+**Dependência que ainda falta no repositório:** a skill manda ler o *Manual de Voz e Estilo* e o `vocabulario-codigos.md` quando existirem no projeto. Eles NÃO estão em `podpoc/`. Sem eles a voz do Elvis sai genérica. Pedir ao Elvis e salvar em `podpoc/` antes do ep03.
+
 ## 1. Perguntas iniciais (só as que a sessão não consegue resolver sozinha)
 Uma por vez, na ordem. Se a resposta já está nos arquivos, não pergunte.
-1. **Material:** número e tema do episódio; roteiro pronto ou transcrição (arquivo em `episodios/epNN/`).
+1. **Material:** número e tema do episódio; a transcrição do NotebookLM em `episodios/epNN/transcricao.md` (ou o roteiro já pronto). Nomes truncados ou errados na transcrição: corrigir a grafia; se continuar duvidoso, perguntar.
 2. **Oferta:** qual aula/produto no CTA e o link que vai na descrição.
 3. **Autores citados:** grafia correta de cada nome; quais fotos o Elvis tem e se pode usar; qual livro (capa em português, senão inglês).
 4. **Vídeos de IA (V01...):** qual serviço e se há chave de API; senão o Elvis gera à mão a partir de `prompts-video.md`.
@@ -12,14 +19,20 @@ Uma por vez, na ordem. Se a resposta já está nos arquivos, não pergunte.
 Padrões já decididos, não perguntar de novo: editor **CapCut**; Elvis grava em **fundo verde, de frente, no canto inferior direito, por cima de tudo**; diagramas e cortes de arquivo ficam completos e centralizados por baixo; textos, lower thirds, fotos e capas ficam à esquerda do canto dele.
 
 ## 2. Passo a passo
-1. Criar `episodios/epNN/roteiro-e-pacote.md` (skill `youtube-podcast-para-video-galifrael` gera roteiro, título, descrição, capítulos, thumbnail e prompts de vídeo).
-2. `python3 tools/parse_roteiro.py epNN`: gera `overlays.json`, `timeline.csv`, `timeline.edl`, `timeline-capcut.srt`, `cue-sheet.md`, `prompts-video.md`. Antes, conferir no script: `QUOTE_IDS` (um id por [TEXTO NA TELA]), `AUTHORS`, `VIDEO_ANCHORS`, `ARCHIVE_TAGS`, `DIAGRAM_TAGS` (hoje têm os valores do ep02).
+1. Criar `episodios/epNN/roteiro-e-pacote.md` a partir da transcrição (skill `youtube-podcast-para-video-galifrael` gera roteiro, título, descrição, capítulos, thumbnail e prompts de vídeo).
+2. `python3 tools/parse_roteiro.py epNN`: gera `overlays.json`, `timeline.csv`, `timeline.edl`, `timeline-capcut.srt`, `cue-sheet.md`, `prompts-video.md`. **Atenção:** o `parse_roteiro.py` ainda tem os mapas do ep02 escritos dentro dele; para um episódio novo é preciso trocar `QUOTE_IDS` (um id por [TEXTO NA TELA]), `AUTHORS`, `VIDEO_ANCHORS`, `ARCHIVE_TAGS`, `DIAGRAM_TAGS` etc. (melhoria planejada: mover isso para um `episodios/epNN/config.json`, gerado no início de cada episódio).
 3. Imagens: `python3 tools/fetch_assets.py` → **olhar cada imagem baixada** (ver §4) → aprovar capas (`--approve`).
 4. `python3 tools/gen_credits.py epNN` (créditos + quadro PEDIR AUTORIZAÇÃO).
 5. `cd remotion && npm i && node scripts/render.mjs` (WebM com alfa + PNG) e `node scripts/render.mjs --chroma` (MP4 em fundo verde para o CapCut).
 6. `python3 tools/check_frames.py epNN` (contraste ≥ 4,5:1, zona do Elvis, alfa).
 7. V01 a V11 em `assets/video/` → `bash tools/cobertura.sh epNN`.
 8. `RELATORIO.md` (máx. 15 linhas), commit, push.
+
+## 2b. Pontos do kit ainda não resolvidos
+- **Slides de edição (passo 19 da skill):** a skill manda entregar um deck de slides; no piloto os overlays animados do `PROMPT.md` ocuparam esse lugar. Decisão tomada por mim, a confirmar com o Elvis.
+- **Legendas palavra por palavra (item 7 do PROMPT.md):** exigem o áudio gravado (Whisper local) e ainda não foram feitas. Fazer quando existir `audio.*` ou o vídeo final.
+- **Cobertura dos vídeos V01 a V11:** `tools/cobertura.sh` monta, mas é rodado à mão (não é automático).
+- **Branch:** o PROMPT manda commitar na branch `epNN`; no piloto usei a branch que a sessão exige.
 
 ## 3. O que o episódio entrega
 Overlays com alfa (`render/`) e em fundo verde (`render/capcut/`); `timeline.csv`, `.edl` e `-capcut.srt`; `cue-sheet.md`; `prompts-video.md`; `assets/credits.json`; bloco "Créditos das imagens" na descrição; `PEDIR-AUTORIZACAO.md`; `RELATORIO.md`.
