@@ -2,6 +2,8 @@
 
 Canal estilo documentário (Discovery / History Channel) que desmistifica a realidade e devolve o poder a quem está despertando. Elvis fala sozinho para a câmera, com cortes de referência visual. Todo episódio vira: roteiro + pacote de publicação + overlays animados prontos para a timeline.
 
+**Num episódio novo, comece lendo `PLAYBOOK-EPISODIO.md`:** ele tem as perguntas iniciais, o passo a passo e as armadilhas já descobertas.
+
 ## Regra de ouro de trabalho
 - Elvis tem pouco tempo. Não faça perguntas que você mesmo pode resolver. Decida, registre a decisão no relatório e siga.
 - Só pare para perguntar quando faltar algo que só ele tem (foto autorizada, link, nome de pesquisador).
@@ -30,7 +32,7 @@ Canal estilo documentário (Discovery / History Channel) que desmistifica a real
 - Prefira imagem VERDADEIRA e livre de direitos (domínio público ou Creative Commons): Wikimedia Commons, Internet Archive, Met Museum Open Access, NYPL, Wellcome, NASA, bibliotecas e museus.
 - Ao baixar do Wikimedia Commons, use a API (action=query, prop=imageinfo, iiprop=extmetadata|url) e grave autor, licença e URL de origem em `assets/credits.json`. Se a licença não for livre, não use: marque como pendente.
 - Pessoas vivas e autores recentes: crie um quadro "PEDIR AUTORIZAÇÃO" com a fonte oficial e liste no relatório. Nunca use foto sem licença como se fosse livre.
-- Capas de livros: sempre a edição em português. Baixe a imagem oficial da página da editora ou loja, registre a origem e marque "uso por citação, crédito à editora". Liste no relatório para Elvis aprovar.
+- Capas de livros: de preferência a edição em português; se não achar, a inglesa (autorizado pelo Elvis). Baixe a imagem oficial da página da editora ou loja, registre a origem e marque "uso por citação, crédito à editora". Liste no relatório para Elvis aprovar.
 - Imagem gerada por IA só para conceito sem imagem real, e rotulada "recriação ilustrativa" no relatório.
 - Gere um bloco "Créditos das imagens" pronto para colar na descrição do YouTube.
 
