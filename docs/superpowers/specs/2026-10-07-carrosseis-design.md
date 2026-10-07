@@ -15,7 +15,11 @@ Dar aos clientes do Instituto Galifrael uma ferramenta para transformar um texto
 
 ## Acesso
 
-Rota: `/projects/[projectId]/carrosseis`. O módulo aparece para quem satisfaz `can_access_project(projectId)`. Nenhuma tabela de acesso nova.
+Rota: `/projects/[projectId]/carrosseis`. O módulo aparece para quem satisfaz `private.can_access_project(projectId)` (helpers no schema `private`, migration 004). Nenhuma tabela de acesso nova.
+
+Correções verificadas no código em 2026-10-07:
+- O segmento `[projectId]` da URL é o código do projeto em minúsculas (`prj-001`), resolvido no banco por `projects.code = upper(...)` sob RLS. O UUID não aparece na URL.
+- O repo ainda não tem login, middleware nem criação automática de `profiles`. O módulo exige uma sessão Supabase, então o plano inclui login mínimo (e-mail e senha), guarda de sessão só para este módulo e trigger de perfil no cadastro. O restante do painel continua como está.
 
 ## Fluxo
 
@@ -31,7 +35,7 @@ Estilos visuais: Documental Cru, Noir & Suspense, Futurista Tech, Luxo Editorial
 
 - `carousels`: `id`, `project_id`, `created_by`, `name`, `source_text`, `author_name`, `author_handle`, `author_photo_path`, `aspect` (enum), `slide_count` (3–15), `style` (enum), `status` (enum), timestamps.
 - `carousel_slides`: `id`, `carousel_id`, `position`, `title`, `body`, `image_prompt`, `image_path`, `image_status` (`pendente | gerando | pronta | erro`), timestamps. Único `(carousel_id, position)`.
-- RLS em ambas as tabelas via `public.can_access_project`, derivando o projeto pelo carrossel nas slides. Cliente lê e escreve só nos projetos em que é membro.
+- RLS em ambas as tabelas via `private.can_access_project`, derivando o projeto pelo carrossel nas slides. A unicidade `(carousel_id, position)` é `deferrable initially deferred`, para reordenar vários slides numa só transação. Cliente lê e escreve só nos projetos em que é membro.
 - Storage: bucket privado `carousel-assets`, caminho `{project_id}/{carousel_id}/…`, com política equivalente. A foto do autor fica no mesmo bucket.
 - Cota: tabela de contagem diária de imagens por projeto, limite configurável por variável de ambiente.
 
