@@ -18,7 +18,7 @@ export const AuthorCard: React.FC<Props> = ({rec, available}) => {
       <AbsoluteFill style={{opacity: out}}>
         {photo && (
           <div style={{position: 'absolute', left: 96, top: 130, clipPath: `inset(0 ${(1 - a) * 100}% 0 0)`}}>
-            <Duotone src={photo} width={380} height={500} />
+            <Duotone src={photo} width={380} height={500} fit="contain" />
           </div>
         )}
         {cover && (

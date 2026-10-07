@@ -193,8 +193,9 @@
    "titulo": "Gregg Braden",
    "url": "https://www.greggbraden.com/",
    "licenca": "Protegida",
-   "status": "pedir-autorizacao",
-   "obs": "Seção Press / Bio & Press Photos."
+   "status": "fornecida",
+   "obs": "Foto enviada pelo Elvis; origem e autorização não informadas.",
+   "arquivo": "assets/img/braden.jpg"
   },
   {
    "id": "deldebbio",
@@ -203,8 +204,9 @@
    "titulo": "Marcelo Del Debbio",
    "url": "www.deldebbio.com",
    "licenca": "Protegida",
-   "status": "pedir-autorizacao",
-   "obs": "Site não aberto; ou pedir à editora."
+   "status": "fornecida",
+   "obs": "Foto enviada pelo Elvis; origem e autorização não informadas.",
+   "arquivo": "assets/img/deldebbio.jpg"
   },
   {
    "id": "goddard",
@@ -213,8 +215,9 @@
    "titulo": "Neville Goddard",
    "url": "",
    "licenca": "Provável copyright",
-   "status": "pedir-autorizacao",
-   "obs": "Fundação/herdeiros, ou licenciar de agência."
+   "status": "fornecida",
+   "obs": "Foto enviada pelo Elvis; origem e autorização não informadas.",
+   "arquivo": "assets/img/goddard.jpg"
   },
   {
    "id": "bailey",
@@ -223,8 +226,9 @@
    "titulo": "Alice Bailey",
    "url": "lucistrust.org",
    "licenca": "Status incerto",
-   "status": "pedir-autorizacao",
-   "obs": "Lucis Trust."
+   "status": "fornecida",
+   "obs": "Foto enviada pelo Elvis. Traz o crédito impresso na própria imagem (\"Original photo courtesy of Lucis Trust\", \"Edited by SC\"); não foi cortado.",
+   "arquivo": "assets/img/bailey.jpg"
   },
   {
    "id": "deepak",
@@ -234,7 +238,7 @@
    "url": "",
    "licenca": "Não verificado",
    "status": "pedir-autorizacao",
-   "obs": "Pessoa e site oficial não identificados: Elvis precisa passar a fonte ou o perfil."
+   "obs": "Elvis confirmou que ele é autor de Os 72 Nomes de Deus (O Poder de Criar Milagres). Texto que o Elvis colou (resposta do Google) não foi verificado e não foi usado. Foto não enviada."
   },
   {
    "id": "leyden-1529",

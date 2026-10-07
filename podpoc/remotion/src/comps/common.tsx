@@ -104,7 +104,7 @@ export const Duotone: React.FC<{
   return (
     <div style={{position: 'relative', width, height, overflow: 'hidden', background: C.ink}}>
       <div style={{position: 'absolute', inset: 0, transform: `translateX(${tx}px) scale(${scale})`}}>
-        <Img src={src} style={{width: '100%', height: '100%', objectFit: 'cover', filter: look}} />
+        <Img src={src} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 18%', filter: look}} />
       </div>
       {layers}
     </div>

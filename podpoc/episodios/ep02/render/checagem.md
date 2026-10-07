@@ -33,7 +33,7 @@ Contraste medido contra o pior caso (placa sobre fundo branco). Zona do rosto: x
 | deldebbio | author | 10.2:1 | 6.3:1 | livre | ok |
 | q-credenciais | quote | 9.6:1 | 5.9:1 | livre | ok |
 | arq-raziel | archive | 15.1:1 | 9.3:1 | cobre (corte) | ok |
-| deepak | author | 10.1:1 | 6.2:1 | livre | ok |
+| deepak | author | 10.2:1 | 6.3:1 | livre | ok |
 | q-teclado | quote | 9.6:1 | 5.9:1 | livre | ok |
 | q-fechadura | quote | 9.6:1 | 5.9:1 | livre | ok |
 | cta-acesso | invite | 9.6:1 | 5.9:1 | livre | ok |

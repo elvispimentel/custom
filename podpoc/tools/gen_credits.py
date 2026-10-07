@@ -18,12 +18,17 @@ items = doc["itens"]
 # ---- quadro PEDIR AUTORIZAÇÃO
 rows = [i for i in items if i["status"] == "pedir-autorizacao"]
 caps_all = [i for i in items if i.get("gate") == "uso-por-citacao"]
-caps = [i for i in caps_all if i["status"] != "ok"]
+caps = [i for i in caps_all if i["status"] not in ("ok", "dispensado")]
 L = ["# PEDIR AUTORIZAÇÃO", "",
      "Nada abaixo entra no vídeo sem autorização por escrito (ou licença confirmada). Sem a imagem, o overlay sai só com o lower third.", "",
      "## Pessoas vivas e autores recentes", "", "| Quem | Onde pedir | Uso no vídeo | Status |", "|---|---|---|---|"]
 for i in rows:
     L.append(f"| {i['titulo']} | {i.get('url') or 'a identificar'} | {i['uso']} | {i['obs']} |")
+recebidas = [i for i in items if i["status"] == "fornecida"]
+if recebidas:
+    L += ["", "## Fotos recebidas do Elvis: confirmar origem e autorização antes de publicar", "", "| Quem | Arquivo | Observação |", "|---|---|---|"]
+    for i in recebidas:
+        L.append(f"| {i['titulo']} | {i['arquivo']} | {i['obs']} |")
 L += ["", "## Capas em português (uso por citação, crédito à editora): Elvis aprova", "",
       "| Capa | Origem | Status |", "|---|---|---|"]
 for i in caps:
