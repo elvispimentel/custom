@@ -1,0 +1,4 @@
+# ferramentas do podpoc (Python)
+faster-whisper>=1.0
+Pillow>=10
+numpy>=1.26

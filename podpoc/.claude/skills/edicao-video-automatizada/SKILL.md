@@ -25,8 +25,8 @@ Base: `referencias/analise-manual-edicao-video-2026.md` (análise verificada do 
 
 ## Receitas
 - **Cortar silêncios:** `python3 tools/cortar_silencios.py gravacao.mp4 [--noise -30] [--min 0.6] [--pad 0.10] [--merge 0.25] [--render saida.mp4]`. Grava `.cortes.json` e `.cortes.srt`. `--noise` é o limite em dB: mais perto de 0 (ex.: -25) trata mais som como silêncio; mais negativo (ex.: -40) só trata o muito baixo. Fala baixa ou ruído de fundo: testar em 1 minuto antes de aplicar no vídeo todo.
-- **Transcrição com tempo por palavra:** Whisper local (`faster-whisper`), com `word_timestamps`; modelo vem do Hugging Face (testar o download). Sem isso, o Elvis manda a transcrição.
-- **Alinhar overlays:** achar no texto transcrito a frase de cada `[TEXTO NA TELA]` e usar o tempo da primeira palavra; reescrever `timeline*.csv/.srt` com esses tempos.
+- **Transcrição com tempo por palavra (testado: o modelo `small` baixa e carrega aqui):** `pip install faster-whisper` e `python3 tools/transcrever.py episodios/epNN/gravacao.mp4 --episodio epNN` → `transcricao-palavras.json`. Em CPU leva cerca de metade da duração do áudio. Sem isso, o Elvis manda a transcrição.
+- **Alinhar tudo à fala real:** `python3 tools/alinhar_tempos.py epNN` (acha cada `[TEXTO NA TELA]` na fala e usa como âncora) → `tempos-reais.json`; depois `python3 tools/parse_roteiro.py epNN` regenera `overlays.json`, `timeline.csv/.edl/-capcut.srt` e `cue-sheet.md` com tempos reais. Os textos na tela passam a revelar no ritmo real da fala: **re-renderize os overlays `quote` e `invite`** (`node scripts/render.mjs --only id1,id2,...` e `--chroma`). Frases em `nao_localizados` ou com semelhança baixa (< 0,85) precisam de conferência à mão. Autoteste: `python3 tools/teste_alinhar.py epNN`.
 - **Vertical 9:16:** `scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2` (barras) ou recomposição com o Elvis ampliado (a fazer).
 - **Juntar sem reencodar:** `ffmpeg -f concat -safe 0 -i lista.txt -c copy saida.mp4` (só para arquivos com mesmo codec).
 - **Overlays:** `cd remotion && node scripts/render.mjs` (WebM com alfa), `--chroma` (MP4 verde para CapCut).

@@ -51,7 +51,7 @@
 [QUEBRA] corta pra plano mais fechado, tom mais baixo, pausa curta depois de "c
 
 14
-00:03:15,207 --> 00:03:19,377
+00:03:10,655 --> 00:03:14,825
 [OVERLAY] q-codigo
 
 15
@@ -131,7 +131,7 @@
 [VÍDEO] V05 Bloco 4: a luz ocultada
 
 34
-00:09:05,207 --> 00:09:10,617
+00:08:46,586 --> 00:08:51,996
 [OVERLAY] q-restricao
 
 35
@@ -183,7 +183,7 @@
 [OVERLAY] levi
 
 47
-00:13:39,897 --> 00:13:47,787
+00:13:29,552 --> 00:13:37,442
 [OVERLAY] q-queda
 
 48
@@ -195,12 +195,12 @@
 [BLOCO] BLOCO 7 — As túnicas de pele e a espada flamejante
 
 50
-00:14:51,379 --> 00:14:56,379
-[OVERLAY] arq-astronauta
+00:14:39,483 --> 00:14:44,483
+[OVERLAY] q-traje
 
 51
-00:14:51,483 --> 00:14:56,483
-[OVERLAY] q-traje
+00:14:51,379 --> 00:14:56,379
+[OVERLAY] arq-astronauta
 
 52
 00:14:54,379 --> 00:15:02,379
@@ -235,7 +235,7 @@
 [VÍDEO] V09 TEN: o livro de Raziel
 
 60
-00:17:09,690 --> 00:17:15,930
+00:16:59,759 --> 00:17:05,999
 [OVERLAY] q-credenciais
 
 61
@@ -251,7 +251,7 @@
 [VÍDEO] V10 TEN: a emoção coerente e o lado sombrio, Qlippoth
 
 64
-00:18:04,724 --> 00:18:11,374
+00:18:01,828 --> 00:18:08,478
 [OVERLAY] q-teclado
 
 65
@@ -271,7 +271,7 @@
 [BLOCO] CTA — logo depois da virada
 
 69
-00:19:51,172 --> 00:19:59,062
+00:19:50,345 --> 00:19:58,235
 [OVERLAY] cta-acesso
 
 70
@@ -279,7 +279,7 @@
 [BLOCO] CONVITE — Toque 2
 
 71
-00:20:55,724 --> 00:20:59,064
+00:20:28,000 --> 00:20:31,340
 [OVERLAY] convite-2
 
 72

@@ -12,7 +12,7 @@ m010,1:46.4,estrutura,BLOCO 1 — A mesa e a ranhura
 V02,2:08.4,video,V02 Bloco 1: a mesa se abre (10s)
 m012,2:23.7,ref-visual,a mesa se abrindo e revelando o relógio astronômico (vídeo gerado)
 m013,2:39.8,quebra,"corta pra plano mais fechado, tom mais baixo, pausa curta depois de ""como quem olha pra mesa"""
-q-codigo,3:15.2,overlay,"q-codigo (quote, 4.2s)"
+q-codigo,3:10.6,overlay,"q-codigo (quote, 4.2s)"
 m015,3:42.9,ref-visual,"montagem rápida, 1 segundo cada: manuscrito do Zohar, foto de Helena Blavatsky, foto de Neville Goddard, foto de Gregg Braden (foto limpa, sem marca de terceiros)"
 arq-zohar,3:42.9,overlay,"arq-zohar (archive, 5.0s)"
 m017,4:17.6,estrutura,"BLOCO 2 — Bereshit: emanação, não cronologia"
@@ -32,7 +32,7 @@ q-bases,7:57.8,overlay,"q-bases (quote, 4.6s)"
 m031,8:21.4,quebra,"respira, olha pra câmera, silêncio de 2 segundos antes de ""Como ler a tela do programador do universo."""
 m032,8:23.4,estrutura,BLOCO 4 — A luz que foi ocultada
 V05,8:42.8,video,V05 Bloco 4: a luz ocultada (6s)
-q-restricao,9:05.2,overlay,"q-restricao (quote, 5.4s)"
+q-restricao,8:46.5,overlay,"q-restricao (quote, 5.4s)"
 m035,9:08.5,ref-visual,luz intensa sendo filtrada por um véu (b-roll gerado)
 m036,9:36.6,estrutura,BLOCO 5 — Dois relatos e o Adão que não acordou
 blavatsky,9:37.6,overlay,"blavatsky (author, 5.0s)"
@@ -45,11 +45,11 @@ q-esquecer,12:22.9,overlay,"q-esquecer (quote, 4.6s)"
 m044,12:25.4,estrutura,BLOCO 6 — A queda e a serpente
 V07,12:25.4,video,V07 Bloco 6 e 7: a descida da consciência e o traje biológico (10s)
 levi,13:23.7,overlay,"levi (author, 5.0s)"
-q-queda,13:39.8,overlay,"q-queda (quote, 7.9s)"
+q-queda,13:29.5,overlay,"q-queda (quote, 7.9s)"
 bailey,13:43.1,overlay,"bailey (author, 5.0s)"
 m049,13:45.6,estrutura,BLOCO 7 — As túnicas de pele e a espada flamejante
+q-traje,14:39.4,overlay,"q-traje (quote, 5.0s)"
 arq-astronauta,14:51.3,overlay,"arq-astronauta (archive, 5.0s)"
-q-traje,14:51.4,overlay,"q-traje (quote, 5.0s)"
 V08,14:54.3,video,V08 Bloco 7: a espada flamejante e o caminho (8s)
 zayn,15:08.8,overlay,"zayn (diagram, 20.0s)"
 q-lamina,15:43.2,overlay,"q-lamina (quote, 6.7s)"
@@ -58,18 +58,18 @@ m056,15:47.7,estrutura,BLOCO 8 — Caim e Abel: a dualidade na mente
 m057,16:34.5,quebra,tom mais baixo e mais lento; a luz da cena abaixa antes de entrar no TEN
 m058,16:34.5,estrutura,TEN — virada principal: a chave é a emoção coerente
 V09,16:46.1,video,V09 TEN: o livro de Raziel (8s)
-q-credenciais,17:09.6,overlay,"q-credenciais (quote, 6.2s)"
+q-credenciais,16:59.7,overlay,"q-credenciais (quote, 6.2s)"
 arq-raziel,17:10.8,overlay,"arq-raziel (archive, 5.0s)"
 deepak,17:35.3,overlay,"deepak (author, 5.0s)"
 V10,17:37.8,video,"V10 TEN: a emoção coerente e o lado sombrio, Qlippoth (10s)"
-q-teclado,18:04.7,overlay,"q-teclado (quote, 6.7s)"
+q-teclado,18:01.8,overlay,"q-teclado (quote, 6.7s)"
 m065,18:47.7,ref-visual,Árvore da Vida com o lado sombrio (Qlippoth) em contraste
 q-fechadura,19:24.5,overlay,"q-fechadura (quote, 7.1s)"
 m067,19:29.5,quebra,"silêncio de 3 segundos depois da frase, plano fechado, sem música"
 m068,19:32.5,estrutura,CTA — logo depois da virada
-cta-acesso,19:51.1,overlay,"cta-acesso (invite, 7.9s)"
+cta-acesso,19:50.3,overlay,"cta-acesso (invite, 7.9s)"
 m070,20:25.5,estrutura,CONVITE — Toque 2
-convite-2,20:55.7,overlay,"convite-2 (invite, 3.3s)"
+convite-2,20:28.0,overlay,"convite-2 (invite, 3.3s)"
 m072,20:56.9,estrutura,KETSU — fechamento
 V11,20:56.9,video,V11 Ketsu: a mesa aberta e o logo (6s)
 q-operar,21:46.6,overlay,"q-operar (quote, 4.2s)"

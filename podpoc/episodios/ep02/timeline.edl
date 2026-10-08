@@ -40,7 +40,7 @@ FCM: NON-DROP FRAME
 013  001      V     C        01:02:39:26 01:02:39:27 01:02:39:26 01:02:39:27
  |C:ResolveColorRed |M:corta pra plano mais fechado, tom mais baixo, pausa curta de |D:1
 
-014  001      V     C        01:03:15:06 01:03:15:07 01:03:15:06 01:03:15:07
+014  001      V     C        01:03:10:20 01:03:10:21 01:03:10:20 01:03:10:21
  |C:ResolveColorYellow |M:q-codigo q-codigo (quote, 4.2s) |D:1
 
 015  001      V     C        01:03:42:28 01:03:42:29 01:03:42:28 01:03:42:29
@@ -100,7 +100,7 @@ FCM: NON-DROP FRAME
 033  001      V     C        01:08:42:26 01:08:42:27 01:08:42:26 01:08:42:27
  |C:ResolveColorBlue |M:V05 V05 Bloco 4 |D:1
 
-034  001      V     C        01:09:05:06 01:09:05:07 01:09:05:06 01:09:05:07
+034  001      V     C        01:08:46:18 01:08:46:19 01:08:46:18 01:08:46:19
  |C:ResolveColorYellow |M:q-restricao q-restricao (quote, 5.4s) |D:1
 
 035  001      V     C        01:09:08:16 01:09:08:17 01:09:08:16 01:09:08:17
@@ -139,7 +139,7 @@ FCM: NON-DROP FRAME
 046  001      V     C        01:13:23:22 01:13:23:23 01:13:23:22 01:13:23:23
  |C:ResolveColorYellow |M:levi levi (author, 5.0s) |D:1
 
-047  001      V     C        01:13:39:27 01:13:39:28 01:13:39:27 01:13:39:28
+047  001      V     C        01:13:29:17 01:13:29:18 01:13:29:17 01:13:29:18
  |C:ResolveColorYellow |M:q-queda q-queda (quote, 7.9s) |D:1
 
 048  001      V     C        01:13:43:06 01:13:43:07 01:13:43:06 01:13:43:07
@@ -148,11 +148,11 @@ FCM: NON-DROP FRAME
 049  001      V     C        01:13:45:21 01:13:45:22 01:13:45:21 01:13:45:22
  |C:ResolveColorGreen |M:BLOCO 7 — As túnicas de pele e a espada flamejante |D:1
 
-050  001      V     C        01:14:51:11 01:14:51:12 01:14:51:11 01:14:51:12
- |C:ResolveColorYellow |M:arq-astronauta arq-astronauta (archive, 5.0s) |D:1
-
-051  001      V     C        01:14:51:14 01:14:51:15 01:14:51:14 01:14:51:15
+050  001      V     C        01:14:39:14 01:14:39:15 01:14:39:14 01:14:39:15
  |C:ResolveColorYellow |M:q-traje q-traje (quote, 5.0s) |D:1
+
+051  001      V     C        01:14:51:11 01:14:51:12 01:14:51:11 01:14:51:12
+ |C:ResolveColorYellow |M:arq-astronauta arq-astronauta (archive, 5.0s) |D:1
 
 052  001      V     C        01:14:54:11 01:14:54:12 01:14:54:11 01:14:54:12
  |C:ResolveColorBlue |M:V08 V08 Bloco 7 |D:1
@@ -178,7 +178,7 @@ FCM: NON-DROP FRAME
 059  001      V     C        01:16:46:03 01:16:46:04 01:16:46:03 01:16:46:04
  |C:ResolveColorBlue |M:V09 V09 TEN |D:1
 
-060  001      V     C        01:17:09:21 01:17:09:22 01:17:09:21 01:17:09:22
+060  001      V     C        01:16:59:23 01:16:59:24 01:16:59:23 01:16:59:24
  |C:ResolveColorYellow |M:q-credenciais q-credenciais (quote, 6.2s) |D:1
 
 061  001      V     C        01:17:10:25 01:17:10:26 01:17:10:25 01:17:10:26
@@ -190,7 +190,7 @@ FCM: NON-DROP FRAME
 063  001      V     C        01:17:37:25 01:17:37:26 01:17:37:25 01:17:37:26
  |C:ResolveColorBlue |M:V10 V10 TEN |D:1
 
-064  001      V     C        01:18:04:22 01:18:04:23 01:18:04:22 01:18:04:23
+064  001      V     C        01:18:01:25 01:18:01:26 01:18:01:25 01:18:01:26
  |C:ResolveColorYellow |M:q-teclado q-teclado (quote, 6.7s) |D:1
 
 065  001      V     C        01:18:47:23 01:18:47:24 01:18:47:23 01:18:47:24
@@ -205,13 +205,13 @@ FCM: NON-DROP FRAME
 068  001      V     C        01:19:32:17 01:19:32:18 01:19:32:17 01:19:32:18
  |C:ResolveColorGreen |M:CTA — logo depois da virada |D:1
 
-069  001      V     C        01:19:51:05 01:19:51:06 01:19:51:05 01:19:51:06
+069  001      V     C        01:19:50:10 01:19:50:11 01:19:50:10 01:19:50:11
  |C:ResolveColorYellow |M:cta-acesso cta-acesso (invite, 7.9s) |D:1
 
 070  001      V     C        01:20:25:16 01:20:25:17 01:20:25:16 01:20:25:17
  |C:ResolveColorGreen |M:CONVITE — Toque 2 |D:1
 
-071  001      V     C        01:20:55:22 01:20:55:23 01:20:55:22 01:20:55:23
+071  001      V     C        01:20:28:00 01:20:28:01 01:20:28:00 01:20:28:01
  |C:ResolveColorYellow |M:convite-2 convite-2 (invite, 3.3s) |D:1
 
 072  001      V     C        01:20:56:29 01:20:57:00 01:20:56:29 01:20:57:00

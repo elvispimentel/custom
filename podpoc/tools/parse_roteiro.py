@@ -169,6 +169,38 @@ def mmss(sec, tenths=False):
     return f"{base}.{tt % 10}" if tenths else base
 
 
+def _toks(text):
+    import unicodedata
+    t = unicodedata.normalize("NFKD", text)
+    t = "".join(c for c in t if not unicodedata.combining(c)).lower()
+    return re.sub(r"[^a-z0-9 ]+", " ", t).split()
+
+
+def phrase_est_start(items, i, phrase):
+    """Tempo estimado em que a frase COMEÇA a ser dita, procurando-a nas falas logo antes do marcador.
+    O marcador fica depois do parágrafo; usar a posição dele erraria até 30 s em parágrafos longos."""
+    want = _toks(phrase)
+    if len(want) < 2:
+        return None
+    seen = 0
+    for j in range(i - 1, -1, -1):
+        it = items[j]
+        if it["t"] != "say":
+            continue
+        toks = []
+        for k, w in enumerate(it["text"].replace("\u2014", " ").split()):
+            for t in _toks(w):
+                toks.append((t, k))
+        flat = [t for t, _ in toks]
+        for a in range(len(flat) - len(want) + 1):
+            if flat[a:a + len(want)] == want:
+                return T(it["w0"] + toks[a][1], it["p0"])
+        seen += 1
+        if seen >= 4:
+            break
+    return None
+
+
 def say_before(items, i):
     for j in range(i - 1, -1, -1):
         if items[j]["t"] == "say":
@@ -181,6 +213,69 @@ def find_say(items, starts):
         if it["t"] == "say" and starts in it["text"]:
             return it
     raise SystemExit(f"âncora não encontrada: {starts!r}")
+
+
+
+# ---------------------------------------------------------------- tempos reais (alinhar_tempos.py)
+def make_warp(anchors):
+    pts = sorted((float(a), float(b)) for a, b in anchors)
+
+    def seg(t):
+        for (e0, r0), (e1, r1) in zip(pts, pts[1:]):
+            if e0 <= t <= e1:
+                return (r1 - r0) / (e1 - e0) if e1 > e0 else 1.0, e0, r0
+        return None
+
+    def W(t):
+        if not pts:
+            return t
+        if t <= pts[0][0]:
+            return t + pts[0][1] - pts[0][0]
+        if t >= pts[-1][0]:
+            return t + pts[-1][1] - pts[-1][0]
+        sl, e0, r0 = seg(t)
+        return r0 + (t - e0) * sl
+
+    def slope(t):
+        r = seg(t) if len(pts) > 1 else None
+        return r[0] if r else 1.0
+
+    return W, slope
+
+
+def apply_real_times(ev, ov):
+    """Se existir episodios/epNN/tempos-reais.json, troca os tempos estimados pelos reais."""
+    p = EPDIR / "tempos-reais.json"
+    if not p.exists():
+        return False
+    real = json.loads(p.read_text(encoding="utf-8"))
+    W, slope = make_warp(real["anchors"])
+    quotes = real.get("quotes", {})
+    by_id = {}
+    for r in ov:
+        q = quotes.get(r["id"])
+        if q:  # texto na tela: nasce quando a frase começa e revela no ritmo da fala real
+            reveal = max(q["end"] - q["start"], 0.4)
+            dur = reveal + 1.6 + 0.5
+            r.update(start_s=round(q["start"], 2), dur_s=round(dur, 2), frames=int(round(dur * FPS)),
+                     reveal_s=round(reveal, 2))
+        else:
+            sl = slope(r["start_s"])
+            r["start_s"] = round(W(r["start_s"]), 2)
+            if r["kind"] == "diagram":  # a duração acompanha o ritmo real da fala
+                r["dur_s"] = round(r["dur_s"] * sl, 2)
+                r["frames"] = int(round(r["dur_s"] * FPS))
+        by_id[r["id"]] = r
+    for e in ev:
+        r = by_id.get(e["id"]) if e["tipo"] == "overlay" else None
+        if r:
+            e["t"] = r["start_s"]
+            e["desc"] = f"{r['id']} ({r['kind']}, {r['dur_s']:.1f}s)"
+        else:
+            e["t"] = W(e["t"])
+    ev.sort(key=lambda e: e["t"])
+    ov.sort(key=lambda r: r["start_s"])
+    return True
 
 
 def main():
@@ -227,7 +322,9 @@ def main():
             reveal = n * 60.0 / WPM
             dur = reveal + 1.6 + 0.5
             kind = "invite" if qid in INVITE_IDS else "quote"
-            add_ov(qid, kind, max(t_after - reveal, COLD_OPEN_S), dur, text=phrase, reveal_s=round(reveal, 2))
+            ps = phrase_est_start(items, i, phrase)
+            start = ps if ps is not None else max(t_after - reveal, COLD_OPEN_S)
+            add_ov(qid, kind, start, dur, text=phrase, reveal_s=round(reveal, 2))
         elif tag == "QUEBRA DE PADRÃO":
             add_ev(t_after, "quebra", rest, "")
         elif tag == "REF. VISUAL":
@@ -274,6 +371,12 @@ def main():
     ov.sort(key=lambda r: r["start_s"])
     total_s = T(total_words, 0) + sum(0 for _ in [])
 
+    # estimativa pura (entrada do alinhar_tempos.py), antes de qualquer correção
+    (EPDIR / "overlays.estimado.json").write_text(json.dumps(ov, ensure_ascii=False, indent=1), encoding="utf-8")
+    com_real = apply_real_times(ev, ov)
+    if com_real:
+        total_s = max(e["t"] for e in ev)
+
     # ---- overlays.json
     out = ROOT / "remotion" / "src" / "data" / "overlays.json"
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -282,7 +385,7 @@ def main():
     # ---- timeline.csv
     with (EPDIR / "timeline.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["id", "tempo_estimado", "tipo", "descricao"])
+        w.writerow(["id", "tempo_real" if com_real else "tempo_estimado", "tipo", "descricao"])
         for k, e in enumerate(ev, 1):
             w.writerow([e["id"] or f"m{k:03d}", mmss(e["t"], True), e["tipo"], e["desc"]])
 
@@ -301,7 +404,7 @@ def main():
     write_capcut_srt(ev, extract_prompts())
     write_cues(items, ev)
     write_prompts_md(prompts, ev)
-    print(f"{len(ov)} overlays, {len(ev)} marcadores, duração estimada {mmss(total_s)}")
+    print(f"{len(ov)} overlays, {len(ev)} marcadores, {'com tempos REAIS' if com_real else 'duração estimada'} {mmss(total_s)}")
 
 
 # ---------------------------------------------------------------- CapCut: o CapCut não importa EDL

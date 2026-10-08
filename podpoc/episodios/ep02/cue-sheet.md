@@ -9,7 +9,7 @@ Tempos estimados; confirme no áudio gravado.
 | 0:08.0 | impacto | Impacto curto e seco na entrada do hook |
 | 2:08.4 | whoosh | Transição para V02 |
 | 2:39.8 | silêncio | Pausa curta |
-| 3:15.2 | queda de música | Música baixa cai na pergunta |
+| 3:10.6 | queda de música | Música baixa cai na pergunta |
 | 5:17.6 | whoosh | Transição para V03 |
 | 5:52.8 | whoosh | Entrada do diagrama fases |
 | 6:42.1 | impacto | Corte seco para tela escura com o número 4 (1 s) |
