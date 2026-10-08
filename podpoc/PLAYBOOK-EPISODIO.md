@@ -25,6 +25,7 @@ Padrões já decididos, não perguntar de novo: editor **CapCut**; Elvis grava e
 4. `python3 tools/gen_credits.py epNN` (créditos + quadro PEDIR AUTORIZAÇÃO).
 5. `cd remotion && npm i && node scripts/render.mjs` (WebM com alfa + PNG) e `node scripts/render.mjs --chroma` (MP4 em fundo verde para o CapCut).
 6. `python3 tools/check_frames.py epNN` (contraste ≥ 4,5:1, zona do Elvis, alfa).
+6b. **Gravação do Elvis** (skill `edicao-video-automatizada`): ele termina a edição e exporta; opcional `python3 tools/cortar_silencios.py gravacao.mp4`; transcrever com tempo por palavra; alinhar overlays e legendas aos tempos reais.
 7. V01 a V11 em `assets/video/` → `bash tools/cobertura.sh epNN`.
 8. `RELATORIO.md` (máx. 15 linhas), commit, push.
 

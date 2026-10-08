@@ -2,7 +2,7 @@
 
 Canal estilo documentário (Discovery / History Channel) que desmistifica a realidade e devolve o poder a quem está despertando. Elvis fala sozinho para a câmera, com cortes de referência visual. Todo episódio vira: roteiro + pacote de publicação + overlays animados prontos para a timeline.
 
-**Num episódio novo, comece lendo `PLAYBOOK-EPISODIO.md`:** ele tem as perguntas iniciais, o passo a passo e as armadilhas já descobertas.
+**Num episódio novo, comece lendo `PLAYBOOK-EPISODIO.md`:** ele tem as perguntas iniciais, o passo a passo e as armadilhas já descobertas. Para cortar, alinhar ou legendar a gravação do Elvis, use a skill `edicao-video-automatizada`.
 
 ## Regra de ouro de trabalho
 - Elvis tem pouco tempo. Não faça perguntas que você mesmo pode resolver. Decida, registre a decisão no relatório e siga.
