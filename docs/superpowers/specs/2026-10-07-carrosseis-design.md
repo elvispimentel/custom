@@ -4,7 +4,7 @@ Data: 2026-10-07 · Status: aguardando revisão
 
 ## Objetivo
 
-Dar aos clientes do Instituto Galifrael uma ferramenta para transformar um texto em carrossel de Instagram com IA (slides, imagens e ZIP), dentro do painel do projeto deles. Referência de fluxo e layout: a "Forja Igoriana" (tela pública de entrada observada pelo dono do projeto).
+Dar aos clientes do Instituto Galifrael uma ferramenta para transformar um texto em carrossel de Instagram com IA (slides, imagens e ZIP), dentro do painel do projeto deles. **Nome do produto: Forja Galifrael.** Referência de fluxo e layout: a tela pública de entrada de uma ferramenta de carrosséis observada pelo dono do projeto; aqui o produto é da marca Galifrael e não usa o nome da referência.
 
 ## Fora de escopo
 
@@ -21,10 +21,14 @@ Correções verificadas no código em 2026-10-07:
 - O segmento `[projectId]` da URL é o código do projeto em minúsculas (`prj-001`), resolvido no banco por `projects.code = upper(...)` sob RLS. O UUID não aparece na URL.
 - O repo ainda não tem login, middleware nem criação automática de `profiles`. O módulo exige uma sessão Supabase, então o plano inclui login mínimo (e-mail e senha), guarda de sessão só para este módulo e trigger de perfil no cadastro. O restante do painel continua como está.
 
+## Destaque no painel do cliente
+
+Na visão geral de cada projeto, logo abaixo das abas, um cartão dourado em destaque com o título "Criar meus carrosséis agora" e o botão que leva a `/projects/[projectId]/carrosseis/nova`. É a chamada principal da página, para o cliente saber de cara que a ferramenta existe.
+
 ## Fluxo
 
 1. **Lista** dos carrosséis do projeto, com status (`rascunho`, `gerando_imagens`, `pronto`).
-2. **Entrada** (igual à Forja): nome; texto/copy; dados do autor (nome, @usuário, foto); proporção `1:1 | 4:5 | 9:16` (padrão 4:5); slides de 3 a 15 (padrão 7); estilo visual; botão "Gerar estrutura".
+2. **Entrada** (mesmo layout da referência): nome; texto/copy; dados do autor (nome, @usuário, foto); proporção `1:1 | 4:5 | 9:16` (padrão 4:5); slides de 3 a 15 (padrão 7); estilo visual; botão "Gerar estrutura".
 3. **Revisão** (confirmação humana): título e copy editáveis por slide; reordenar, apagar, "reescrever este slide". Nenhuma imagem é gerada antes de "Aprovar".
 4. **Imagens**: uma por slide, geradas uma a uma, com progresso e "refazer".
 5. **Exportar**: ZIP com os slides em PNG na proporção escolhida, montado no navegador (JSZip).
