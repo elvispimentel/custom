@@ -31,6 +31,7 @@ CLIPS = {  # clipe do Drive -> id do roteiro (conferido olhando os quadros)
     "V01": "gemini_aeeb3534", "V02": "gemini_73a2900f", "V03": "gemini_5391823f", "V04": "gemini_548d9448",
     "V05": "gemini_b2dcbe71", "V06": "gemini_c41444fa", "V07": "gemini_eb617bad", "V08": "gemini_9dd9098b",
     "V09": "gemini_5df69370", "V10": "prompt_split_peito_V10", "V11": "prompt_mesa_aberta_V11",
+    "P1": "P1_vinheta",  # vinheta fixa do canal (10 s, sem áudio); entra em "Esse é o Podcast Aqui Agora PodPoc"
 }
 UNDER = {"diagram", "archive"}      # ficam sob o Elvis
 TOP = {"quote", "invite", "author"}  # ficam sobre o Elvis
@@ -79,6 +80,19 @@ def amostrar_verde(video):
     return f"0x{r:02X}{g:02X}{b:02X}"
 
 
+def frase_na_fala(palavras, toks, antes_de=200.0):
+    """Início (s da gravação) da primeira ocorrência da sequência de palavras `toks` na transcrição."""
+    import unicodedata
+    n = lambda w: "".join(c for c in unicodedata.normalize("NFKD", w.lower()) if c.isalnum() and ord(c) < 128)  # noqa: E731
+    seq = [n(w["w"]) for w in palavras]
+    for i in range(len(seq) - len(toks)):
+        if palavras[i]["start"] > antes_de:
+            break
+        if seq[i:i + len(toks)] == toks:
+            return palavras[i]["start"]
+    return None
+
+
 def etapa_plano(E):
     over = json.loads((E.dir / "tempos-reais.json").read_text(encoding="utf-8"))
     ov = json.loads((ROOT / "remotion/src/data/overlays.json").read_text(encoding="utf-8"))
@@ -99,6 +113,9 @@ def etapa_plano(E):
     total = round(COLD + tr["duracao_s"], 3)
     vstart = {e["id"]: e["t"] for e in ev if e["tipo"] == "video" and e["id"] in CLIPS}
     vstart["V01"] = 0.0
+    p1 = frase_na_fala(tr["palavras"], ["esse", "e", "o", "podcast"])
+    if p1 is not None and (E.fonte / "curtos" / f"{CLIPS['P1']}.mp4").exists():
+        vstart["P1"] = round(COLD + p1, 3)
     ordem = sorted(vstart.items(), key=lambda kv: kv[1])
     fundo = []
     for i, (vid, t0) in enumerate(ordem):
