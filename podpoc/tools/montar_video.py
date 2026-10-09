@@ -320,7 +320,7 @@ def etapa_audio(E, args):
         ms = int(round(p["inicio_final_s"] * 1000))
         fc.append(f"[{k}:a]aresample=48000,aformat=channel_layouts=stereo,highpass=f=70,adelay={ms}|{ms}[v{k}]")
     nv = len(P["partes"])
-    fc.append("".join(f"[v{k}]" for k in range(nv)) + f"amix=inputs={nv}:normalize=0:duration=longest,apad=whole_dur={P['total_s']:.3f}[voz]")
+    fc.append("".join(f"[v{k}]" for k in range(nv)) + f"amix=inputs={nv}:normalize=0:duration=longest,apad=whole_dur={P['total_s']:.3f},asplit=2[voz][voz_m]")
     # trilha ambiente contínua, bem baixa, com entrada e saída suaves
     ins += ["-stream_loop", "-1", "-i", str(sfxdir / "10_bed_drone_loop.wav")]
     fc.append(f"[{nv}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=0:{P['total_s']:.3f},volume=-30dB,"
@@ -332,8 +332,8 @@ def etapa_audio(E, args):
         ms = int(round(s["t"] * 1000))
         fc.append(f"[{i}:a]aresample=48000,aformat=channel_layouts=stereo,volume={s['ganho_db']}dB,adelay={ms}|{ms}[s{k}]")
         labels.append(f"[s{k}]")
-    fc.append("".join(labels) + f"amix=inputs={len(labels)}:normalize=0:duration=longest,atrim=0:{P['total_s']:.3f}[sfx]")
-    fc.append("[voz][sfx]amix=inputs=2:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5,alimiter=limit=0.95,"
+    fc.append("".join(labels) + f"amix=inputs={len(labels)}:normalize=0:duration=longest,atrim=0:{P['total_s']:.3f},asplit=2[sfx][sfx_m]")
+    fc.append("[voz_m][sfx_m]amix=inputs=2:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5,alimiter=limit=0.95,"
               f"atrim=0:{P['total_s']:.3f}[mix]")
     (E.mdir / "audio.filter").write_text(";\n".join(fc), encoding="utf-8")
     cmd = ["ffmpeg", "-y", "-loglevel", "error"] + ins + ["-filter_complex_script", E.mdir / "audio.filter",
