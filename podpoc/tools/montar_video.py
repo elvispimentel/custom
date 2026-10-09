@@ -183,12 +183,11 @@ def etapa_fundo(E, args):
             continue
         hero = min(f["hero_s"], L)
         rest = max(L - hero, 0.0)
+        if rest > 0.05:
+            rest += 1.0  # o xfade hero->mood consome 1 s
         scale = f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},format=yuv420p,setsar=1"
         mood = scale + ",eq=brightness=-0.17:saturation=0.82,gblur=sigma=3.5"
         # fundo: o clipe inteiro, depois vai e volta (ping-pong) escurecido e levemente desfocado
-        fc = (f"[0:v]{scale},split=2[h0][h1];[h0]trim=0:{hero:.3f},setpts=PTS-STARTPTS[hero];"
-              f"[h1]{mood.split(',', 1)[1] if False else 'null'}[unused];"
-              f"[1:v]{mood},trim=0:{max(rest, 0.04):.3f},setpts=PTS-STARTPTS[mood]")
         if rest <= 0.05:
             fc = f"[0:v]{scale},trim=0:{L:.3f},setpts=PTS-STARTPTS[v]"
         else:
