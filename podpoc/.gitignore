@@ -10,3 +10,5 @@ assets/img-pendente/*
 !assets/img-pendente/.gitkeep
 !assets/video/.gitkeep
 __pycache__/
+episodios/*/fonte/
+episodios/*/final/

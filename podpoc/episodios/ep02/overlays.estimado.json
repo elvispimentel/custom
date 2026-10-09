@@ -2,7 +2,7 @@
  {
   "id": "q-mecanismo",
   "kind": "quote",
-  "start_s": 19.59,
+  "start_s": 17.52,
   "dur_s": 5.82,
   "frames": 175,
   "text": "ninguém nunca te mostrou o mecanismo que está embaixo",
@@ -11,7 +11,7 @@
  {
   "id": "convite-1",
   "kind": "invite",
-  "start_s": 104.0,
+  "start_s": 101.93,
   "dur_s": 4.58,
   "frames": 137,
   "text": "Siga o canal. Deixe o like.",
@@ -20,7 +20,7 @@
  {
   "id": "q-codigo",
   "kind": "quote",
-  "start_s": 190.66,
+  "start_s": 188.59,
   "dur_s": 4.17,
   "frames": 125,
   "text": "E se forem um código?",
@@ -29,7 +29,7 @@
  {
   "id": "arq-zohar",
   "kind": "archive",
-  "start_s": 222.93,
+  "start_s": 220.86,
   "dur_s": 5.0,
   "frames": 150,
   "images": [
@@ -40,14 +40,14 @@
  {
   "id": "genesis-hebraico",
   "kind": "diagram",
-  "start_s": 290.53,
+  "start_s": 288.47,
   "dur_s": 6.0,
   "frames": 180
  },
  {
   "id": "q-forca",
   "kind": "quote",
-  "start_s": 325.97,
+  "start_s": 323.9,
   "dur_s": 8.72,
   "frames": 262,
   "text": "Não é o tempo começando a correr. É uma força organizadora começando a estruturar a energia.",
@@ -56,14 +56,14 @@
  {
   "id": "fases",
   "kind": "diagram",
-  "start_s": 352.86,
+  "start_s": 350.79,
   "dur_s": 19.21,
   "frames": 576
  },
  {
   "id": "q-camadas",
   "kind": "quote",
-  "start_s": 391.34,
+  "start_s": 389.28,
   "dur_s": 5.0,
   "frames": 150,
   "text": "Um fluxo de informação em quatro camadas.",
@@ -72,7 +72,7 @@
  {
   "id": "braden",
   "kind": "author",
-  "start_s": 414.5,
+  "start_s": 412.43,
   "dur_s": 5.0,
   "frames": 150,
   "name": "Gregg Braden",
@@ -85,28 +85,28 @@
  {
   "id": "tetragrama",
   "kind": "diagram",
-  "start_s": 422.53,
+  "start_s": 420.47,
   "dur_s": 5.0,
   "frames": 150
  },
  {
   "id": "braden-mapa",
   "kind": "diagram",
-  "start_s": 442.24,
+  "start_s": 440.17,
   "dur_s": 20.0,
   "frames": 600
  },
  {
   "id": "helice",
   "kind": "diagram",
-  "start_s": 469.55,
+  "start_s": 467.48,
   "dur_s": 5.0,
   "frames": 150
  },
  {
   "id": "q-bases",
   "kind": "quote",
-  "start_s": 477.83,
+  "start_s": 475.76,
   "dur_s": 4.58,
   "frames": 137,
   "text": "Quatro letras, quatro elementos, quatro bases.",
@@ -115,7 +115,7 @@
  {
   "id": "q-restricao",
   "kind": "quote",
-  "start_s": 526.59,
+  "start_s": 524.52,
   "dur_s": 5.41,
   "frames": 162,
   "text": "Não foi um erro. Foi uma restrição arquitetônica.",
@@ -124,7 +124,7 @@
  {
   "id": "blavatsky",
   "kind": "author",
-  "start_s": 577.66,
+  "start_s": 575.59,
   "dur_s": 5.0,
   "frames": 150,
   "name": "Helena Blavatsky",
@@ -137,7 +137,7 @@
  {
   "id": "goddard",
   "kind": "author",
-  "start_s": 616.55,
+  "start_s": 614.48,
   "dur_s": 5.0,
   "frames": 150,
   "name": "Neville Goddard",
@@ -150,7 +150,7 @@
  {
   "id": "arq-adao",
   "kind": "archive",
-  "start_s": 646.48,
+  "start_s": 644.41,
   "dur_s": 5.0,
   "frames": 150,
   "images": [
@@ -161,7 +161,7 @@
  {
   "id": "q-adao",
   "kind": "quote",
-  "start_s": 665.21,
+  "start_s": 663.14,
   "dur_s": 3.76,
   "frames": 113,
   "text": "Adão ainda está dormindo.",
@@ -170,7 +170,7 @@
  {
   "id": "q-esquecer",
   "kind": "quote",
-  "start_s": 742.93,
+  "start_s": 740.86,
   "dur_s": 4.58,
   "frames": 137,
   "text": "Ela teve que esquecer quem era.",
@@ -179,7 +179,7 @@
  {
   "id": "levi",
   "kind": "author",
-  "start_s": 803.74,
+  "start_s": 801.67,
   "dur_s": 5.0,
   "frames": 150,
   "name": "Éliphas Lévi",
@@ -192,7 +192,7 @@
  {
   "id": "q-queda",
   "kind": "quote",
-  "start_s": 809.55,
+  "start_s": 807.48,
   "dur_s": 7.89,
   "frames": 237,
   "text": "A queda não foi um pecado: foi a descida voluntária do espírito pra matéria.",
@@ -201,7 +201,7 @@
  {
   "id": "bailey",
   "kind": "author",
-  "start_s": 823.19,
+  "start_s": 821.12,
   "dur_s": 5.0,
   "frames": 150,
   "name": "Alice Bailey",
@@ -214,7 +214,7 @@
  {
   "id": "q-traje",
   "kind": "quote",
-  "start_s": 879.48,
+  "start_s": 877.41,
   "dur_s": 5.0,
   "frames": 150,
   "text": "O Espírito vestiu um traje espacial biológico.",
@@ -223,7 +223,7 @@
  {
   "id": "arq-astronauta",
   "kind": "archive",
-  "start_s": 891.38,
+  "start_s": 889.31,
   "dur_s": 5.0,
   "frames": 150,
   "images": [
@@ -235,14 +235,14 @@
  {
   "id": "zayn",
   "kind": "diagram",
-  "start_s": 908.86,
+  "start_s": 906.79,
   "dur_s": 20.0,
   "frames": 600
  },
  {
   "id": "q-lamina",
   "kind": "quote",
-  "start_s": 943.21,
+  "start_s": 941.14,
   "dur_s": 6.65,
   "frames": 200,
   "text": "A lâmina fecha a porta rápida, mas mostra o caminho longo.",
@@ -251,7 +251,7 @@
  {
   "id": "deldebbio",
   "kind": "author",
-  "start_s": 945.26,
+  "start_s": 943.19,
   "dur_s": 5.0,
   "frames": 150,
   "name": "Marcelo Del Debbio",
@@ -264,7 +264,7 @@
  {
   "id": "q-credenciais",
   "kind": "quote",
-  "start_s": 1019.76,
+  "start_s": 1017.69,
   "dur_s": 6.24,
   "frames": 187,
   "text": "Ele era o administrador do sistema, e perdeu as credenciais.",
@@ -273,7 +273,7 @@
  {
   "id": "arq-raziel",
   "kind": "archive",
-  "start_s": 1030.83,
+  "start_s": 1028.76,
   "dur_s": 5.0,
   "frames": 150,
   "images": [
@@ -284,7 +284,7 @@
  {
   "id": "deepak",
   "kind": "author",
-  "start_s": 1055.33,
+  "start_s": 1053.26,
   "dur_s": 5.0,
   "frames": 150,
   "name": "Deepak Sankara Veda",
@@ -297,7 +297,7 @@
  {
   "id": "q-teclado",
   "kind": "quote",
-  "start_s": 1081.83,
+  "start_s": 1079.76,
   "dur_s": 6.65,
   "frames": 200,
   "text": "A emoção é o teclado que insere os comandos no código.",
@@ -306,7 +306,7 @@
  {
   "id": "q-fechadura",
   "kind": "quote",
-  "start_s": 1164.59,
+  "start_s": 1162.52,
   "dur_s": 7.07,
   "frames": 212,
   "text": "A gente veste a fechadura e gera as chaves ao mesmo tempo.",
@@ -315,7 +315,7 @@
  {
   "id": "cta-acesso",
   "kind": "invite",
-  "start_s": 1190.34,
+  "start_s": 1188.28,
   "dur_s": 7.89,
   "frames": 237,
   "text": "perder o acesso ao que sabe bem na hora que a conversa mais importa",
@@ -324,7 +324,7 @@
  {
   "id": "convite-2",
   "kind": "invite",
-  "start_s": 1228.0,
+  "start_s": 1225.93,
   "dur_s": 3.34,
   "frames": 100,
   "text": "Comenta aqui embaixo.",
@@ -333,7 +333,7 @@
  {
   "id": "q-operar",
   "kind": "quote",
-  "start_s": 1306.62,
+  "start_s": 1304.55,
   "dur_s": 4.17,
   "frames": 125,
   "text": "Só precisamos aprender a operar.",

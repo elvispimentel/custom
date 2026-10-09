@@ -71,6 +71,8 @@ def main():
     ap.add_argument("--palavras")
     ap.add_argument("--estimado")
     ap.add_argument("--saida")
+    ap.add_argument("--deslocamento", type=float, default=0.0, help="s somados a todos os tempos reais (ex.: 8 para o cold open V01 antes da gravação)")
+    ap.add_argument("--cold-open-est", type=float, default=8.0, help="onde a fala começa na estimativa (= duração do cold open estimado)")
     ap.add_argument("--minimo", type=float, default=0.75, help="semelhança mínima (0 a 1) para aceitar a frase")
     ap.add_argument("--janela", type=float, default=25.0, help="s de busca em volta do tempo previsto (frases curtas)")
     a = ap.parse_args()
@@ -127,6 +129,9 @@ def main():
         if sc >= max(a.minimo, 0.8):
             accept(r, sc, i, j)
     pts = sorted((v["est"], v["start"]) for v in found.values())
+    # âncora do início da fala: a primeira palavra gravada = o HOOK da estimativa
+    pts.append((a.cold_open_est, words[0]["start"]))
+    pts.sort()
     # garante âncoras estritamente crescentes nos dois eixos
     clean = []
     for e, r in pts:
@@ -142,7 +147,9 @@ def main():
             print(f"{r['id']:16} {v['est']:9.1f} {v['start']:8.1f} {v['start'] - v['est']:+10.1f} {v['score']:11.2f}")
     if missing:
         print("NÃO localizados (conferir à mão):", ", ".join(missing))
-    doc = {"origem": pal_p.name, "anchors": [[round(e, 3), round(r, 3)] for e, r in clean], "quotes": found,
+    d = a.deslocamento
+    found = {k: {**v, "start": round(v["start"] + d, 3), "end": round(v["end"] + d, 3)} for k, v in found.items()}
+    doc = {"origem": pal_p.name, "deslocamento_s": d, "anchors": [[round(e, 3), round(r + d, 3)] for e, r in clean], "quotes": found,
            "nao_localizados": missing}
     out_p.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"gravado: {out_p}")

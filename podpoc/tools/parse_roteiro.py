@@ -111,6 +111,7 @@ def clean(s):
 def parse():
     text = SRC.read_text(encoding="utf-8")
     body = text.split("## Roteiro, parte 1", 1)[1].split("\n## Título", 1)[0]
+    body = body.split("\n", 1)[1]  # descarta o resto do título da seção na mesma linha
     lines, words, pause = [], 0, 0.0
     cur = {"kind": None}
     items = []  # sequência: spoken ou marker
@@ -271,8 +272,10 @@ def apply_real_times(ev, ov):
         if r:
             e["t"] = r["start_s"]
             e["desc"] = f"{r['id']} ({r['kind']}, {r['dur_s']:.1f}s)"
+        elif e["id"] == "V01":
+            e["t"] = 0.0  # o cold open abre o vídeo final
         else:
-            e["t"] = W(e["t"])
+            e["t"] = max(0.0, W(e["t"]))
     ev.sort(key=lambda e: e["t"])
     ov.sort(key=lambda r: r["start_s"])
     return True

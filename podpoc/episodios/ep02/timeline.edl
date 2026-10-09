@@ -7,221 +7,221 @@ FCM: NON-DROP FRAME
 002  001      V     C        01:00:08:00 01:00:08:01 01:00:08:00 01:00:08:01
  |C:ResolveColorGreen |M:HOOK |D:1
 
-003  001      V     C        01:00:19:18 01:00:19:19 01:00:19:18 01:00:19:19
- |C:ResolveColorYellow |M:q-mecanismo q-mecanismo (quote, 5.8s) |D:1
+003  001      V     C        01:00:16:29 01:00:17:00 01:00:16:29 01:00:17:00
+ |C:ResolveColorYellow |M:q-mecanismo q-mecanismo (quote, 6.3s) |D:1
 
-004  001      V     C        01:00:23:09 01:00:23:10 01:00:23:09 01:00:23:10
+004  001      V     C        01:00:20:21 01:00:20:22 01:00:20:21 01:00:20:22
  |C:ResolveColorCyan |M:mesa antiga de madeira maciça, câmera deslizando até uma ran |D:1
 
-005  001      V     C        01:00:23:09 01:00:23:10 01:00:23:09 01:00:23:10
+005  001      V     C        01:00:20:21 01:00:20:22 01:00:20:21 01:00:20:22
  |C:ResolveColorGreen |M:IDENTIDADE |D:1
 
-006  001      V     C        01:00:23:09 01:00:23:10 01:00:23:09 01:00:23:10
+006  001      V     C        01:00:20:21 01:00:20:22 01:00:20:21 01:00:20:22
  |C:ResolveColorPurple |M:P1 Entra vídeo P1 (já existe) |D:1
 
-007  001      V     C        01:01:04:21 01:01:04:22 01:01:04:21 01:01:04:22
+007  001      V     C        01:01:02:10 01:01:02:11 01:01:02:10 01:01:02:11
  |C:ResolveColorPurple |M:P2 Entra vídeo P2 (já existe) |D:1
 
-008  001      V     C        01:01:29:16 01:01:29:17 01:01:29:16 01:01:29:17
+008  001      V     C        01:01:27:10 01:01:27:11 01:01:27:10 01:01:27:11
  |C:ResolveColorGreen |M:CONVITE — Toque 1 |D:1
 
-009  001      V     C        01:01:44:00 01:01:44:01 01:01:44:00 01:01:44:01
- |C:ResolveColorYellow |M:convite-1 convite-1 (invite, 4.6s) |D:1
+009  001      V     C        01:01:41:27 01:01:41:28 01:01:41:27 01:01:41:28
+ |C:ResolveColorYellow |M:convite-1 convite-1 (invite, 4.2s) |D:1
 
-010  001      V     C        01:01:46:14 01:01:46:15 01:01:46:14 01:01:46:15
+010  001      V     C        01:01:45:01 01:01:45:02 01:01:45:01 01:01:45:02
  |C:ResolveColorGreen |M:BLOCO 1 — A mesa e a ranhura |D:1
 
-011  001      V     C        01:02:08:12 01:02:08:13 01:02:08:12 01:02:08:13
+011  001      V     C        01:02:12:22 01:02:12:23 01:02:12:22 01:02:12:23
  |C:ResolveColorBlue |M:V02 V02 Bloco 1 |D:1
 
-012  001      V     C        01:02:23:22 01:02:23:23 01:02:23:22 01:02:23:23
+012  001      V     C        01:02:32:02 01:02:32:03 01:02:32:02 01:02:32:03
  |C:ResolveColorCyan |M:a mesa se abrindo e revelando o relógio astronômico (vídeo g |D:1
 
-013  001      V     C        01:02:39:26 01:02:39:27 01:02:39:26 01:02:39:27
+013  001      V     C        01:02:52:13 01:02:52:14 01:02:52:13 01:02:52:14
  |C:ResolveColorRed |M:corta pra plano mais fechado, tom mais baixo, pausa curta de |D:1
 
-014  001      V     C        01:03:10:20 01:03:10:21 01:03:10:20 01:03:10:21
- |C:ResolveColorYellow |M:q-codigo q-codigo (quote, 4.2s) |D:1
+014  001      V     C        01:03:31:10 01:03:31:11 01:03:31:10 01:03:31:11
+ |C:ResolveColorYellow |M:q-codigo q-codigo (quote, 3.4s) |D:1
 
-015  001      V     C        01:03:42:28 01:03:42:29 01:03:42:28 01:03:42:29
- |C:ResolveColorCyan |M:montagem rápida, 1 segundo cada |D:1
-
-016  001      V     C        01:03:42:28 01:03:42:29 01:03:42:28 01:03:42:29
+015  001      V     C        01:04:06:11 01:04:06:12 01:04:06:11 01:04:06:12
  |C:ResolveColorYellow |M:arq-zohar arq-zohar (archive, 5.0s) |D:1
 
-017  001      V     C        01:04:17:21 01:04:17:22 01:04:17:21 01:04:17:22
+016  001      V     C        01:04:06:11 01:04:06:12 01:04:06:11 01:04:06:12
+ |C:ResolveColorCyan |M:montagem rápida, 1 segundo cada |D:1
+
+017  001      V     C        01:04:44:02 01:04:44:03 01:04:44:02 01:04:44:03
  |C:ResolveColorGreen |M:BLOCO 2 — Bereshit |D:1
 
-018  001      V     C        01:04:50:16 01:04:50:17 01:04:50:16 01:04:50:17
- |C:ResolveColorYellow |M:genesis-hebraico genesis-hebraico (diagram, 6.0s) |D:1
+018  001      V     C        01:05:19:22 01:05:19:23 01:05:19:22 01:05:19:23
+ |C:ResolveColorYellow |M:genesis-hebraico genesis-hebraico (diagram, 6.5s) |D:1
 
-019  001      V     C        01:05:17:21 01:05:17:22 01:05:17:21 01:05:17:22
+019  001      V     C        01:05:49:06 01:05:49:07 01:05:49:06 01:05:49:07
  |C:ResolveColorBlue |M:V03 V03 Bloco 2 |D:1
 
-020  001      V     C        01:05:25:29 01:05:26:00 01:05:25:29 01:05:26:00
- |C:ResolveColorYellow |M:q-forca q-forca (quote, 8.7s) |D:1
+020  001      V     C        01:05:58:05 01:05:58:06 01:05:58:05 01:05:58:06
+ |C:ResolveColorYellow |M:q-forca q-forca (quote, 9.9s) |D:1
 
-021  001      V     C        01:05:52:26 01:05:52:27 01:05:52:26 01:05:52:27
- |C:ResolveColorYellow |M:fases fases (diagram, 19.2s) |D:1
+021  001      V     C        01:06:30:06 01:06:30:07 01:06:30:06 01:06:30:07
+ |C:ResolveColorYellow |M:fases fases (diagram, 22.9s) |D:1
 
-022  001      V     C        01:06:31:10 01:06:31:11 01:06:31:10 01:06:31:11
- |C:ResolveColorYellow |M:q-camadas q-camadas (quote, 5.0s) |D:1
+022  001      V     C        01:07:16:00 01:07:16:01 01:07:16:00 01:07:16:01
+ |C:ResolveColorYellow |M:q-camadas q-camadas (quote, 4.8s) |D:1
 
-023  001      V     C        01:06:42:03 01:06:42:04 01:06:42:03 01:06:42:04
+023  001      V     C        01:07:26:25 01:07:26:26 01:07:26:25 01:07:26:26
  |C:ResolveColorRed |M:corte seco pra tela escura, só o número 4 por um segundo, e  |D:1
 
-024  001      V     C        01:06:42:03 01:06:42:04 01:06:42:03 01:06:42:04
+024  001      V     C        01:07:26:25 01:07:26:26 01:07:26:25 01:07:26:26
  |C:ResolveColorGreen |M:BLOCO 3 — O quatro dentro de você |D:1
 
-025  001      V     C        01:06:54:15 01:06:54:16 01:06:54:15 01:06:54:16
+025  001      V     C        01:07:39:09 01:07:39:10 01:07:39:09 01:07:39:10
  |C:ResolveColorYellow |M:braden braden (author, 5.0s) |D:1
 
-026  001      V     C        01:07:02:16 01:07:02:17 01:07:02:16 01:07:02:17
+026  001      V     C        01:07:47:12 01:07:47:13 01:07:47:12 01:07:47:13
  |C:ResolveColorYellow |M:tetragrama tetragrama (diagram, 5.0s) |D:1
 
-027  001      V     C        01:07:22:07 01:07:22:08 01:07:22:07 01:07:22:08
- |C:ResolveColorYellow |M:braden-mapa braden-mapa (diagram, 20.0s) |D:1
+027  001      V     C        01:08:07:07 01:08:07:08 01:08:07:07 01:08:07:08
+ |C:ResolveColorYellow |M:braden-mapa braden-mapa (diagram, 20.1s) |D:1
 
-028  001      V     C        01:07:49:17 01:07:49:18 01:07:49:17 01:07:49:18
+028  001      V     C        01:08:34:22 01:08:34:23 01:08:34:22 01:08:34:23
  |C:ResolveColorYellow |M:helice helice (diagram, 5.0s) |D:1
 
-029  001      V     C        01:07:49:17 01:07:49:18 01:07:49:17 01:07:49:18
+029  001      V     C        01:08:34:22 01:08:34:23 01:08:34:22 01:08:34:23
  |C:ResolveColorBlue |M:V04 V04 Bloco 3 |D:1
 
-030  001      V     C        01:07:57:25 01:07:57:26 01:07:57:25 01:07:57:26
- |C:ResolveColorYellow |M:q-bases q-bases (quote, 4.6s) |D:1
+030  001      V     C        01:08:43:02 01:08:43:03 01:08:43:02 01:08:43:03
+ |C:ResolveColorYellow |M:q-bases q-bases (quote, 6.1s) |D:1
 
-031  001      V     C        01:08:21:12 01:08:21:13 01:08:21:12 01:08:21:13
+031  001      V     C        01:09:05:01 01:09:05:02 01:09:05:01 01:09:05:02
  |C:ResolveColorRed |M:respira, olha pra câmera, silêncio de 2 segundos antes de "C |D:1
 
-032  001      V     C        01:08:23:12 01:08:23:13 01:08:23:12 01:08:23:13
+032  001      V     C        01:09:06:27 01:09:06:28 01:09:06:27 01:09:06:28
  |C:ResolveColorGreen |M:BLOCO 4 — A luz que foi ocultada |D:1
 
-033  001      V     C        01:08:42:26 01:08:42:27 01:08:42:26 01:08:42:27
+033  001      V     C        01:09:25:01 01:09:25:02 01:09:25:01 01:09:25:02
  |C:ResolveColorBlue |M:V05 V05 Bloco 4 |D:1
 
-034  001      V     C        01:08:46:18 01:08:46:19 01:08:46:18 01:08:46:19
+034  001      V     C        01:09:28:15 01:09:28:16 01:09:28:15 01:09:28:16
  |C:ResolveColorYellow |M:q-restricao q-restricao (quote, 5.4s) |D:1
 
-035  001      V     C        01:09:08:16 01:09:08:17 01:09:08:16 01:09:08:17
+035  001      V     C        01:09:51:04 01:09:51:05 01:09:51:04 01:09:51:05
  |C:ResolveColorCyan |M:luz intensa sendo filtrada por um véu (b-roll gerado) |D:1
 
-036  001      V     C        01:09:36:20 01:09:36:21 01:09:36:20 01:09:36:21
+036  001      V     C        01:10:20:06 01:10:20:07 01:10:20:06 01:10:20:07
  |C:ResolveColorGreen |M:BLOCO 5 — Dois relatos e o Adão que não acordou |D:1
 
-037  001      V     C        01:09:37:20 01:09:37:21 01:09:37:20 01:09:37:21
+037  001      V     C        01:10:21:07 01:10:21:08 01:10:21:07 01:10:21:08
  |C:ResolveColorYellow |M:blavatsky blavatsky (author, 5.0s) |D:1
 
-038  001      V     C        01:10:16:17 01:10:16:18 01:10:16:17 01:10:16:18
+038  001      V     C        01:11:01:11 01:11:01:12 01:11:01:11 01:11:01:12
  |C:ResolveColorYellow |M:goddard goddard (author, 5.0s) |D:1
 
-039  001      V     C        01:10:46:14 01:10:46:15 01:10:46:14 01:10:46:15
+039  001      V     C        01:11:32:09 01:11:32:10 01:11:32:09 01:11:32:10
  |C:ResolveColorYellow |M:arq-adao arq-adao (archive, 5.0s) |D:1
 
-040  001      V     C        01:11:05:06 01:11:05:07 01:11:05:06 01:11:05:07
- |C:ResolveColorYellow |M:q-adao q-adao (quote, 3.8s) |D:1
+040  001      V     C        01:11:51:19 01:11:51:20 01:11:51:19 01:11:51:20
+ |C:ResolveColorYellow |M:q-adao q-adao (quote, 4.3s) |D:1
 
-041  001      V     C        01:11:06:26 01:11:06:27 01:11:06:26 01:11:06:27
+041  001      V     C        01:11:53:10 01:11:53:11 01:11:53:10 01:11:53:11
  |C:ResolveColorRed |M:pausa de 2 segundos depois de "Adão ainda está dormindo." |D:1
 
-042  001      V     C        01:11:08:26 01:11:08:27 01:11:08:26 01:11:08:27
+042  001      V     C        01:11:55:12 01:11:55:13 01:11:55:12 01:11:55:13
  |C:ResolveColorBlue |M:V06 V06 Bloco 5 |D:1
 
-043  001      V     C        01:12:22:28 01:12:22:29 01:12:22:28 01:12:22:29
+043  001      V     C        01:13:11:22 01:13:11:23 01:13:11:22 01:13:11:23
  |C:ResolveColorYellow |M:q-esquecer q-esquecer (quote, 4.6s) |D:1
 
-044  001      V     C        01:12:25:12 01:12:25:13 01:12:25:12 01:12:25:13
+044  001      V     C        01:13:14:27 01:13:14:28 01:13:14:27 01:13:14:28
  |C:ResolveColorGreen |M:BLOCO 6 — A queda e a serpente |D:1
 
-045  001      V     C        01:12:25:12 01:12:25:13 01:12:25:12 01:12:25:13
+045  001      V     C        01:13:14:27 01:13:14:28 01:13:14:27 01:13:14:28
  |C:ResolveColorBlue |M:V07 V07 Bloco 6 e 7 |D:1
 
-046  001      V     C        01:13:23:22 01:13:23:23 01:13:23:22 01:13:23:23
+046  001      V     C        01:14:29:17 01:14:29:18 01:14:29:17 01:14:29:18
  |C:ResolveColorYellow |M:levi levi (author, 5.0s) |D:1
 
-047  001      V     C        01:13:29:17 01:13:29:18 01:13:29:17 01:13:29:18
- |C:ResolveColorYellow |M:q-queda q-queda (quote, 7.9s) |D:1
+047  001      V     C        01:14:37:00 01:14:37:01 01:14:37:00 01:14:37:01
+ |C:ResolveColorYellow |M:q-queda q-queda (quote, 8.0s) |D:1
 
-048  001      V     C        01:13:43:06 01:13:43:07 01:13:43:06 01:13:43:07
+048  001      V     C        01:14:52:14 01:14:52:15 01:14:52:14 01:14:52:15
  |C:ResolveColorYellow |M:bailey bailey (author, 5.0s) |D:1
 
-049  001      V     C        01:13:45:21 01:13:45:22 01:13:45:21 01:13:45:22
+049  001      V     C        01:14:55:09 01:14:55:10 01:14:55:09 01:14:55:10
  |C:ResolveColorGreen |M:BLOCO 7 — As túnicas de pele e a espada flamejante |D:1
 
-050  001      V     C        01:14:39:14 01:14:39:15 01:14:39:14 01:14:39:15
- |C:ResolveColorYellow |M:q-traje q-traje (quote, 5.0s) |D:1
+050  001      V     C        01:15:56:10 01:15:56:11 01:15:56:10 01:15:56:11
+ |C:ResolveColorYellow |M:q-traje q-traje (quote, 5.9s) |D:1
 
-051  001      V     C        01:14:51:11 01:14:51:12 01:14:51:11 01:14:51:12
+051  001      V     C        01:16:10:04 01:16:10:05 01:16:10:04 01:16:10:05
  |C:ResolveColorYellow |M:arq-astronauta arq-astronauta (archive, 5.0s) |D:1
 
-052  001      V     C        01:14:54:11 01:14:54:12 01:14:54:11 01:14:54:12
+052  001      V     C        01:16:13:18 01:16:13:19 01:16:13:18 01:16:13:19
  |C:ResolveColorBlue |M:V08 V08 Bloco 7 |D:1
 
-053  001      V     C        01:15:08:26 01:15:08:27 01:15:08:26 01:15:08:27
- |C:ResolveColorYellow |M:zayn zayn (diagram, 20.0s) |D:1
+053  001      V     C        01:16:30:11 01:16:30:12 01:16:30:11 01:16:30:12
+ |C:ResolveColorYellow |M:zayn zayn (diagram, 23.2s) |D:1
 
-054  001      V     C        01:15:43:06 01:15:43:07 01:15:43:06 01:15:43:07
- |C:ResolveColorYellow |M:q-lamina q-lamina (quote, 6.7s) |D:1
+054  001      V     C        01:17:10:05 01:17:10:06 01:17:10:05 01:17:10:06
+ |C:ResolveColorYellow |M:q-lamina q-lamina (quote, 8.3s) |D:1
 
-055  001      V     C        01:15:45:08 01:15:45:09 01:15:45:08 01:15:45:09
+055  001      V     C        01:17:12:13 01:17:12:14 01:17:12:13 01:17:12:14
  |C:ResolveColorYellow |M:deldebbio deldebbio (author, 5.0s) |D:1
 
-056  001      V     C        01:15:47:23 01:15:47:24 01:15:47:23 01:15:47:24
+056  001      V     C        01:17:15:06 01:17:15:07 01:17:15:06 01:17:15:07
  |C:ResolveColorGreen |M:BLOCO 8 — Caim e Abel |D:1
 
-057  001      V     C        01:16:34:16 01:16:34:17 01:16:34:16 01:16:34:17
+057  001      V     C        01:18:07:00 01:18:07:01 01:18:07:00 01:18:07:01
  |C:ResolveColorRed |M:tom mais baixo e mais lento; a luz da cena abaixa antes de e |D:1
 
-058  001      V     C        01:16:34:16 01:16:34:17 01:16:34:16 01:16:34:17
+058  001      V     C        01:18:07:00 01:18:07:01 01:18:07:00 01:18:07:01
  |C:ResolveColorGreen |M:TEN — virada principal |D:1
 
-059  001      V     C        01:16:46:03 01:16:46:04 01:16:46:03 01:16:46:04
+059  001      V     C        01:18:19:24 01:18:19:25 01:18:19:24 01:18:19:25
  |C:ResolveColorBlue |M:V09 V09 TEN |D:1
 
-060  001      V     C        01:16:59:23 01:16:59:24 01:16:59:23 01:16:59:24
- |C:ResolveColorYellow |M:q-credenciais q-credenciais (quote, 6.2s) |D:1
+060  001      V     C        01:18:34:28 01:18:34:29 01:18:34:28 01:18:34:29
+ |C:ResolveColorYellow |M:q-credenciais q-credenciais (quote, 5.6s) |D:1
 
-061  001      V     C        01:17:10:25 01:17:10:26 01:17:10:25 01:17:10:26
+061  001      V     C        01:18:48:14 01:18:48:15 01:18:48:14 01:18:48:15
  |C:ResolveColorYellow |M:arq-raziel arq-raziel (archive, 5.0s) |D:1
 
-062  001      V     C        01:17:35:10 01:17:35:11 01:17:35:10 01:17:35:11
+062  001      V     C        01:19:18:14 01:19:18:15 01:19:18:14 01:19:18:15
  |C:ResolveColorYellow |M:deepak deepak (author, 5.0s) |D:1
 
-063  001      V     C        01:17:37:25 01:17:37:26 01:17:37:25 01:17:37:26
+063  001      V     C        01:19:21:16 01:19:21:17 01:19:21:16 01:19:21:17
  |C:ResolveColorBlue |M:V10 V10 TEN |D:1
 
-064  001      V     C        01:18:01:25 01:18:01:26 01:18:01:25 01:18:01:26
- |C:ResolveColorYellow |M:q-teclado q-teclado (quote, 6.7s) |D:1
+064  001      V     C        01:19:50:27 01:19:50:28 01:19:50:27 01:19:50:28
+ |C:ResolveColorYellow |M:q-teclado q-teclado (quote, 6.4s) |D:1
 
-065  001      V     C        01:18:47:23 01:18:47:24 01:18:47:23 01:18:47:24
+065  001      V     C        01:20:40:11 01:20:40:12 01:20:40:11 01:20:40:12
  |C:ResolveColorCyan |M:Árvore da Vida com o lado sombrio (Qlippoth) em contraste |D:1
 
-066  001      V     C        01:19:24:18 01:19:24:19 01:19:24:18 01:19:24:19
- |C:ResolveColorYellow |M:q-fechadura q-fechadura (quote, 7.1s) |D:1
+066  001      V     C        01:21:20:00 01:21:20:01 01:21:20:00 01:21:20:01
+ |C:ResolveColorYellow |M:q-fechadura q-fechadura (quote, 6.7s) |D:1
 
-067  001      V     C        01:19:29:17 01:19:29:18 01:19:29:17 01:19:29:18
+067  001      V     C        01:21:24:21 01:21:24:22 01:21:24:21 01:21:24:22
  |C:ResolveColorRed |M:silêncio de 3 segundos depois da frase, plano fechado, sem m |D:1
 
-068  001      V     C        01:19:32:17 01:19:32:18 01:19:32:17 01:19:32:18
+068  001      V     C        01:21:27:16 01:21:27:17 01:21:27:16 01:21:27:17
  |C:ResolveColorGreen |M:CTA — logo depois da virada |D:1
 
-069  001      V     C        01:19:50:10 01:19:50:11 01:19:50:10 01:19:50:11
- |C:ResolveColorYellow |M:cta-acesso cta-acesso (invite, 7.9s) |D:1
+069  001      V     C        01:21:44:09 01:21:44:10 01:21:44:09 01:21:44:10
+ |C:ResolveColorYellow |M:cta-acesso cta-acesso (invite, 8.7s) |D:1
 
-070  001      V     C        01:20:25:16 01:20:25:17 01:20:25:16 01:20:25:17
+070  001      V     C        01:22:24:26 01:22:24:27 01:22:24:26 01:22:24:27
  |C:ResolveColorGreen |M:CONVITE — Toque 2 |D:1
 
-071  001      V     C        01:20:28:00 01:20:28:01 01:20:28:00 01:20:28:01
- |C:ResolveColorYellow |M:convite-2 convite-2 (invite, 3.3s) |D:1
+071  001      V     C        01:22:27:22 01:22:27:23 01:22:27:22 01:22:27:23
+ |C:ResolveColorYellow |M:convite-2 convite-2 (invite, 3.0s) |D:1
 
-072  001      V     C        01:20:56:29 01:20:57:00 01:20:56:29 01:20:57:00
+072  001      V     C        01:22:55:06 01:22:55:07 01:22:55:06 01:22:55:07
  |C:ResolveColorGreen |M:KETSU — fechamento |D:1
 
-073  001      V     C        01:20:56:29 01:20:57:00 01:20:56:29 01:20:57:00
+073  001      V     C        01:22:55:06 01:22:55:07 01:22:55:06 01:22:55:07
  |C:ResolveColorBlue |M:V11 V11 Ketsu |D:1
 
-074  001      V     C        01:21:46:19 01:21:46:20 01:21:46:19 01:21:46:20
- |C:ResolveColorYellow |M:q-operar q-operar (quote, 4.2s) |D:1
+074  001      V     C        01:23:42:09 01:23:42:10 01:23:42:09 01:23:42:10
+ |C:ResolveColorYellow |M:q-operar q-operar (quote, 3.3s) |D:1
 
-075  001      V     C        01:21:48:21 01:21:48:22 01:21:48:21 01:21:48:22
+075  001      V     C        01:23:44:12 01:23:44:13 01:23:44:12 01:23:44:13
  |C:ResolveColorCyan |M:a mesa aberta, engrenagens girando, fade para o logo do cana |D:1
