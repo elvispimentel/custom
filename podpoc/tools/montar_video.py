@@ -111,11 +111,13 @@ def etapa_plano(E):
                        "inicio_final_s": round(COLD + p["inicio_s"], 3), "dur_s": p["duracao_s"],
                        "chroma": amostrar_verde(px) if px.exists() else None})
     total = round(COLD + tr["duracao_s"], 3)
-    vstart = {e["id"]: e["t"] for e in ev if e["tipo"] == "video" and e["id"] in CLIPS}
+    vstart = {e["id"]: e["t"] for e in ev if e["tipo"] == "video" and e["id"] in CLIPS and e["id"] != "P1"}
     vstart["V01"] = 0.0
+    insercoes = []
     p1 = frase_na_fala(tr["palavras"], ["esse", "e", "o", "podcast"])
-    if p1 is not None and (E.fonte / "curtos" / f"{CLIPS['P1']}.mp4").exists():
-        vstart["P1"] = round(COLD + p1, 3)
+    clip_p1 = E.fonte / "curtos" / f"{CLIPS['P1']}.mp4"
+    if p1 is not None and clip_p1.exists():  # vinheta: entra por cima do fundo vigente e sai de volta para ele
+        insercoes.append({"id": "P1", "clip": str(clip_p1), "inicio_s": round(COLD + p1, 3), "dur_s": round(dur_of(clip_p1), 3)})
     ordem = sorted(vstart.items(), key=lambda kv: kv[1])
     fundo = []
     for i, (vid, t0) in enumerate(ordem):
@@ -130,15 +132,15 @@ def etapa_plano(E):
             continue
         camadas.append({"id": r["id"], "kind": r["kind"], "arquivo": str(webm), "inicio_s": r["start_s"], "dur_s": r["dur_s"],
                         "sob_elvis": r["kind"] in UNDER})
-    sfx = plano_sfx(E, ev, camadas, total)
-    plano = {"total_s": total, "cold_open_s": COLD, "partes": partes, "fundo": fundo, "camadas": camadas, "sfx": sfx}
+    sfx = plano_sfx(E, ev, camadas, total, insercoes)
+    plano = {"total_s": total, "cold_open_s": COLD, "partes": partes, "fundo": fundo, "insercoes": insercoes, "camadas": camadas, "sfx": sfx}
     (E.mdir / "plano.json").write_text(json.dumps(plano, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"plano: {total / 60:.1f} min, {len(fundo)} fundos, {len(camadas)} camadas, {len(sfx)} efeitos sonoros")
     for p in partes:
         print("  parte", Path(p["proxy"]).name, "verde", p["chroma"], "início", p["inicio_final_s"], "s")
 
 
-def plano_sfx(E, ev, camadas, total):
+def plano_sfx(E, ev, camadas, total, insercoes=()):
     S = []
     add = lambda t, f, g, nota: S.append({"t": round(max(t, 0), 3), "arquivo": f, "ganho_db": g, "nota": nota})  # noqa: E731
     add(COLD - 1.74, "05_riser", -8, "riser até o hook")
@@ -148,6 +150,9 @@ def plano_sfx(E, ev, camadas, total):
             add(e["t"] - 0.15, "04_whoosh", -10, f"transição para {e['id']}")
         if e["tipo"] == "quebra" and "tela escura" in e["desc"]:
             add(e["t"], "02_impact_whoom", -6, "corte seco para o número 4")
+    for ins in insercoes:
+        add(ins["inicio_s"] - 0.15, "04_whoosh", -9, f"entrada da vinheta {ins['id']}")
+        add(ins["inicio_s"] + ins["dur_s"] - 0.3, "04_whoosh", -12, f"saída da vinheta {ins['id']}")
     for c in camadas:
         i, k, t = c["id"], c["kind"], c["inicio_s"]
         if k == "diagram":
@@ -261,6 +266,18 @@ def etapa_video(E, args):
             cur = nxt
             n_in += 1
 
+        for c in P.get("insercoes", []):
+            s0, e0 = c["inicio_s"], c["inicio_s"] + c["dur_s"]
+            if e0 <= a or s0 >= b:
+                continue
+            ss, off = max(a - s0, 0.0), max(s0 - a, 0.0)
+            inputs.extend(["-ss", f"{ss:.3f}", "-i", c["clip"]])
+            fc.append(f"[{n_in}:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},format=yuva420p,setsar=1,"
+                      f"fade=t=in:st=0:d=0.5:alpha=1,fade=t=out:st={c['dur_s'] - 0.5 - ss:.3f}:d=0.5:alpha=1,"
+                      f"setpts=PTS-STARTPTS+{off:.3f}/TB[o{n_in}]")
+            fc.append(f"[{cur}][o{n_in}]overlay=0:0:format=auto:eof_action=pass[b{n_in}]")
+            cur = f"b{n_in}"
+            n_in += 1
         for c in P["camadas"]:
             if c["sob_elvis"]:
                 add_overlay(c)
