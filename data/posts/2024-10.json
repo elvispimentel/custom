@@ -20,10 +20,16 @@
     "formato": "short",
     "publicado_em": "2024-10-23T22:00:32Z",
     "titulo_ou_legenda": "What is the fastest, most effective way to lose belly fat? #jayshetty #bellyfat #health",
-    "views": 3775179,
-    "curtidas": 94548,
-    "comentarios": 691,
-    "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    "views": 3779715,
+    "curtidas": 94579,
+    "comentarios": 692,
+    "coletado_em": "2026-10-12T18:16:30.391947+00:00",
+    "anterior": {
+      "views": 3775179,
+      "curtidas": 94548,
+      "comentarios": 691,
+      "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    }
   },
   {
     "id": "yt:bL2J_657prk",
@@ -37,5 +43,18 @@
     "curtidas": 52184,
     "comentarios": 1478,
     "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+  },
+  {
+    "id": "yt:gpzXelCXVo4",
+    "concorrente_id": "yt-UC-WNIv9QcjlFMdERsrbLWYQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=gpzXelCXVo4",
+    "formato": "short",
+    "publicado_em": "2024-10-09T22:59:40Z",
+    "titulo_ou_legenda": "O poder da alegria.",
+    "views": 186678,
+    "curtidas": 27916,
+    "comentarios": 430,
+    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
   }
 ]

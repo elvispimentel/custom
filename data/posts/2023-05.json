@@ -59,10 +59,16 @@
     "formato": "video",
     "publicado_em": "2023-05-22T21:30:00Z",
     "titulo_ou_legenda": "COMO MUDAR (RÁPIDO) SUA VIDA",
-    "views": 3046258,
-    "curtidas": 189421,
+    "views": 3051870,
+    "curtidas": 189514,
     "comentarios": 2806,
-    "coletado_em": "2026-10-06T02:59:42.440271+00:00"
+    "coletado_em": "2026-10-12T18:16:29.570096+00:00",
+    "anterior": {
+      "views": 3046258,
+      "curtidas": 189421,
+      "comentarios": 2806,
+      "coletado_em": "2026-10-06T02:59:42.440271+00:00"
+    }
   },
   {
     "id": "yt:3I482TBLEzc",
@@ -72,9 +78,80 @@
     "formato": "video",
     "publicado_em": "2023-05-22T12:47:58Z",
     "titulo_ou_legenda": "KIM KARDASHIAN OPENS UP About Insecurity, Healing Your Pain, & Finding HAPPINESS | Jay Shetty",
-    "views": 3933986,
-    "curtidas": 71510,
-    "comentarios": 3908,
-    "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    "views": 3952727,
+    "curtidas": 71582,
+    "comentarios": 3910,
+    "coletado_em": "2026-10-12T18:16:30.391947+00:00",
+    "anterior": {
+      "views": 3933986,
+      "curtidas": 71510,
+      "comentarios": 3908,
+      "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    }
+  },
+  {
+    "id": "yt:hy47ZkTFQNE",
+    "concorrente_id": "yt-UCwOxBQR9QK24qk6XM5jeGgA",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=hy47ZkTFQNE",
+    "formato": "video",
+    "publicado_em": "2023-05-14T15:00:26Z",
+    "titulo_ou_legenda": "5 HÁBITOS QUE VOCÊ PRECISA ELIMINAR ANTES QUE SEJA TARDE DEMAIS",
+    "views": 2539638,
+    "curtidas": 250266,
+    "comentarios": 2459,
+    "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+  },
+  {
+    "id": "yt:faE1EGQJ0lQ",
+    "concorrente_id": "yt-UCwOxBQR9QK24qk6XM5jeGgA",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=faE1EGQJ0lQ",
+    "formato": "video",
+    "publicado_em": "2023-05-31T21:30:04Z",
+    "titulo_ou_legenda": "COMO CURAR (RÁPIDO) SUA PROCRASTINAÇÃO",
+    "views": 2179556,
+    "curtidas": 152227,
+    "comentarios": 2300,
+    "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+  },
+  {
+    "id": "yt:1LQ_NPLcLVg",
+    "concorrente_id": "yt-UCwOxBQR9QK24qk6XM5jeGgA",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=1LQ_NPLcLVg",
+    "formato": "video",
+    "publicado_em": "2023-05-07T15:00:01Z",
+    "titulo_ou_legenda": "5 HÁBITOS QUE VOCÊ PRECISA TER NA SUA VIDA",
+    "views": 1160664,
+    "curtidas": 114216,
+    "comentarios": 1197,
+    "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+  },
+  {
+    "id": "yt:1c1fZAzXGMM",
+    "concorrente_id": "yt-UCwOxBQR9QK24qk6XM5jeGgA",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=1c1fZAzXGMM",
+    "formato": "video",
+    "publicado_em": "2023-05-11T21:30:00Z",
+    "titulo_ou_legenda": "COMO NÃO DESPERDIÇAR SUA VIDA",
+    "views": 876325,
+    "curtidas": 76590,
+    "comentarios": 931,
+    "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+  },
+  {
+    "id": "yt:d7sUWwHugg8",
+    "concorrente_id": "yt-UCbk_QsfaFZG6PdQeCvaYXJQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=d7sUWwHugg8",
+    "formato": "video",
+    "publicado_em": "2023-05-29T10:43:39Z",
+    "titulo_ou_legenda": "Joe Dispenza: You've Been Programmed To Stay BROKE, STUCK & EXHAUSTED - Here's How To Break It!",
+    "views": 9480693,
+    "curtidas": 159478,
+    "comentarios": 3719,
+    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
   }
 ]

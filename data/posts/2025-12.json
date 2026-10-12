@@ -20,10 +20,16 @@
     "formato": "video",
     "publicado_em": "2025-12-23T23:12:20Z",
     "titulo_ou_legenda": "ASSISTA A ESTE VÍDEO TODOS OS DIAS - Motivacional da Dra. Mabel Cristina Dias",
-    "views": 609387,
-    "curtidas": 58805,
-    "comentarios": 1984,
-    "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    "views": 613832,
+    "curtidas": 58955,
+    "comentarios": 1994,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00",
+    "anterior": {
+      "views": 609387,
+      "curtidas": 58805,
+      "comentarios": 1984,
+      "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    }
   },
   {
     "id": "yt:z4joNCXHGuE",
@@ -37,5 +43,31 @@
     "curtidas": 19237,
     "comentarios": 667,
     "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+  },
+  {
+    "id": "yt:r-9EzSHkZ2g",
+    "concorrente_id": "yt-UC-WNIv9QcjlFMdERsrbLWYQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=r-9EzSHkZ2g",
+    "formato": "video",
+    "publicado_em": "2025-12-11T22:00:07Z",
+    "titulo_ou_legenda": "Realidade e Negação - Hélio Couto",
+    "views": 271518,
+    "curtidas": 19154,
+    "comentarios": 1268,
+    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+  },
+  {
+    "id": "yt:aTKX0sy_3FE",
+    "concorrente_id": "yt-UC2oNAjmdM1jA5MV0ZWsUOBw",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=aTKX0sy_3FE",
+    "formato": "video",
+    "publicado_em": "2025-12-10T22:09:49Z",
+    "titulo_ou_legenda": "Torne-se quem você tem medo de ser | A filosofia de Carl Jung",
+    "views": 1439802,
+    "curtidas": 107848,
+    "comentarios": 4873,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00"
   }
 ]

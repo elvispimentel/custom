@@ -7,10 +7,16 @@
     "formato": "short",
     "publicado_em": "2025-09-11T21:00:11Z",
     "titulo_ou_legenda": "Se esse arquétipo estiver atuando, o negócio dará certo #heliocouto",
-    "views": 244716,
-    "curtidas": 17311,
+    "views": 245961,
+    "curtidas": 17352,
     "comentarios": 273,
-    "coletado_em": "2026-10-06T02:59:39.684510+00:00"
+    "coletado_em": "2026-10-12T18:16:26.821635+00:00",
+    "anterior": {
+      "views": 244716,
+      "curtidas": 17311,
+      "comentarios": 273,
+      "coletado_em": "2026-10-06T02:59:39.684510+00:00"
+    }
   },
   {
     "id": "yt:GL648seg6Zk",
@@ -46,10 +52,16 @@
     "formato": "video",
     "publicado_em": "2025-09-17T23:45:42Z",
     "titulo_ou_legenda": "Se você estiver prestes a VENCER, verá este vídeo! (Não ignore!)",
-    "views": 1362184,
-    "curtidas": 120413,
-    "comentarios": 3823,
-    "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    "views": 1385021,
+    "curtidas": 120928,
+    "comentarios": 3850,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00",
+    "anterior": {
+      "views": 1362184,
+      "curtidas": 120413,
+      "comentarios": 3823,
+      "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    }
   },
   {
     "id": "yt:Kmz3mxIMWco",
@@ -59,10 +71,16 @@
     "formato": "video",
     "publicado_em": "2025-09-11T22:20:55Z",
     "titulo_ou_legenda": "COMO FALAR COM O UNIVERSO? (TÉCNICA DE 5 PASSOS)",
-    "views": 943712,
-    "curtidas": 93245,
-    "comentarios": 2089,
-    "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    "views": 948707,
+    "curtidas": 93388,
+    "comentarios": 2090,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00",
+    "anterior": {
+      "views": 943712,
+      "curtidas": 93245,
+      "comentarios": 2089,
+      "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    }
   },
   {
     "id": "yt:IKc9dqp2ahc",
@@ -76,5 +94,31 @@
     "curtidas": 23805,
     "comentarios": 595,
     "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+  },
+  {
+    "id": "yt:bvKkhnzo6cw",
+    "concorrente_id": "yt-UCSTTPGPS-lm0YVb4DMJ3lTA",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=bvKkhnzo6cw",
+    "formato": "video",
+    "publicado_em": "2025-09-23T17:19:04Z",
+    "titulo_ou_legenda": "Believing, Behaving, Becoming Abundance",
+    "views": 274931,
+    "curtidas": 11679,
+    "comentarios": 362,
+    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+  },
+  {
+    "id": "yt:2caQ4j9oohE",
+    "concorrente_id": "yt-UCbk_QsfaFZG6PdQeCvaYXJQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=2caQ4j9oohE",
+    "formato": "video",
+    "publicado_em": "2025-09-24T14:00:03Z",
+    "titulo_ou_legenda": "EMMA WATSON EXCLUSIVE: The TRUTH I Have Never Shared Before..",
+    "views": 5511279,
+    "curtidas": 138044,
+    "comentarios": 10195,
+    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
   }
 ]

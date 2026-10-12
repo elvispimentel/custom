@@ -7,9 +7,28 @@
     "formato": "video",
     "publicado_em": "2021-11-17T16:13:58Z",
     "titulo_ou_legenda": "FIZ O DESAFIO 75 HARD - O QUE MUDOU?",
-    "views": 1095524,
-    "curtidas": 93844,
+    "views": 1095862,
+    "curtidas": 93847,
     "comentarios": 1138,
-    "coletado_em": "2026-10-06T02:59:42.440271+00:00"
+    "coletado_em": "2026-10-12T18:16:29.570096+00:00",
+    "anterior": {
+      "views": 1095524,
+      "curtidas": 93844,
+      "comentarios": 1138,
+      "coletado_em": "2026-10-06T02:59:42.440271+00:00"
+    }
+  },
+  {
+    "id": "yt:mH8GtM7CCcI",
+    "concorrente_id": "yt-UCSTTPGPS-lm0YVb4DMJ3lTA",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=mH8GtM7CCcI",
+    "formato": "video",
+    "publicado_em": "2021-11-09T16:20:56Z",
+    "titulo_ou_legenda": "Why Woo-Woo Works: Dr David R. Hamilton in Conversation with Dr Joe Dispenza",
+    "views": 352345,
+    "curtidas": 12297,
+    "comentarios": 726,
+    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
   }
 ]

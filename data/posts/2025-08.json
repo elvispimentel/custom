@@ -33,10 +33,16 @@
     "formato": "video",
     "publicado_em": "2025-08-07T22:30:07Z",
     "titulo_ou_legenda": "TÉCNICA PARA MUDAR (RAPIDAMENTE) SUA VIDA",
-    "views": 600560,
-    "curtidas": 54538,
-    "comentarios": 9523,
-    "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    "views": 603383,
+    "curtidas": 54623,
+    "comentarios": 9540,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00",
+    "anterior": {
+      "views": 600560,
+      "curtidas": 54538,
+      "comentarios": 9523,
+      "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    }
   },
   {
     "id": "yt:EHsZlzMDHa8",
@@ -50,5 +56,18 @@
     "curtidas": 33206,
     "comentarios": 949,
     "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+  },
+  {
+    "id": "yt:Z2bjGukc-qo",
+    "concorrente_id": "yt-UC2oNAjmdM1jA5MV0ZWsUOBw",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=Z2bjGukc-qo",
+    "formato": "video",
+    "publicado_em": "2025-08-28T21:45:07Z",
+    "titulo_ou_legenda": "O Princípio do Espelho | Se você não mudar, a realidade nunca mudará",
+    "views": 1266019,
+    "curtidas": 109371,
+    "comentarios": 2447,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00"
   }
 ]

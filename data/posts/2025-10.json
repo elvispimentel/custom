@@ -7,10 +7,16 @@
     "formato": "video",
     "publicado_em": "2025-10-09T22:12:31Z",
     "titulo_ou_legenda": "O Poder da Mente Subconsciente | Como Transformar sua Mente | Joseph Murphy",
-    "views": 1619520,
-    "curtidas": 132834,
-    "comentarios": 5791,
-    "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    "views": 1641926,
+    "curtidas": 133545,
+    "comentarios": 5819,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00",
+    "anterior": {
+      "views": 1619520,
+      "curtidas": 132834,
+      "comentarios": 5791,
+      "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+    }
   },
   {
     "id": "yt:6WhHi41hHqc",
@@ -20,10 +26,16 @@
     "formato": "video",
     "publicado_em": "2025-10-06T13:00:14Z",
     "titulo_ou_legenda": "CARDI B: The TRUTH Behind The End of My Relationship…",
-    "views": 3281944,
-    "curtidas": 103857,
-    "comentarios": 8058,
-    "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    "views": 3314977,
+    "curtidas": 104085,
+    "comentarios": 8065,
+    "coletado_em": "2026-10-12T18:16:30.391947+00:00",
+    "anterior": {
+      "views": 3281944,
+      "curtidas": 103857,
+      "comentarios": 8058,
+      "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    }
   },
   {
     "id": "yt:kr12yDWzToI",
@@ -37,5 +49,31 @@
     "curtidas": 28248,
     "comentarios": 817,
     "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+  },
+  {
+    "id": "yt:h1uj7vaZI7M",
+    "concorrente_id": "yt-UC2oNAjmdM1jA5MV0ZWsUOBw",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=h1uj7vaZI7M",
+    "formato": "video",
+    "publicado_em": "2025-10-19T22:11:34Z",
+    "titulo_ou_legenda": "7 COISAS QUE VOCÊ NÃO DEVE CONTAR PARA NINGUÉM",
+    "views": 1751557,
+    "curtidas": 114844,
+    "comentarios": 2970,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+  },
+  {
+    "id": "yt:R3kAXKIru_g",
+    "concorrente_id": "yt-UC2oNAjmdM1jA5MV0ZWsUOBw",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=R3kAXKIru_g",
+    "formato": "video",
+    "publicado_em": "2025-10-02T23:02:48Z",
+    "titulo_ou_legenda": "Sinais de que uma versão paralela de você está tentando lhe enviar uma mensagem! | O DUPLO",
+    "views": 365944,
+    "curtidas": 36933,
+    "comentarios": 1867,
+    "coletado_em": "2026-10-12T18:16:28.792872+00:00"
   }
 ]
