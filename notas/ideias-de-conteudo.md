@@ -1,0 +1,23 @@
+# Ideias de conteúdo e de produto (banco de notas)
+
+Registro rápido de ideias que surgem fora da hora. Uma ideia por bloco, com data.
+
+---
+
+## 2026-10-13 · Qual conteúdo prende o seu cliente de alma?
+
+**Tema para gravar (conteúdo do Elvis):**
+- Gancho: "Você sabe qual conteúdo prende o seu cliente de alma? O cliente alinhado à sua essência?"
+- Verdade a dizer: não adianta atrair qualquer cliente que pague. Cliente que paga e te enche o saco não é cliente de alma. Você escolhe com quem quer se relacionar e trabalhar.
+- Ponte com a essência: não vire outra pessoa para prender a atenção. Ache, dentro do que você já fala, o que gera curiosidade e retenção para o cliente certo. Negócio de acordo com a essência é o que você faria por prazer, mesmo sem precisar do dinheiro.
+
+**Ideia de ferramenta (Project OS):**
+- Diagnóstico "O que prende o meu cliente de alma": quais assuntos, dentro do universo da pessoa, geram curiosidade, retenção na tela e avanço no funil (aula gratuita → workshop pago → produto).
+- Fontes possíveis: métricas da própria conta (retenção, salvamentos, compartilhamentos), comentários e directs, referências do método 5-3 (5 concorrentes × 3 conteúdos), e de qual conteúdo veio cada inscrição ou venda.
+- Também serve como gancho de venda da ferramenta: "Você sabe qual conteúdo prende o seu cliente de alma?"
+
+## 2026-10-13 · Agente 5-3 multiplataforma
+
+- Método 5-3 (Lu Cureau, @lucureau): 5 concorrentes de dentro ou fora do nicho × 3 conteúdos validados = 15 referências por ciclo; 20 ciclos = 300 conteúdos.
+- Ideia: agente que acha, por cliente e por rede (Instagram, TikTok, YouTube), os 5 maiores concorrentes e os 3 conteúdos que mais performaram no que o algoritmo de cada rede valoriza, e abastece o Método dos 300 do calendário.
+- Corte de "conteúdo validado" ajustável por nicho (a Lu usa 1 milhão; para terapeutas e mentores, 100 mil já valida).
