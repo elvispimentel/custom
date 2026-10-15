@@ -9,6 +9,10 @@ para as ferramentas do Project OS criarem conteúdo alinhado ao algoritmo, para 
   regras novas por PR para o Elvis aprovar. Já está na `main` (PR #35).
 - **Calendário e legendas nas 3 redes** (v0.9.0), com título e descrição para o YouTube. Também na `main`.
 - **Notas de ideias**: `notas/ideias-de-conteudo.md`.
+- **Jornada de Conteúdo** (v0.12.0, PR #41): Idioma da Marca → Cliente Alinhado → Diagnóstico de Perfil → Planejamento,
+  com abas Instagram, TikTok e YouTube; na central de soluções e no projeto. Fala do Idioma funcionando;
+  Raiz e Diagnóstico em preparação. Calendário e legendas usam os 3 estilos de vídeo de utilidade
+  (contraste, tutorial prático, erro e correção) e a comunicação que não chama o público pela fraqueza.
 
 ## Travado (resolver primeiro)
 1. ~~Migração do banco~~ **resolvido em 15/10**: conferido no Supabase, colunas, índice e regras estão no lugar.
@@ -17,13 +21,8 @@ para as ferramentas do Project OS criarem conteúdo alinhado ao algoritmo, para 
 3. Supermetrics desconectado (para ler os dados do Instagram do Elvis).
 
 ## Ideias que surgiram (nenhuma iniciada)
-- **Jornada em 6 passos no Project OS:**
-  1. Idioma da Marca (nome provisório; a Voz Única do Elvis foi feita com a professora e não vira ferramenta)
-  2. Cliente de Alma
-  3. Base da comunicação (já existe)
-  4. Diagnóstico de Perfil por objetivo
-  5. Radar e Referências 5-3
-  6. Calendário, legenda e roteiro
+- **Próximas peças da Jornada:** Raiz do Idioma (entrevista paga, liberação manual; precisa de migration),
+  Diagnóstico de Perfil por rede, Agente 5-3.
 - **Agente 5-3:** 5 concorrentes × 3 conteúdos, por rede, para abastecer o Método dos 300.
 - **"O que prende o cliente de alma":** teste de 30 dias com 5 assuntos-hipótese.
 - **Roteiro de vídeo** (fase C): desenho pronto, esperando o "sim" do Elvis.
