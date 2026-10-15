@@ -26,4 +26,5 @@ Registro rápido de ideias que surgem fora da hora. Uma ideia por bloco, com dat
 
 - Substitui "Voz Única" como ferramenta para clientes (a Voz Única do Elvis foi feita com a professora e é só dele).
 - Entrega em 2 camadas: **Raiz** (retrato da essência e da história) e **Fala** (guia prático: tom, vocabulário, palavras que usa e evita, frases-exemplo).
-- Em aberto: relação com a "Base da comunicação" que já existe no Project OS.
+- Decidido: o Idioma **alimenta** a Base (Fala → "Linguagem e Tom"; Raiz → "Posicionamento"), como rascunho que a pessoa aprova.
+- Decidido: matéria-prima em 2 vias. **Escuta** (transcrições de lives, áudios, posts e legendas que ela já tem) revela a Fala; **entrevista guiada**, uma pergunta por vez, aprofunda a Raiz.
