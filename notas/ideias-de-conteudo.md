@@ -21,3 +21,9 @@ Registro rápido de ideias que surgem fora da hora. Uma ideia por bloco, com dat
 - Método 5-3 (Lu Cureau, @lucureau): 5 concorrentes de dentro ou fora do nicho × 3 conteúdos validados = 15 referências por ciclo; 20 ciclos = 300 conteúdos.
 - Ideia: agente que acha, por cliente e por rede (Instagram, TikTok, YouTube), os 5 maiores concorrentes e os 3 conteúdos que mais performaram no que o algoritmo de cada rede valoriza, e abastece o Método dos 300 do calendário.
 - Corte de "conteúdo validado" ajustável por nicho (a Lu usa 1 milhão; para terapeutas e mentores, 100 mil já valida).
+
+## 2026-10-15 · Idioma da Marca (passo 1 da jornada, nome provisório)
+
+- Substitui "Voz Única" como ferramenta para clientes (a Voz Única do Elvis foi feita com a professora e é só dele).
+- Entrega em 2 camadas: **Raiz** (retrato da essência e da história) e **Fala** (guia prático: tom, vocabulário, palavras que usa e evita, frases-exemplo).
+- Em aberto: relação com a "Base da comunicação" que já existe no Project OS.
