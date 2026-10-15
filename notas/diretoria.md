@@ -15,6 +15,7 @@ para as ferramentas do Project OS criarem conteúdo alinhado ao algoritmo, para 
   (contraste, tutorial prático, erro e correção) e a comunicação que não chama o público pela fraqueza.
 
 ## Travado (resolver primeiro)
+0. **Sem crédito na OpenAI** (15/10): toda IA do Project OS para (Idioma, calendário, legendas, radar). Recarregar antes de testar.
 1. ~~Migração do banco~~ **resolvido em 15/10**: conferido no Supabase, colunas, índice e regras estão no lugar.
 2. Radar nunca rodou no GitHub: falta ligar "Allow GitHub Actions to create PRs", cadastrar o secret
    `OPENAI_API_KEY` e rodar uma vez à mão.
@@ -35,3 +36,6 @@ para as ferramentas do Project OS criarem conteúdo alinhado ao algoritmo, para 
 
 ## Regra para não se perder
 Uma frente por vez: **destravar → testar → só então a próxima ideia.**
+
+## Próximo passo (16/10)
+Recarregar a OpenAI → Jornada de Conteúdo → Idioma da Marca → enviar o dossiê Voz Única (.md) → "Escutar meu idioma" → ver se soa como você.
