@@ -28,3 +28,4 @@ Registro rápido de ideias que surgem fora da hora. Uma ideia por bloco, com dat
 - Entrega em 2 camadas: **Raiz** (retrato da essência e da história) e **Fala** (guia prático: tom, vocabulário, palavras que usa e evita, frases-exemplo).
 - Decidido: o Idioma **alimenta** a Base (Fala → "Linguagem e Tom"; Raiz → "Posicionamento"), como rascunho que a pessoa aprova.
 - Decidido: matéria-prima em 2 vias. **Escuta** (transcrições de lives, áudios, posts e legendas que ela já tem) revela a Fala; **entrevista guiada**, uma pergunta por vez, aprofunda a Raiz.
+- Decidido: **Fala para todos; Raiz profunda paga.** Liberação da Raiz começa **manual** (botão por projeto, só Elvis liga); automação via Cakto só quando houver volume.
