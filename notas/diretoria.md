@@ -11,15 +11,14 @@ para as ferramentas do Project OS criarem conteúdo alinhado ao algoritmo, para 
 - **Notas de ideias**: `notas/ideias-de-conteudo.md`.
 
 ## Travado (resolver primeiro)
-1. **Migração do banco não aplicada.** O calendário está fora do ar em produção desde 12/10.
-   Para destravar: colar o SQL no SQL Editor do Supabase, projeto "RPG - OJC".
+1. ~~Migração do banco~~ **resolvido em 15/10**: conferido no Supabase, colunas, índice e regras estão no lugar.
 2. Radar nunca rodou no GitHub: falta ligar "Allow GitHub Actions to create PRs", cadastrar o secret
    `OPENAI_API_KEY` e rodar uma vez à mão.
 3. Supermetrics desconectado (para ler os dados do Instagram do Elvis).
 
 ## Ideias que surgiram (nenhuma iniciada)
 - **Jornada em 6 passos no Project OS:**
-  1. Voz Única
+  1. Idioma da Marca (nome provisório; a Voz Única do Elvis foi feita com a professora e não vira ferramenta)
   2. Cliente de Alma
   3. Base da comunicação (já existe)
   4. Diagnóstico de Perfil por objetivo
