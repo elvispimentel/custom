@@ -62,3 +62,36 @@ def test_escassez_marca_urgencia_real():
     for texto in ("Válido só hoje!", "Só hoje até meia-noite", "A oferta acaba em 2 horas",
                   "Acaba hoje às 23h", "Apenas 5 vagas restantes", "Restam 3 vagas"):
         assert [a["tipo"] for a in linter_copy(texto)] == ["escassez"], texto
+
+
+def test_redige_texto_sem_acento():
+    texto, cats = redigir_inferencias("Meu publico e evangelico.")
+    assert texto == REMOVIDO and cats == ["religiao"]
+
+
+def test_redige_outras_palavras_de_publico():
+    casos = {
+        "Minhas pacientes têm TDAH.": "saude",
+        "As alunas são bipolares.": "saude",
+        "A galera que me segue é LGBT.": "sexualidade",
+        "Meus alunos são ateus.": "religiao",
+    }
+    for frase, categoria in casos.items():
+        texto, cats = redigir_inferencias(frase)
+        assert texto == REMOVIDO and cats == [categoria], frase
+
+
+def test_sem_acento_continua_preservando_o_criador():
+    for original in ("Sou terapeuta espirita e atendo clientes online.",
+                     "Atendo pacientes com ansiedade ha 10 anos.",
+                     "Trabalho com alunas e com o tema TDAH no adulto."):
+        assert redigir_inferencias(original) == (original, [])
+
+
+def test_linter_atributo_pessoal_sem_acento():
+    assert [a["tipo"] for a in linter_copy("Voce que e evangelica precisa ouvir")] == ["atributo_pessoal"]
+
+
+def test_redige_atribuicao_com_virgulas_no_meio():
+    texto, cats = redigir_inferencias("Seu público é, em geral, católico praticante.")
+    assert texto == REMOVIDO and cats == ["religiao"]
