@@ -41,6 +41,39 @@ Sem os dois secrets da Meta, a coleta roda só no YouTube e a Issue avisa "Insta
 3. **Coletar:** para cada canal aprovado, o agente pega os vídeos recentes **e** os mais vistos do canal (100 unidades de cota por canal), e ranqueia por **visualizações e comentários** de todo o histórico (inscritos não entram na conta). Roda sozinho toda segunda (06h em Brasília), ou manualmente com modo `coletar`.
    O resultado chega como uma Issue.
 
+## Auditoria de perfil (fases 0 e 1)
+
+Modo `auditar`: dá nota ao perfil de Instagram de cada cliente e aos concorrentes Instagram aprovados,
+comparando com o **cartão do cliente de alma** (pesquisa em `reports/Análise de perfil para cliente de alma.md`).
+
+- **Camada A (algoritmo, sem LLM):** engajamento por seguidor, palavra-chave em nome/bio/legendas,
+  originalidade (repost em 30 dias) e mix de formatos.
+- **Camada B (neuromarketing, pela LLM):** concretude, excitação, fluência, prova, sinais parassociais e
+  encaixe com o cartão. Toda nota cita um trecho literal do perfil; citação inventada anula a nota.
+- **Ética:** frases que atribuem religião, saúde, sexualidade ou política ao público são removidas;
+  escassez fabricada e "você que é…" geram penalidade.
+
+### Fase 0 (uma vez por cliente)
+
+1. Com o token real: `META_ACCESS_TOKEN=... IG_USER_ID=... python scripts/verificar_campos.py --handle <cliente>`
+   e anote os campos que deram `AUSENTE`.
+2. Copie `config/clientes/exemplo/` para `config/clientes/<id>/` e preencha o `cartao.json` a partir do
+   Briefing de Transição (opcional: `palavras_chave` próprias do cliente).
+3. O cliente revisa e marca `"aprovado": true`. Sem isso, o cliente é pulado.
+4. Acrescente em `config/territorios.json`, na chave `clientes`:
+   `{"id": "<id>", "handle": "<perfil>", "cartao": "config/clientes/<id>/cartao.json", "proprio": false}`
+   (`proprio: true` só quando o token da Meta é do próprio cliente; aí entram os insights por alcance).
+5. Actions → *Concorrentes semanal* → Run workflow → modo `auditar`. O resultado chega numa Issue
+   e fica em `data/auditorias/` e `relatorios/auditorias/` na branch `dados-concorrentes`.
+
+Teste local sem rede: `python scripts/auditar.py --dry-run --data-dir /tmp/aud-teste`.
+
+### Calibração (fecha a fase 1)
+
+`python scripts/calibrar.py exportar --data-dir dados --saida planilha.csv`, preencha `nota_humana`,
+depois `python scripts/calibrar.py comparar --csv planilha.csv`.
+Fase 1 só termina quando todos os critérios estiverem `confiavel` em ≥ 30 perfis; critério não confiável sai da pontuação até o prompt ser ajustado.
+
 ## Renovar o token da Meta
 
 Quando a Issue mostrar "renovar token Meta", gere um novo token de longa duração (dura ~60 dias)

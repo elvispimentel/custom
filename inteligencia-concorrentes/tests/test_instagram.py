@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from instagram import SemAcesso, TokenExpirado, collect_instagram
+from instagram import SemAcesso, TokenExpirado, collect_instagram, collect_perfil_publico
 
 FIX = Path(__file__).resolve().parent / "fixtures"
 CONC = {"id": "c2", "plataforma": "instagram", "handle": "canalx"}
@@ -61,3 +61,36 @@ def test_erro_de_limite_nao_vira_sem_acesso():
 
     with pytest.raises(GraphError):
         collect_instagram(CONC, "IGID", "TOKEN", fetch=fetch_from("ig_error_limite"))
+
+
+def test_coleta_semanal_nao_pede_campo_nao_verificado():
+    calls = []
+    collect_instagram(CONC, "IGID", "TOKEN", fetch=fetch_from("ig_business_discovery", calls))
+    assert "view_count" not in calls[0][1]["fields"]
+
+
+def test_collect_perfil_publico_traz_bio_e_views():
+    perfil = collect_perfil_publico("canalx", "IGID", "TOKEN", fetch=fetch_from("ig_business_discovery_perfil"))
+    assert (perfil["nome"], perfil["bio"], perfil["website"]) == (
+        "Ana Terapeuta", "Ajudo terapeutas a lotar a agenda sem pressão", "https://ana.example")
+    assert perfil["handle"] == "canalx"
+    assert perfil["seguidores"] == 50000
+    assert perfil["posts"][0]["views"] == 300000 and perfil["posts"][1]["views"] is None
+    assert perfil["posts"][0]["concorrente_id"] == "canalx"
+
+
+def test_collect_perfil_publico_pede_campos_de_perfil():
+    calls = []
+    collect_perfil_publico("canalx", "IGID", "TOKEN", fetch=fetch_from("ig_business_discovery_perfil", calls))
+    for campo in ("biography", "name", "website", "view_count", "username(canalx)"):
+        assert campo in calls[0][1]["fields"]
+
+
+def test_perfil_sem_bio_vira_texto_vazio():
+    perfil = collect_perfil_publico("canalx", "IGID", "TOKEN", fetch=fetch_from("ig_business_discovery"))
+    assert perfil["bio"] == "" and perfil["nome"] == "" and perfil["website"] == ""
+
+
+def test_collect_perfil_publico_token_expirado():
+    with pytest.raises(TokenExpirado):
+        collect_perfil_publico("canalx", "IGID", "TOKEN", fetch=fetch_from("ig_error_token"))

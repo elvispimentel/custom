@@ -32,5 +32,7 @@
   "max_buscas_youtube": 20,
   "max_posts_por_concorrente": 30,
   "min_views_video": 100000,
-  "max_mais_vistos_por_canal": 25
+  "max_mais_vistos_por_canal": 25,
+  "clientes": [],
+  "max_posts_auditoria": 24
 }

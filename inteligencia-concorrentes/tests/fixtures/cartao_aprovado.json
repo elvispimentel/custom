@@ -1,0 +1,37 @@
+{
+  "_como_preencher": "Preencha à mão a partir do Briefing de Transição; o cliente revisa e muda aprovado para true.",
+  "aprovado": true,
+  "identidade": "Terapeuta que ajuda outras terapeutas a viverem do próprio dom",
+  "proposito": "Tirar terapeutas talentosas da invisibilidade sem que precisem vender com pressão",
+  "cliente_de_alma": "Terapeuta holística de 30 a 50 anos, agenda vazia, sente culpa de cobrar pelo próprio trabalho",
+  "mecanismo_unico": "Método Agenda Viva: posicionamento por história real + convite em vez de oferta",
+  "limites_inegociaveis": [
+    "Sem escassez falsa",
+    "Sem promessa de cura",
+    "Sem expor clientes"
+  ],
+  "objetivo_negocio": "Encher 12 vagas da mentoria em grupo nos próximos 90 dias",
+  "voz_do_cliente": {
+    "dores": [
+      "tenho vergonha de cobrar",
+      "posto todo dia e ninguém agenda"
+    ],
+    "progresso_desejado": [
+      "agenda cheia sem me sentir vendedora",
+      "viver só dos atendimentos"
+    ],
+    "objecoes": [
+      "não tenho dinheiro agora",
+      "já fiz curso de marketing e não funcionou"
+    ],
+    "frases_exatas": [
+      "sinto que estou falando com as paredes",
+      "quero cobrar o justo sem culpa"
+    ],
+    "metaforas": [
+      "falar com as paredes",
+      "dom guardado na gaveta"
+    ],
+    "tom": "acolhedor, direto, sem jargão de marketing"
+  }
+}

@@ -40,3 +40,36 @@ def analyzer(post: dict) -> dict:
     return {"post_id": post["id"], "gancho": "pergunta provocativa", "tema": "autossabotagem",
             "promessa": "entender o próprio padrão", "por_que_funcionou": "identificação imediata (dry-run)",
             "adaptacao_galifrael": "Descubra quem você está repetindo (exemplo de dry-run)"}
+
+
+def cliente_exemplo(data_dir) -> dict:
+    """Cópia aprovada do cartão de exemplo, só para o dry-run (o exemplo do repositório vem com aprovado=false)."""
+    import json
+    from pathlib import Path
+
+    origem = Path(__file__).resolve().parent.parent / "config" / "clientes" / "exemplo" / "cartao.json"
+    cartao = {**json.loads(origem.read_text(encoding="utf-8")), "aprovado": True}
+    destino = Path(data_dir) / "dry-run-cartao.json"
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    destino.write_text(json.dumps(cartao, ensure_ascii=False), encoding="utf-8")
+    return {"id": "exemplo", "handle": "exemplo", "cartao": str(destino.resolve()), "proprio": False}
+
+
+def perfil_falso(handle: str) -> dict:
+    agora = datetime.now().astimezone()
+    posts = [
+        {"id": f"ig:{handle}-{i}", "concorrente_id": handle, "plataforma": "instagram",
+         "url": f"https://exemplo.invalid/{handle}/{i}", "formato": ("reel", "carrossel")[i % 2],
+         "publicado_em": (agora - timedelta(days=3 + i)).isoformat(),
+         "titulo_ou_legenda": f"Atendi {10 + i} terapeutas este mês e conto como (dry-run)",
+         "views": None, "curtidas": 400 - i * 50, "comentarios": 30 - i, "coletado_em": agora.isoformat()}
+        for i in range(4)
+    ]
+    return {"handle": handle, "nome": f"Perfil {handle}", "bio": "Ajudo terapeutas a lotar a agenda sem pressão",
+            "website": "", "seguidores": 20000, "posts": posts}
+
+
+def avaliador_b_falso(perfil: dict, cartao: dict) -> list[dict]:
+    from rubrica import CRITERIOS_B
+
+    return [{"id": cid, "camada": "B", "nota": 2, "evidencia": perfil["bio"]} for cid, _, _ in CRITERIOS_B]
