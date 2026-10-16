@@ -111,10 +111,15 @@ def run_auditoria(
         if token_expirado:
             break
         inicio = len(falhas)
+        nome = cliente.get("id", "?") if isinstance(cliente, dict) else "?"
+        faltando = [k for k in ("id", "handle", "cartao") if not isinstance(cliente, dict) or not cliente.get(k)]
+        if faltando:
+            falhas.append(f"cliente {nome} pulado: entrada em clientes sem {', '.join(faltando)}")
+            continue
         try:
             cartao = load_cartao(_caminho_cartao(cliente, base_config))
         except CartaoInvalido as e:
-            falhas.append(f"cliente {cliente['id']} pulado: {e}")
+            falhas.append(f"cliente {nome} pulado: {e}")
             continue
         palavras = cartao.get("palavras_chave") or config.get("palavras_chave", [])
 
@@ -130,6 +135,9 @@ def run_auditoria(
                 break
             except (SemAcesso, GraphError) as e:
                 falhas.append(f"instagram {handle}: {e}")
+                continue
+            except Exception as e:  # rede, resposta malformada: um perfil falha, os outros continuam
+                falhas.append(f"instagram {handle}: {type(e).__name__}: {e}")
                 continue
             try:
                 resultados.append(auditar_perfil(perfil, cartao, palavras, now, avaliador_b))
@@ -170,7 +178,7 @@ def main(argv: list[str]) -> int:
         arq = data_dir / "data" / "concorrentes.json"
         if not load_json(arq, []):
             save_json(arq, sample_concorrentes())
-        config = {**config, "clientes": config.get("clientes") or [cliente_exemplo()]}
+        config = {**config, "clientes": config.get("clientes") or [cliente_exemplo(data_dir)]}
         mds, falhas = run_auditoria(config, data_dir, now, perfil_falso, None, avaliador_b_falso)
         _escrever_issue(data_dir, mds, falhas, now)
         return 0

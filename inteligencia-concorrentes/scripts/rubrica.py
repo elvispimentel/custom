@@ -72,6 +72,9 @@ def avaliar_camada_b(perfil: dict, cartao: dict, llm, model: str) -> list[dict]:
     )
     try:
         texto = llm.complete(prompt, model, 1200)
+    except Exception:  # cota, rede, chave inválida: camada A segue, camada B fica sem nota
+        return _todos_nulos("LLM indisponível")
+    try:
         data = json.loads(texto[texto.index("{") : texto.rindex("}") + 1])
         itens = {c["id"]: c for c in data["criterios"] if isinstance(c, dict) and "id" in c}
     except (ValueError, KeyError, TypeError):

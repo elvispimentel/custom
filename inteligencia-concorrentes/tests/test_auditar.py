@@ -8,8 +8,10 @@ from storage import save_json
 
 BASE = Path(__file__).resolve().parent.parent
 NOW = datetime(2026, 10, 16, tzinfo=timezone.utc)
+EXEMPLO = BASE / "config" / "clientes" / "exemplo" / "cartao.json"
+APROVADO = BASE / "tests" / "fixtures" / "cartao_aprovado.json"
 CFG = {"palavras_chave": ["terapeutas"], "max_posts_auditoria": 24,
-       "clientes": [{"id": "ana", "handle": "ana", "cartao": "config/clientes/exemplo/cartao.json", "proprio": False}]}
+       "clientes": [{"id": "ana", "handle": "ana", "cartao": "tests/fixtures/cartao_aprovado.json", "proprio": False}]}
 
 
 def perfil(handle, posts=True):
@@ -46,7 +48,7 @@ def test_audita_cliente_e_concorrentes_instagram_aprovados(tmp_path):
 
 
 def test_cartao_nao_aprovado_pula_cliente(tmp_path):
-    cartao = json.loads((BASE / "config/clientes/exemplo/cartao.json").read_text())
+    cartao = json.loads(APROVADO.read_text())
     cartao["aprovado"] = False
     (tmp_path / "cartao.json").write_text(json.dumps(cartao))
     cfg = {**CFG, "clientes": [{**CFG["clientes"][0], "cartao": str(tmp_path / "cartao.json")}]}
@@ -108,3 +110,38 @@ def test_dry_run(tmp_path):
     assert main(["--data-dir", str(tmp_path), "--dry-run"]) == 0
     assert (tmp_path / "issue.md").read_text(encoding="utf-8").strip()
     assert list((tmp_path / "relatorios" / "auditorias").glob("*.md"))
+
+
+def test_erro_de_rede_num_concorrente_nao_derruba_a_execucao(tmp_path):
+    from urllib.error import URLError
+
+    concorrentes(tmp_path, CONC)
+
+    def coletar(handle):
+        if handle == "rival":
+            raise URLError("timeout")
+        return perfil(handle)
+
+    mds, falhas = run_auditoria(CFG, tmp_path, NOW, coletar, None, avaliador, BASE)
+    assert len(mds) == 1 and any("rival" in f and "timeout" in f for f in falhas)
+
+
+def test_cliente_mal_configurado_e_pulado_e_os_outros_rodam(tmp_path):
+    concorrentes(tmp_path, [])
+    lista = tmp_path / "lista.json"
+    lista.write_text("[]")
+    cfg = {**CFG, "clientes": [{"id": "x", "handle": "x", "cartão": "errado"},
+                               {"id": "y", "handle": "y", "cartao": str(lista)},
+                               CFG["clientes"][0]]}
+    mds, falhas = run_auditoria(cfg, tmp_path, NOW, perfil, None, avaliador, BASE)
+    assert len(mds) == 1
+    assert any(f.startswith("cliente x pulado") for f in falhas)
+    assert any(f.startswith("cliente y pulado") for f in falhas)
+
+
+def test_cartao_de_exemplo_nao_vem_aprovado():
+    from cartao import CartaoInvalido, load_cartao
+    import pytest
+
+    with pytest.raises(CartaoInvalido, match="não aprovado"):
+        load_cartao(EXEMPLO)

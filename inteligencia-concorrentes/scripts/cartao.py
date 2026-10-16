@@ -30,6 +30,8 @@ def load_cartao(path: Path) -> dict:
         cartao = json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, ValueError) as e:
         raise CartaoInvalido(f"cartão ilegível: {e}") from e
+    if not isinstance(cartao, dict):
+        raise CartaoInvalido("cartão precisa ser um objeto JSON")
     faltando = [k for k in OBRIGATORIOS if not cartao.get(k)]
     if faltando:
         raise CartaoInvalido(f"cartão sem: {', '.join(faltando)}")

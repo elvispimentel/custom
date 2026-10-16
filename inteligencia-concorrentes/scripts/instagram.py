@@ -50,8 +50,10 @@ def checar_erro(resp: dict) -> None:
     raise GraphError(f"erro {codigo}: {mensagem}")
 
 
-# view_count: NÃO VERIFICADO — confirmar na Fase 0
-CAMPOS_MIDIA = "{id,caption,media_type,permalink,timestamp,like_count,comments_count,view_count}"
+CAMPOS_MIDIA_BASE = "id,caption,media_type,permalink,timestamp,like_count,comments_count"
+# view_count: NÃO VERIFICADO — confirmar na Fase 0. A coleta semanal não pede este campo:
+# um campo inválido derruba a requisição inteira na Graph API.
+CAMPOS_MIDIA = "{" + CAMPOS_MIDIA_BASE + ",view_count}"
 
 
 def _mapear_post(m: dict, dono_id: str, agora: str) -> dict:
@@ -70,8 +72,10 @@ def _mapear_post(m: dict, dono_id: str, agora: str) -> dict:
     }
 
 
-def _business_discovery(handle: str, extras: str, ig_user_id: str, token: str, fetch, limit: int) -> dict:
-    campos = f"business_discovery.username({handle}){{{extras}followers_count,media.limit({limit}){CAMPOS_MIDIA}}}"
+def _business_discovery(
+    handle: str, extras: str, ig_user_id: str, token: str, fetch, limit: int, midia: str = CAMPOS_MIDIA
+) -> dict:
+    campos = f"business_discovery.username({handle}){{{extras}followers_count,media.limit({limit}){midia}}}"
     resp = fetch(f"{GRAPH}/{ig_user_id}", {"fields": campos, "access_token": token})
     checar_erro(resp)
     return resp["business_discovery"]
@@ -84,7 +88,7 @@ def collect_instagram(
     fetch: Callable[[str, dict], dict] = http_get_graph,
     limit: int = 30,
 ) -> tuple[list[dict], int]:
-    bd = _business_discovery(concorrente["handle"], "", ig_user_id, token, fetch, limit)
+    bd = _business_discovery(concorrente["handle"], "", ig_user_id, token, fetch, limit, "{" + CAMPOS_MIDIA_BASE + "}")
     agora = datetime.now(timezone.utc).isoformat()
     posts = [_mapear_post(m, concorrente["id"], agora) for m in bd.get("media", {}).get("data", [])]
     return posts, int(bd.get("followers_count", 0))

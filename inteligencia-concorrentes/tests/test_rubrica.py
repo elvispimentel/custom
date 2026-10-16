@@ -108,3 +108,12 @@ def test_pontuar_penalidade_tem_teto_e_total_nao_negativo():
 
 def test_pontuar_sem_nenhuma_nota():
     assert pontuar([], [])["total"] is None
+
+
+def test_erro_da_api_da_llm_anula_so_a_camada_b():
+    class LLMQuebrada:
+        def complete(self, prompt, model, max_tokens):
+            raise RuntimeError("429 rate limit")
+
+    notas = avaliar_camada_b(PERFIL, CARTAO, LLMQuebrada(), "m")
+    assert len(notas) == 6 and all(n["nota"] is None and n["evidencia"] == "LLM indisponível" for n in notas)

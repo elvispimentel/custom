@@ -37,3 +37,15 @@ def test_linter_numero_de_vagas():
 
 def test_linter_texto_neutro():
     assert linter_copy("Hoje conto como atendo minhas clientes com calma.") == []
+
+
+def test_nao_redige_texto_do_nicho_do_criador():
+    for original in ("Sou terapeuta espírita e atendo clientes online.",
+                     "Atendo clientes com ansiedade há 10 anos.",
+                     "Arraste para a direita e veja o depoimento da cliente."):
+        assert redigir_inferencias(original) == (original, [])
+
+
+def test_redige_atribuicao_ao_publico_com_verbo():
+    _, cats = redigir_inferencias("Suas clientes têm depressão.")
+    assert cats == ["saude"]

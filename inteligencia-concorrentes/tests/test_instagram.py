@@ -63,9 +63,10 @@ def test_erro_de_limite_nao_vira_sem_acesso():
         collect_instagram(CONC, "IGID", "TOKEN", fetch=fetch_from("ig_error_limite"))
 
 
-def test_collect_instagram_mapeia_view_count():
-    posts, _ = collect_instagram(CONC, "IGID", "TOKEN", fetch=fetch_from("ig_business_discovery_perfil"))
-    assert posts[0]["views"] == 300000 and posts[1]["views"] is None
+def test_coleta_semanal_nao_pede_campo_nao_verificado():
+    calls = []
+    collect_instagram(CONC, "IGID", "TOKEN", fetch=fetch_from("ig_business_discovery", calls))
+    assert "view_count" not in calls[0][1]["fields"]
 
 
 def test_collect_perfil_publico_traz_bio_e_views():

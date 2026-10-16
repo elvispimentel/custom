@@ -14,9 +14,15 @@ SENSIVEIS: dict[str, tuple[str, ...]] = {
     "sexualidade": ("gay", "lésbica", "bissexual", "orientação sexual"),
     "politica": ("esquerda", "direita", "bolsonarista", "petista"),
 }
-PUBLICO = ("seguidor", "público", "audiência", "leitor", "cliente", "sua base")
 MARCA_REMOVIDO = "[removido: inferência sensível sobre o público]"
 
+# Só conta como inferência quando o público é o sujeito de uma atribuição
+# ("seu público é…", "os seguidores parecem…"); "atendo clientes com ansiedade" fica intacto.
+_ATRIBUICAO_AO_PUBLICO = re.compile(
+    r"\b(?:seguidor(?:es|as)?|público|audiência|leitor(?:es|as)?|clientes?|sua base)\b"
+    r"(?:\s+[\wÀ-ÿ]+){0,2}?\s+(?:é|são|tem|têm|parece|parecem|sofre|sofrem|está|estão|vive|vivem)\b",
+    re.IGNORECASE,
+)
 _FRASE = re.compile(r"[^.!?\n]+[.!?]*")
 _ATRIBUTO = re.compile(r"\bvocê (?:que )?(?:é|está|sofre)\b[^.!?\n]{0,40}", re.IGNORECASE)
 _ESCASSEZ = (
@@ -34,7 +40,8 @@ def _nfc(texto: str) -> str:
 
 def _categorias(texto: str) -> list[str]:
     baixo = texto.lower()
-    return [cat for cat, termos in SENSIVEIS.items() if any(t in baixo for t in termos)]
+    return [cat for cat, termos in SENSIVEIS.items()
+            if any(re.search(r"(?<![\wÀ-ÿ])" + re.escape(t), baixo) for t in termos)]
 
 
 def redigir_inferencias(texto: str) -> tuple[str, list[str]]:
@@ -44,7 +51,7 @@ def redigir_inferencias(texto: str) -> tuple[str, list[str]]:
     def trocar(m: re.Match) -> str:
         frase = m.group(0)
         cats = _categorias(frase)
-        if cats and any(p in frase.lower() for p in PUBLICO):
+        if cats and _ATRIBUICAO_AO_PUBLICO.search(frase):
             removidas.extend(c for c in cats if c not in removidas)
             espaco = frase[: len(frase) - len(frase.lstrip())]
             return espaco + MARCA_REMOVIDO

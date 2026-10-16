@@ -10,15 +10,22 @@ EXEMPLO = Path(__file__).resolve().parent.parent / "config" / "clientes" / "exem
 
 def gravar(tmp_path, mudar):
     dados = json.loads(EXEMPLO.read_text(encoding="utf-8"))
+    dados["aprovado"] = True
     mudar(dados)
     caminho = tmp_path / "cartao.json"
     caminho.write_text(json.dumps(dados, ensure_ascii=False), encoding="utf-8")
     return caminho
 
 
-def test_exemplo_carrega():
-    c = load_cartao(EXEMPLO)
+def test_exemplo_aprovado_carrega(tmp_path):
+    c = load_cartao(gravar(tmp_path, lambda d: d.update(aprovado=True)))
     assert c["aprovado"] is True and "cliente_de_alma" in c
+
+
+def test_json_que_nao_e_objeto(tmp_path):
+    (tmp_path / "c.json").write_text("[]")
+    with pytest.raises(CartaoInvalido):
+        load_cartao(tmp_path / "c.json")
 
 
 def test_falta_chave_obrigatoria(tmp_path):

@@ -42,8 +42,17 @@ def analyzer(post: dict) -> dict:
             "adaptacao_galifrael": "Descubra quem você está repetindo (exemplo de dry-run)"}
 
 
-def cliente_exemplo() -> dict:
-    return {"id": "exemplo", "handle": "exemplo", "cartao": "config/clientes/exemplo/cartao.json", "proprio": False}
+def cliente_exemplo(data_dir) -> dict:
+    """Cópia aprovada do cartão de exemplo, só para o dry-run (o exemplo do repositório vem com aprovado=false)."""
+    import json
+    from pathlib import Path
+
+    origem = Path(__file__).resolve().parent.parent / "config" / "clientes" / "exemplo" / "cartao.json"
+    cartao = {**json.loads(origem.read_text(encoding="utf-8")), "aprovado": True}
+    destino = Path(data_dir) / "dry-run-cartao.json"
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    destino.write_text(json.dumps(cartao, ensure_ascii=False), encoding="utf-8")
+    return {"id": "exemplo", "handle": "exemplo", "cartao": str(destino.resolve()), "proprio": False}
 
 
 def perfil_falso(handle: str) -> dict:

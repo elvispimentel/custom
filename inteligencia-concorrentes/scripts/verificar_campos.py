@@ -7,19 +7,33 @@ import os
 import sys
 from typing import Callable
 
-from instagram import collect_perfil_publico, http_get_graph
+from instagram import CAMPOS_MIDIA_BASE, GraphError, _business_discovery, http_get_graph
+
+# campo -> (campo extra de perfil, campos de mídia, onde procurar a resposta)
+SONDAS = {
+    "bio": ("biography,", "{" + CAMPOS_MIDIA_BASE + "}", "biography"),
+    "nome": ("name,", "{" + CAMPOS_MIDIA_BASE + "}", "name"),
+    "website": ("website,", "{" + CAMPOS_MIDIA_BASE + "}", "website"),
+    "view_count": ("", "{" + CAMPOS_MIDIA_BASE + ",view_count}", None),
+}
 
 
 def verificar(
     handle: str, ig_user_id: str, token: str, fetch: Callable[[str, dict], dict] = http_get_graph
 ) -> dict[str, bool]:
-    perfil = collect_perfil_publico(handle, ig_user_id, token, fetch=fetch)
-    return {
-        "bio": bool(perfil["bio"]),
-        "nome": bool(perfil["nome"]),
-        "website": bool(perfil["website"]),
-        "view_count": any(p["views"] is not None for p in perfil["posts"]),
-    }
+    """Uma requisição por campo: a Graph API recusa a requisição inteira se um campo não existir."""
+    resultado = {}
+    for nome, (extra, midia, chave) in SONDAS.items():
+        try:
+            bd = _business_discovery(handle, extra, ig_user_id, token, fetch, 5, midia)
+        except GraphError:
+            resultado[nome] = False
+            continue
+        if chave:
+            resultado[nome] = bool(bd.get(chave))
+        else:
+            resultado[nome] = any(m.get("view_count") is not None for m in bd.get("media", {}).get("data", []))
+    return resultado
 
 
 def main(argv: list[str]) -> int:
