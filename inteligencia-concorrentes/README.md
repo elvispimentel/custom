@@ -68,6 +68,12 @@ comparando com o **cartão do cliente de alma** (pesquisa em `reports/Análise d
 
 Teste local sem rede: `python scripts/auditar.py --dry-run --data-dir /tmp/aud-teste`.
 
+### Calibração (fecha a fase 1)
+
+`python scripts/calibrar.py exportar --data-dir dados --saida planilha.csv`, preencha `nota_humana`,
+depois `python scripts/calibrar.py comparar --csv planilha.csv`.
+Fase 1 só termina quando todos os critérios estiverem `confiavel` em ≥ 30 perfis; critério não confiável sai da pontuação até o prompt ser ajustado.
+
 ## Renovar o token da Meta
 
 Quando a Issue mostrar "renovar token Meta", gere um novo token de longa duração (dura ~60 dias)
