@@ -49,3 +49,16 @@ def test_nao_redige_texto_do_nicho_do_criador():
 def test_redige_atribuicao_ao_publico_com_verbo():
     _, cats = redigir_inferencias("Suas clientes têm depressão.")
     assert cats == ["saude"]
+
+
+def test_escassez_nao_marca_frases_inocentes():
+    for texto in ("Só hoje entendi que o dom é meu.",
+                  "Abri 12 vagas para a turma de março.",
+                  "A dor acaba em você quando você se escuta."):
+        assert linter_copy(texto) == [], texto
+
+
+def test_escassez_marca_urgencia_real():
+    for texto in ("Válido só hoje!", "Só hoje até meia-noite", "A oferta acaba em 2 horas",
+                  "Acaba hoje às 23h", "Apenas 5 vagas restantes", "Restam 3 vagas"):
+        assert [a["tipo"] for a in linter_copy(texto)] == ["escassez"], texto

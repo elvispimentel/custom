@@ -25,12 +25,14 @@ _ATRIBUICAO_AO_PUBLICO = re.compile(
 )
 _FRASE = re.compile(r"[^.!?\n]+[.!?]*")
 _ATRIBUTO = re.compile(r"\bvocê (?:que )?(?:é|está|sofre)\b[^.!?\n]{0,40}", re.IGNORECASE)
+# Urgência fabricada: só conta com sinal de prazo ou de "acabando".
+# "Só hoje entendi…", "Abri 12 vagas" e "a dor acaba em você" não são escassez.
 _ESCASSEZ = (
     re.compile(r"últimas vagas", re.IGNORECASE),
-    re.compile(r"só hoje", re.IGNORECASE),
-    re.compile(r"acaba em", re.IGNORECASE),
+    re.compile(r"só hoje(?=\s*(?:[!.:,;—-]|$|até\b|para\b|pra\b|com\b))", re.IGNORECASE),
+    re.compile(r"\bacaba (?:em \d+\s*(?:h\b|horas?|min\b|minutos?|dias?)|hoje|amanhã|à meia-noite)", re.IGNORECASE),
     re.compile(r"\bcorre\b[^.!?\n]*\bvaga", re.IGNORECASE),
-    re.compile(r"\b\d+ vagas\b", re.IGNORECASE),
+    re.compile(r"\b(?:restam|apenas|somente|só)\s+\d+\s+vagas\b", re.IGNORECASE),
 )
 
 
