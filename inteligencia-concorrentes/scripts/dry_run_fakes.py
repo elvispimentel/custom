@@ -40,3 +40,27 @@ def analyzer(post: dict) -> dict:
     return {"post_id": post["id"], "gancho": "pergunta provocativa", "tema": "autossabotagem",
             "promessa": "entender o próprio padrão", "por_que_funcionou": "identificação imediata (dry-run)",
             "adaptacao_galifrael": "Descubra quem você está repetindo (exemplo de dry-run)"}
+
+
+def cliente_exemplo() -> dict:
+    return {"id": "exemplo", "handle": "exemplo", "cartao": "config/clientes/exemplo/cartao.json", "proprio": False}
+
+
+def perfil_falso(handle: str) -> dict:
+    agora = datetime.now().astimezone()
+    posts = [
+        {"id": f"ig:{handle}-{i}", "concorrente_id": handle, "plataforma": "instagram",
+         "url": f"https://exemplo.invalid/{handle}/{i}", "formato": ("reel", "carrossel")[i % 2],
+         "publicado_em": (agora - timedelta(days=3 + i)).isoformat(),
+         "titulo_ou_legenda": f"Atendi {10 + i} terapeutas este mês e conto como (dry-run)",
+         "views": None, "curtidas": 400 - i * 50, "comentarios": 30 - i, "coletado_em": agora.isoformat()}
+        for i in range(4)
+    ]
+    return {"handle": handle, "nome": f"Perfil {handle}", "bio": "Ajudo terapeutas a lotar a agenda sem pressão",
+            "website": "", "seguidores": 20000, "posts": posts}
+
+
+def avaliador_b_falso(perfil: dict, cartao: dict) -> list[dict]:
+    from rubrica import CRITERIOS_B
+
+    return [{"id": cid, "camada": "B", "nota": 2, "evidencia": perfil["bio"]} for cid, _, _ in CRITERIOS_B]

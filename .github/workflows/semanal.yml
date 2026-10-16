@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       modo:
-        description: "coletar (ranking + relatório) ou descobrir (novos candidatos)"
+        description: "coletar (ranking + relatório), descobrir (novos candidatos) ou auditar (perfil x cliente de alma)"
         type: choice
-        options: [coletar, descobrir]
+        options: [coletar, descobrir, auditar]
         default: coletar
 
 permissions:
@@ -55,6 +55,8 @@ jobs:
         run: |
           if [ "$MODO" = "descobrir" ]; then
             python inteligencia-concorrentes/scripts/discover.py --data-dir dados
+          elif [ "$MODO" = "auditar" ]; then
+            python inteligencia-concorrentes/scripts/auditar.py --data-dir dados
           else
             python inteligencia-concorrentes/scripts/run_weekly.py --data-dir dados
           fi
@@ -72,4 +74,10 @@ jobs:
 
       - name: Abrir Issue com o resumo
         if: ${{ env.MODO != 'descobrir' }}
-        run: gh issue create --title "Concorrentes — semana de $(date -u +%F)" --body-file dados/issue.md
+        run: |
+          if [ "$MODO" = "auditar" ]; then
+            TITULO="Auditoria de perfil — $(date -u +%F)"
+          else
+            TITULO="Concorrentes — semana de $(date -u +%F)"
+          fi
+          gh issue create --title "$TITULO" --body-file dados/issue.md

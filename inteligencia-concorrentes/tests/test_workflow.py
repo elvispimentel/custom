@@ -21,7 +21,7 @@ def test_cron_semanal_segunda():
 def test_tem_disparo_manual_com_modo():
     _, _, g = carregar()
     modo = g["workflow_dispatch"]["inputs"]["modo"]
-    assert modo["options"] == ["coletar", "descobrir"]
+    assert modo["options"] == ["coletar", "descobrir", "auditar"]
 
 
 def test_permissoes_minimas():
@@ -61,3 +61,10 @@ def test_git_add_funciona_sem_pasta_relatorios(tmp_path):
     assert r.returncode == 0, r.stderr
     staged = subprocess.run(["git", "diff", "--cached", "--name-only"], cwd=tmp_path, capture_output=True, text=True).stdout.split()
     assert staged == ["data/concorrentes.json"]
+
+
+def test_modo_auditar_roda_auditar_py_e_titula_a_issue():
+    texto, _, _ = carregar()
+    assert 'elif [ "$MODO" = "auditar" ]' in texto
+    assert "inteligencia-concorrentes/scripts/auditar.py --data-dir dados" in texto
+    assert "Auditoria de perfil —" in texto
