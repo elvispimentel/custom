@@ -32,5 +32,8 @@ O dono deste repositório é neurodivergente e **não deve precisar lembrar nome
 ## Projeto GSD
 Comandos `/gsd-...` estão instalados (ex.: `/gsd-new-project`, `/gsd-progress`, `/gsd-help`). Sugira quando o trabalho pedir fases e roadmap.
 
+## Project OS — memória de decisões
+Antes de falar de preço, pacotes, créditos de IA, formulário de qualificação ou do Espelho do Perfil, leia `docs/project-os/decisoes-e-pendencias.md`. Ao decidir algo novo com o Elvis, atualize esse arquivo.
+
 ## Segurança
 `git-guardrails-claude-code` bloqueia comandos git destrutivos. Nunca force push nem apague branch sem confirmação.
