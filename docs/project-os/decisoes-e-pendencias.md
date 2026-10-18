@@ -34,6 +34,12 @@ Desde julho/2026 o Elvis investe tempo e dinheiro no Project OS. Os preços prec
 | 17/10/2026 | **O Espelho é aberto para todo mundo.** Os alunos da Professora Sara Costa são uma porta de entrada, não a única. O Espelho é do Elvis, e os alunos podem contribuir e ganhar com isso (ver P11). | Ideia de piloto só com alunos da Sara |
 | 17/10/2026 | **Pró-labore sai do custo total da empresa**, não do custo de uma ferramenta isolada. Valor atual: **R$ 5.000/mês** (cobre os custos pessoais). Meta futura: **R$ 25.000/mês**. | (nova) |
 | 17/10/2026 | **Todo custo é registrado, nada fica de fora.** Cada execução do Espelho e do formulário grava os tokens e o custo de IA, para calcular o custo real por análise e o **CAC final** do cliente. | (nova) |
+| 18/10/2026 | **Os preços têm base de mercado** (benchmark de 4 plataformas na seção 5 deste arquivo, mais a pesquisa de 14/10), não vêm da cabeça. O que ainda não tem base são as **horas de implementação**, porque nenhuma foi feita. O MVP do Espelho existe para medir isso. | (esclarecimento) |
+| 18/10/2026 | **Custo fixo atual: R$ 6.044/mês** (R$ 1.044, que já incluem Claude e GPT, mais pró-labore de R$ 5.000). | Estimativa de R$ 7.144 de 17/10 |
+| 18/10/2026 | **Implementação por freelancer a R$ 300 cada** (talvez R$ 250, conforme o tamanho), **sem fixo**. Possibilidade de **implementação em conjunto numa reunião semanal**: o cliente paga o pacote (serviço mais ferramenta) e não vê a implementação como item separado. | (nova) |
+| 18/10/2026 | **Estrutura de venda:** 3 pacotes para quem se guia sozinho (implementação mais ferramenta), mais a **mentoria por fora** (encontros quinzenais, hot seat, melhoria contínua; **R$ 5.470/trimestre ou R$ 9.870/semestre**; o conteúdo da mentoria ainda será desenvolvido), mais os **Códices avulsos**. O formulário decide o caminho conforme quanto a pessoa já investiu e se quer fazer sozinha ou acompanhada. | (nova) |
+| 18/10/2026 | **Funil em teste:** formulário → **apresentação ao vivo semanal, à noite**, no lugar de VSL, para tirar dúvidas e conhecer as pessoas. Sempre gravada, para gerar dados das dúvidas. Cerca de **15 pessoas por sala** no primeiro teste. | (hipótese) |
+| 18/10/2026 | **Espelho pago simbólico em teste:** cobrar de **R$ 2 a R$ 5** pela análise, "preço de um cafezinho", para pagar a IA e o tráfego pago. Entrega um relatório básico e convida para a apresentação. Referência: o modelo de workshop pago da PerfectJus. | (hipótese) |
 | 14/10/2026 | Implementação a partir de R$ 1.500; mentoria em grupo a R$ 5.000 por 3 meses, sem desconto. Seleção antes do pagamento, investimento visível antes do envio e decisão humana. Detalhes no documento de 14/10. | (vigente) |
 
 ---
@@ -56,6 +62,9 @@ Desde julho/2026 o Elvis investe tempo e dinheiro no Project OS. Os preços prec
 | P8 | **Conciliar a oferta que está no código** (6 meses por R$ 10 mil, capacidade de 15) com a oferta atual (mentoria de 3 meses por R$ 5 mil, implementação variável e plataforma separada). | Item 1 dos problemas do documento de 14/10. |
 | P10 | **Caso Sara Costa como referência.** Ela relata cerca de R$ 100 mil/mês sem tráfego pago ("tráfego quântico") a partir do alinhamento e do posicionamento. Pedir permissão para analisar o perfil dela com o Espelho. Se usado na comunicação, é **caso relatado por ela**, nunca promessa ("você também vai faturar"). "Tráfego quântico" entra como linguagem, não como fato científico. | Regra do cartão: sem promessa de resultado financeiro. |
 | P11 | **"Alunos da Sara podem contribuir e ganhar"**: definir o modelo (indicação com comissão? parceria com a Sara?) e as regras de repasse. Já existe um modelo de comissões no Drive (`Modelo de Comissões, Atribuição e Controle Financeiro.md`, workshops do Jogo da Vida). | Hipótese de 17/10. |
+| P12 | **Espelho pago: R$ 2 é viável?** Conferir a **taxa fixa por venda da Cakto** (ou do gateway): numa venda de R$ 2, uma taxa fixa pode comer o valor inteiro. Avaliar de R$ 5 a R$ 9,90. Hipótese: **gratuito para quem vem orgânico (stories)** e **pago para quem vem de tráfego pago**. | Não pagar para vender. |
+| P13 | **O que entra em cada pacote** (ferramentas e agentes) e o que a implementação faz em cada um. Depende do inventário real das ferramentas (P9) e das 3 ofertas piloto sugeridas: orçamento, atendimento/agendamento e cobrança. | Sem isso não se mede hora nem preço da implementação. |
+| P14 | **Dream 100 do benchmark:** só 4 das 100 referências foram analisadas. | O benchmark ainda é inicial. |
 | P9 | **Estado real de cada ferramenta do catálogo** (30 entradas). Só se vende como contratação o que estiver implementado, testado e pronto para entregar. | Não vender promessa como produto. |
 
 ---
@@ -73,3 +82,43 @@ Desde julho/2026 o Elvis investe tempo e dinheiro no Project OS. Os preços prec
 8. **Escolha:** pacote adequado, agendamento direto para quem se encaixa, ou oferta de entrada (Códices ou plano básico).
 
 O código reaproveitável está em `inteligencia-concorrentes/`: `collect_perfil_publico`, a rubrica (camadas A e B) e o cartão do cliente de alma.
+
+---
+
+## 5. Benchmark inicial de mercado (trazido pelo Elvis em 18/10/2026)
+
+Benchmark inicial de **4 plataformas** a partir das fontes oficiais. **Não é o Dream 100.**
+
+| Referência | Evidência verificada | Implicação para o Project OS |
+|---|---|---|
+| RD Station CRM | Basic por R$ 65,70/usuário/mês no anual; implantação personalizada opcional de R$ 849 nos planos Basic e Pro. | Assinatura e implantação podem ser produtos separados. |
+| Kommo | Diferencia os planos por automações, recursos de IA e limites de uso. Tem preços regionais; a tabela global não deve ser tratada como cotação brasileira. | Cobrar por capacidade operacional, com limites claros de canais, agentes e consumo. |
+| Brevo | Oferece complementos contratados e cobrados separadamente. | O cliente contrata a solução de que precisa sem comprar todas as categorias. |
+| Bitrix24 | Reúne CRM, tarefas e comunicação, com preço por empresa e usuários incluídos conforme o plano. | "Tudo em um lugar" já existe no mercado; é preciso demonstrar uma vantagem a mais. |
+
+**Diferenciação proposta:** ajudar o empresário a identificar o gargalo atual, implementar a solução necessária e acompanhar a mudança na operação. Vender uma **operação orientada por objetivos, com contratação modular**, e não a quantidade de aplicativos.
+
+**Exemplos de oferta:**
+- orçamentos esquecidos → organizar propostas e retomadas;
+- atendimentos perdidos → organizar atendimento e agendamento;
+- mensalidades em atraso → organizar a cobrança;
+- publicações sem direção → organizar oferta, calendário e conteúdo.
+
+**Não prometer de 10% a 30% de crescimento** antes de conhecer a linha de base.
+
+**Planos em hipótese (não validados):**
+
+| Plano | Preço | Papel |
+|---|---|---|
+| Essencial | R$ 97/mês ou R$ 970/ano | Anfitrião, base, tarefas, propostas e calculadoras, com limites de uso |
+| Crescimento | R$ 197/mês ou R$ 1.970/ano | Essencial mais uma solução padronizada para o gargalo |
+| Master | R$ 497/mês ou R$ 4.970/ano | Combinação de soluções, dentro de escopo definido |
+
+Implantação personalizada e mentoria têm orçamento próprio. Também deve ser possível contratar um módulo avulso.
+
+**Próximas ações sugeridas:**
+1. Fazer o inventário real das ferramentas.
+2. Escolher 3 ofertas piloto.
+3. Calcular o custo de cada entrega.
+4. Testar com clientes reais, registrando por que escolheram ou recusaram.
+5. Reorganizar o início e o menu do painel.
