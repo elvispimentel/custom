@@ -124,3 +124,16 @@ Implantação personalizada e mentoria têm orçamento próprio. Também deve se
 3. Calcular o custo de cada entrega.
 4. Testar com clientes reais, registrando por que escolheram ou recusaram.
 5. Reorganizar o início e o menu do painel.
+
+---
+
+## 6. Status em 19/10/2026: pausado de propósito
+
+- Especificação e plano do Espelho prontos no `galifrael-project-os`, branch `claude/espelho-do-perfil`:
+  - `docs/superpowers/specs/2026-10-18-espelho-do-perfil-design.md`
+  - `docs/superpowers/plans/2026-10-19-espelho-do-perfil.md`
+- Execução escolhida: **por subagentes** (um constrói cada tarefa, outro revisa).
+- **Pausado pelo Elvis** até ele concluir a jornada de **voz única**, que deve trazer clareza para a captação.
+- Ideia a amadurecer: **entregar mais pelos R$ 5**, para a análise ter valor percebido alto e não ser "michuruca".
+- Ao retomar: revisar a spec com o que sair da voz única e só então executar o plano.
+- Meta/Instagram: houve uma trava temporária de segurança em 18/10. Tentar o vínculo da Página só depois de 24 a 48 horas. Pensar em renomear o @eusou.ajay para Instituto Galifrael só depois que a trava sair.
