@@ -52,9 +52,15 @@
     "formato": "short",
     "publicado_em": "2024-10-09T22:59:40Z",
     "titulo_ou_legenda": "O poder da alegria.",
-    "views": 186678,
-    "curtidas": 27916,
+    "views": 186893,
+    "curtidas": 27912,
     "comentarios": 430,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 186678,
+      "curtidas": 27916,
+      "comentarios": 430,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   }
 ]

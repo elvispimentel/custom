@@ -20,10 +20,16 @@
     "formato": "video",
     "publicado_em": "2023-06-27T21:30:04Z",
     "titulo_ou_legenda": "COMO ACORDAR SEM SONO",
-    "views": 835934,
-    "curtidas": 75807,
-    "comentarios": 783,
-    "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+    "views": 836747,
+    "curtidas": 75797,
+    "comentarios": 781,
+    "coletado_em": "2026-10-19T15:55:10.229986+00:00",
+    "anterior": {
+      "views": 835934,
+      "curtidas": 75807,
+      "comentarios": 783,
+      "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+    }
   },
   {
     "id": "yt:M1dej6DlUAw",
@@ -33,9 +39,15 @@
     "formato": "video",
     "publicado_em": "2023-06-06T21:30:01Z",
     "titulo_ou_legenda": "UM DIA NA MINHA NOVA ROTINA | 2 Treinos, Trabalho e Alimentação",
-    "views": 652340,
-    "curtidas": 37128,
+    "views": 652594,
+    "curtidas": 37118,
     "comentarios": 752,
-    "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+    "coletado_em": "2026-10-19T15:55:10.229986+00:00",
+    "anterior": {
+      "views": 652340,
+      "curtidas": 37128,
+      "comentarios": 752,
+      "coletado_em": "2026-10-12T18:16:29.570096+00:00"
+    }
   }
 ]

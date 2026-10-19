@@ -20,9 +20,15 @@
     "formato": "video",
     "publicado_em": "2019-07-17T16:47:19Z",
     "titulo_ou_legenda": "Stories of Transformation - Sansan",
-    "views": 363737,
-    "curtidas": 8572,
-    "comentarios": 563,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "views": 364357,
+    "curtidas": 8577,
+    "comentarios": 567,
+    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "anterior": {
+      "views": 363737,
+      "curtidas": 8572,
+      "comentarios": 563,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   }
 ]

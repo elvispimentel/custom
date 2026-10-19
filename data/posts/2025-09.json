@@ -7,15 +7,15 @@
     "formato": "short",
     "publicado_em": "2025-09-11T21:00:11Z",
     "titulo_ou_legenda": "Se esse arquétipo estiver atuando, o negócio dará certo #heliocouto",
-    "views": 245961,
-    "curtidas": 17352,
+    "views": 246912,
+    "curtidas": 17380,
     "comentarios": 273,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00",
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
     "anterior": {
-      "views": 244716,
-      "curtidas": 17311,
+      "views": 245961,
+      "curtidas": 17352,
       "comentarios": 273,
-      "coletado_em": "2026-10-06T02:59:39.684510+00:00"
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
     }
   },
   {
@@ -52,15 +52,15 @@
     "formato": "video",
     "publicado_em": "2025-09-17T23:45:42Z",
     "titulo_ou_legenda": "Se você estiver prestes a VENCER, verá este vídeo! (Não ignore!)",
-    "views": 1385021,
-    "curtidas": 120928,
-    "comentarios": 3850,
-    "coletado_em": "2026-10-12T18:16:28.792872+00:00",
+    "views": 1410331,
+    "curtidas": 121529,
+    "comentarios": 3872,
+    "coletado_em": "2026-10-19T15:55:08.673025+00:00",
     "anterior": {
-      "views": 1362184,
-      "curtidas": 120413,
-      "comentarios": 3823,
-      "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+      "views": 1385021,
+      "curtidas": 120928,
+      "comentarios": 3850,
+      "coletado_em": "2026-10-12T18:16:28.792872+00:00"
     }
   },
   {
@@ -71,15 +71,15 @@
     "formato": "video",
     "publicado_em": "2025-09-11T22:20:55Z",
     "titulo_ou_legenda": "COMO FALAR COM O UNIVERSO? (TÉCNICA DE 5 PASSOS)",
-    "views": 948707,
-    "curtidas": 93388,
-    "comentarios": 2090,
-    "coletado_em": "2026-10-12T18:16:28.792872+00:00",
+    "views": 955559,
+    "curtidas": 93591,
+    "comentarios": 2093,
+    "coletado_em": "2026-10-19T15:55:08.673025+00:00",
     "anterior": {
-      "views": 943712,
-      "curtidas": 93245,
-      "comentarios": 2089,
-      "coletado_em": "2026-10-06T02:59:41.611724+00:00"
+      "views": 948707,
+      "curtidas": 93388,
+      "comentarios": 2090,
+      "coletado_em": "2026-10-12T18:16:28.792872+00:00"
     }
   },
   {
@@ -103,10 +103,16 @@
     "formato": "video",
     "publicado_em": "2025-09-23T17:19:04Z",
     "titulo_ou_legenda": "Believing, Behaving, Becoming Abundance",
-    "views": 274931,
-    "curtidas": 11679,
-    "comentarios": 362,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "views": 277755,
+    "curtidas": 11708,
+    "comentarios": 361,
+    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "anterior": {
+      "views": 274931,
+      "curtidas": 11679,
+      "comentarios": 362,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   },
   {
     "id": "yt:2caQ4j9oohE",
@@ -116,9 +122,41 @@
     "formato": "video",
     "publicado_em": "2025-09-24T14:00:03Z",
     "titulo_ou_legenda": "EMMA WATSON EXCLUSIVE: The TRUTH I Have Never Shared Before..",
-    "views": 5511279,
-    "curtidas": 138044,
-    "comentarios": 10195,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "views": 5559794,
+    "curtidas": 138367,
+    "comentarios": 10252,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "anterior": {
+      "views": 5511279,
+      "curtidas": 138044,
+      "comentarios": 10195,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
+  },
+  {
+    "id": "yt:W9M9TIDCJp0",
+    "concorrente_id": "yt-UC2oNAjmdM1jA5MV0ZWsUOBw",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=W9M9TIDCJp0",
+    "formato": "video",
+    "publicado_em": "2025-09-04T23:26:02Z",
+    "titulo_ou_legenda": "Quando você fala isso, a realidade se torna sua!",
+    "views": 642890,
+    "curtidas": 61039,
+    "comentarios": 4063,
+    "coletado_em": "2026-10-19T15:55:08.673025+00:00"
+  },
+  {
+    "id": "yt:zUvRv5JrItk",
+    "concorrente_id": "yt-UCbk_QsfaFZG6PdQeCvaYXJQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=zUvRv5JrItk",
+    "formato": "video",
+    "publicado_em": "2025-09-29T14:01:41Z",
+    "titulo_ou_legenda": "MADONNA EXCLUSIVE: The Side That NOBODY Knows…",
+    "views": 3225679,
+    "curtidas": 89736,
+    "comentarios": 15115,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00"
   }
 ]

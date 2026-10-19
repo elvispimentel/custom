@@ -7,10 +7,16 @@
     "formato": "video",
     "publicado_em": "2015-10-09T19:28:42Z",
     "titulo_ou_legenda": "Jesus Cristo - Hélio Couto",
-    "views": 4246166,
-    "curtidas": 145208,
-    "comentarios": 2602,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "views": 4255551,
+    "curtidas": 145431,
+    "comentarios": 2601,
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 4246166,
+      "curtidas": 145208,
+      "comentarios": 2602,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   },
   {
     "id": "yt:XV3bvQ8P7fc",
@@ -20,9 +26,15 @@
     "formato": "video",
     "publicado_em": "2015-10-09T19:20:51Z",
     "titulo_ou_legenda": "O amor é a única coisa que aumenta sua frequência - Hélio Couto",
-    "views": 2482064,
-    "curtidas": 133905,
-    "comentarios": 624,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "views": 2489934,
+    "curtidas": 134034,
+    "comentarios": 625,
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 2482064,
+      "curtidas": 133905,
+      "comentarios": 624,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   }
 ]

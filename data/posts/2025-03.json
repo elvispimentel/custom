@@ -7,10 +7,16 @@
     "formato": "video",
     "publicado_em": "2025-03-05T14:00:58Z",
     "titulo_ou_legenda": "Alia Bhatt's Hidden Struggles: ADHD, Anxiety & Finding Peace as a New Mother",
-    "views": 2602616,
-    "curtidas": 38654,
+    "views": 2634767,
+    "curtidas": 38760,
     "comentarios": 1673,
-    "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "anterior": {
+      "views": 2602616,
+      "curtidas": 38654,
+      "comentarios": 1673,
+      "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+    }
   },
   {
     "id": "yt:bY6JTLwkUzc",
@@ -24,5 +30,18 @@
     "curtidas": 23118,
     "comentarios": 2429,
     "coletado_em": "2026-10-06T02:59:43.229660+00:00"
+  },
+  {
+    "id": "yt:ZF8YiXKYUBg",
+    "concorrente_id": "yt-UCbk_QsfaFZG6PdQeCvaYXJQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=ZF8YiXKYUBg",
+    "formato": "video",
+    "publicado_em": "2025-03-10T13:01:01Z",
+    "titulo_ou_legenda": "Stressed About Money? Do THIS and Money Starts Coming Back to You | Lewis Howes",
+    "views": 2821790,
+    "curtidas": 57668,
+    "comentarios": 2355,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00"
   }
 ]

@@ -39,9 +39,28 @@
     "formato": "short",
     "publicado_em": "2024-07-24T22:58:29Z",
     "titulo_ou_legenda": "Isso pode estar atrasando a sua evolução #heliocouto",
-    "views": 225287,
-    "curtidas": 30292,
+    "views": 225334,
+    "curtidas": 30280,
     "comentarios": 381,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 225287,
+      "curtidas": 30292,
+      "comentarios": 381,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
+  },
+  {
+    "id": "yt:SJKr7BPOXY0",
+    "concorrente_id": "yt-UCbk_QsfaFZG6PdQeCvaYXJQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=SJKr7BPOXY0",
+    "formato": "video",
+    "publicado_em": "2024-07-01T13:00:23Z",
+    "titulo_ou_legenda": "You’re Not Lazy — You’re Just Focused On The WRONG Goal (Fix THIS & Finally Start Winning)",
+    "views": 2720768,
+    "curtidas": 49209,
+    "comentarios": 805,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00"
   }
 ]

@@ -33,10 +33,16 @@
     "formato": "video",
     "publicado_em": "2025-07-31T22:43:46Z",
     "titulo_ou_legenda": "Você só vai encontrar esse vídeo quando precisar dele!",
-    "views": 723065,
-    "curtidas": 69795,
-    "comentarios": 1628,
-    "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+    "views": 726138,
+    "curtidas": 69885,
+    "comentarios": 1632,
+    "coletado_em": "2026-10-19T15:55:08.673025+00:00",
+    "anterior": {
+      "views": 723065,
+      "curtidas": 69795,
+      "comentarios": 1628,
+      "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+    }
   },
   {
     "id": "yt:Sne6MgvOPw0",
@@ -46,9 +52,28 @@
     "formato": "video",
     "publicado_em": "2025-07-03T22:35:21Z",
     "titulo_ou_legenda": "Se você quer algo, então imagina como seria se você tivesse | Dra. Mabel Cristina Dias",
-    "views": 454320,
-    "curtidas": 40234,
-    "comentarios": 1244,
-    "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+    "views": 455780,
+    "curtidas": 40261,
+    "comentarios": 1245,
+    "coletado_em": "2026-10-19T15:55:08.673025+00:00",
+    "anterior": {
+      "views": 454320,
+      "curtidas": 40234,
+      "comentarios": 1244,
+      "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+    }
+  },
+  {
+    "id": "yt:uKgB41pMf-s",
+    "concorrente_id": "yt-UCbk_QsfaFZG6PdQeCvaYXJQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=uKgB41pMf-s",
+    "formato": "video",
+    "publicado_em": "2025-07-07T14:01:29Z",
+    "titulo_ou_legenda": "WORLD'S #1 COUPLES THERAPIST: \"If Your Partner Says THIS, the Relationship Is in TROUBLE!\"",
+    "views": 4378289,
+    "curtidas": 63660,
+    "comentarios": 3702,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00"
   }
 ]

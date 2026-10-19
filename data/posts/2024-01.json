@@ -20,10 +20,16 @@
     "formato": "short",
     "publicado_em": "2024-01-15T22:00:13Z",
     "titulo_ou_legenda": "Mudando isso, muda tudo! #heliocouto",
-    "views": 272040,
-    "curtidas": 33048,
+    "views": 272775,
+    "curtidas": 33067,
     "comentarios": 419,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 272040,
+      "curtidas": 33048,
+      "comentarios": 419,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   },
   {
     "id": "yt:d6IYVBk2jpI",
@@ -37,5 +43,18 @@
     "curtidas": 141711,
     "comentarios": 1464,
     "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+  },
+  {
+    "id": "yt:X2vNGwMCw-M",
+    "concorrente_id": "yt-UCbk_QsfaFZG6PdQeCvaYXJQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=X2vNGwMCw-M",
+    "formato": "video",
+    "publicado_em": "2024-01-08T14:00:20Z",
+    "titulo_ou_legenda": "MICHELLE OBAMA Opens Up On Her 8 Years In The White House: \"We Know Too Much.\"",
+    "views": 3335083,
+    "curtidas": 80464,
+    "comentarios": 5055,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00"
   }
 ]

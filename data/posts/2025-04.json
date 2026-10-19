@@ -33,9 +33,15 @@
     "formato": "video",
     "publicado_em": "2025-04-07T14:58:09Z",
     "titulo_ou_legenda": "DESMENTINDO - PARTE 2 Hélio Couto",
-    "views": 203814,
-    "curtidas": 18912,
+    "views": 204108,
+    "curtidas": 18919,
     "comentarios": null,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 203814,
+      "curtidas": 18912,
+      "comentarios": null,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   }
 ]

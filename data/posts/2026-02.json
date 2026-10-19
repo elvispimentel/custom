@@ -33,10 +33,16 @@
     "formato": "video",
     "publicado_em": "2026-02-01T22:00:06Z",
     "titulo_ou_legenda": "CRENÇAS CRIATIVAS - Hélio Couto",
-    "views": 384139,
-    "curtidas": 24806,
-    "comentarios": 1178,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "views": 392763,
+    "curtidas": 25039,
+    "comentarios": 1187,
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 384139,
+      "curtidas": 24806,
+      "comentarios": 1178,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   },
   {
     "id": "yt:F7t2K3jTMHQ",
@@ -46,10 +52,16 @@
     "formato": "video",
     "publicado_em": "2026-02-13T22:00:06Z",
     "titulo_ou_legenda": "ZONA DE CONFORTO (Sísifo) - Hélio Couto",
-    "views": 244950,
-    "curtidas": 16193,
-    "comentarios": 987,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "views": 249946,
+    "curtidas": 16315,
+    "comentarios": 988,
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 244950,
+      "curtidas": 16193,
+      "comentarios": 987,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   },
   {
     "id": "yt:mYyWbIXFlu0",
@@ -59,9 +71,15 @@
     "formato": "video",
     "publicado_em": "2026-02-25T22:00:07Z",
     "titulo_ou_legenda": "ENTROPIA PSÍQUICA - Hélio Couto",
-    "views": 162835,
-    "curtidas": 13017,
+    "views": 163820,
+    "curtidas": 13050,
     "comentarios": 821,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 162835,
+      "curtidas": 13017,
+      "comentarios": 821,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   }
 ]

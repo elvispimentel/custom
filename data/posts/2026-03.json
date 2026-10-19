@@ -72,10 +72,16 @@
     "formato": "short",
     "publicado_em": "2026-03-10T21:20:02Z",
     "titulo_ou_legenda": "Aprenda a escutar sua INTUIÇÃO assim... #heliocouto",
-    "views": 326317,
-    "curtidas": 29984,
-    "comentarios": 245,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "views": 331124,
+    "curtidas": 30277,
+    "comentarios": 247,
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00",
+    "anterior": {
+      "views": 326317,
+      "curtidas": 29984,
+      "comentarios": 245,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   },
   {
     "id": "yt:WVdKo8no2mU",
@@ -85,9 +91,28 @@
     "formato": "video",
     "publicado_em": "2026-03-02T21:18:00Z",
     "titulo_ou_legenda": "Como conseguir TUDO o que você quer? (A arte de perguntar)",
-    "views": 1257611,
-    "curtidas": 108092,
-    "comentarios": 1911,
-    "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+    "views": 1276489,
+    "curtidas": 108714,
+    "comentarios": 1921,
+    "coletado_em": "2026-10-19T15:55:08.673025+00:00",
+    "anterior": {
+      "views": 1257611,
+      "curtidas": 108092,
+      "comentarios": 1911,
+      "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+    }
+  },
+  {
+    "id": "yt:xgWoZijqH_U",
+    "concorrente_id": "yt-UC-WNIv9QcjlFMdERsrbLWYQ",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=xgWoZijqH_U",
+    "formato": "video",
+    "publicado_em": "2026-03-01T22:00:06Z",
+    "titulo_ou_legenda": "PERDÃO, A Porta Estreita - Hélio Couto",
+    "views": 130222,
+    "curtidas": 10166,
+    "comentarios": 485,
+    "coletado_em": "2026-10-19T15:55:06.857853+00:00"
   }
 ]

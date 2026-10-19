@@ -7,10 +7,16 @@
     "formato": "video",
     "publicado_em": "2018-05-16T04:34:18Z",
     "titulo_ou_legenda": "Dr Joe Q&A  - Why do we die?",
-    "views": 804976,
-    "curtidas": 15176,
+    "views": 805213,
+    "curtidas": 15181,
     "comentarios": 960,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "anterior": {
+      "views": 804976,
+      "curtidas": 15176,
+      "comentarios": 960,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   },
   {
     "id": "yt:3-2LzZFTHQ0",
@@ -20,10 +26,16 @@
     "formato": "video",
     "publicado_em": "2018-05-15T18:41:57Z",
     "titulo_ou_legenda": "Dr Joe Q&A - Overwhelming emotion",
-    "views": 735828,
-    "curtidas": 12359,
-    "comentarios": 384,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "views": 736237,
+    "curtidas": 12368,
+    "comentarios": 385,
+    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "anterior": {
+      "views": 735828,
+      "curtidas": 12359,
+      "comentarios": 384,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   },
   {
     "id": "yt:bdrsWWcGvjw",
@@ -33,9 +45,15 @@
     "formato": "video",
     "publicado_em": "2018-05-15T04:51:57Z",
     "titulo_ou_legenda": "Dr Joe Q&A  - Forgiveness",
-    "views": 572298,
-    "curtidas": 11210,
-    "comentarios": 475,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "views": 573086,
+    "curtidas": 11221,
+    "comentarios": 478,
+    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "anterior": {
+      "views": 572298,
+      "curtidas": 11210,
+      "comentarios": 475,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   }
 ]

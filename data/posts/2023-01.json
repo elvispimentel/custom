@@ -7,10 +7,16 @@
     "formato": "video",
     "publicado_em": "2023-01-09T12:00:15Z",
     "titulo_ou_legenda": "KEVIN HART ON: The SECRET To Success & Happiness NOBODY TALKS ABOUT (Do This In 2023) | Jay Shetty",
-    "views": 4128620,
-    "curtidas": 62822,
-    "comentarios": 1253,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "views": 4141210,
+    "curtidas": 62896,
+    "comentarios": 1257,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "anterior": {
+      "views": 4128620,
+      "curtidas": 62822,
+      "comentarios": 1253,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
   },
   {
     "id": "yt:LhYRD0XmzOU",
@@ -33,9 +39,15 @@
     "formato": "video",
     "publicado_em": "2023-01-23T12:15:00Z",
     "titulo_ou_legenda": "Lewis Hamilton ON: EVERYTHING You've Been Taught About Success Is A LIE... |  Jay Shetty",
-    "views": 2873505,
-    "curtidas": 89126,
-    "comentarios": 2746,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "views": 2882746,
+    "curtidas": 89197,
+    "comentarios": 2749,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "anterior": {
+      "views": 2873505,
+      "curtidas": 89126,
+      "comentarios": 2746,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
   }
 ]

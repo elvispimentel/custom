@@ -7,10 +7,16 @@
     "formato": "video",
     "publicado_em": "2018-04-04T17:04:06Z",
     "titulo_ou_legenda": "Dr Joe Q&A - Emotions",
-    "views": 1434920,
-    "curtidas": 28512,
-    "comentarios": 802,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "views": 1439936,
+    "curtidas": 28566,
+    "comentarios": 803,
+    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "anterior": {
+      "views": 1434920,
+      "curtidas": 28512,
+      "comentarios": 802,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   },
   {
     "id": "yt:vOlF3Wah5fI",
@@ -20,9 +26,15 @@
     "formato": "video",
     "publicado_em": "2018-04-04T17:00:15Z",
     "titulo_ou_legenda": "Dr Joe Q&A - Intense energy",
-    "views": 474667,
-    "curtidas": 9848,
-    "comentarios": 503,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "views": 475324,
+    "curtidas": 9863,
+    "comentarios": 504,
+    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "anterior": {
+      "views": 474667,
+      "curtidas": 9848,
+      "comentarios": 503,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   }
 ]

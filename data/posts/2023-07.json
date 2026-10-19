@@ -7,15 +7,15 @@
     "formato": "video",
     "publicado_em": "2023-07-02T20:00:02Z",
     "titulo_ou_legenda": "COMO A AUTOSSABOTAGEM NOS DESTRÓI",
-    "views": 1419560,
-    "curtidas": 105196,
+    "views": 1421037,
+    "curtidas": 105186,
     "comentarios": 997,
-    "coletado_em": "2026-10-12T18:16:29.570096+00:00",
+    "coletado_em": "2026-10-19T15:55:10.229986+00:00",
     "anterior": {
-      "views": 1418347,
-      "curtidas": 105180,
+      "views": 1419560,
+      "curtidas": 105196,
       "comentarios": 997,
-      "coletado_em": "2026-10-06T02:59:42.440271+00:00"
+      "coletado_em": "2026-10-12T18:16:29.570096+00:00"
     }
   },
   {
@@ -52,10 +52,16 @@
     "formato": "short",
     "publicado_em": "2023-07-03T15:00:16Z",
     "titulo_ou_legenda": "Breaking Hydration Myths With @ZachBushMD NOW LIVE",
-    "views": 25146021,
-    "curtidas": 632454,
-    "comentarios": 25454,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "views": 25146890,
+    "curtidas": 632317,
+    "comentarios": 25449,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "anterior": {
+      "views": 25146021,
+      "curtidas": 632454,
+      "comentarios": 25454,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
   },
   {
     "id": "yt:ucgiOqGs33A",
@@ -65,10 +71,16 @@
     "formato": "short",
     "publicado_em": "2023-07-12T15:00:46Z",
     "titulo_ou_legenda": "Tom Holland on how alcohol addiction can fly under the radar #shorts",
-    "views": 11599576,
-    "curtidas": 504877,
+    "views": 11615007,
+    "curtidas": 504958,
     "comentarios": 5626,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "anterior": {
+      "views": 11599576,
+      "curtidas": 504877,
+      "comentarios": 5626,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
   },
   {
     "id": "yt:GOqEl4ADyVk",
@@ -78,9 +90,15 @@
     "formato": "video",
     "publicado_em": "2023-07-10T11:00:20Z",
     "titulo_ou_legenda": "TOM HOLLAND: How Tom Overcame Social Anxiety- The Mindset That Changed Everything!",
-    "views": 9185890,
-    "curtidas": 216020,
-    "comentarios": 4444,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "views": 9239871,
+    "curtidas": 216505,
+    "comentarios": 4448,
+    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "anterior": {
+      "views": 9185890,
+      "curtidas": 216020,
+      "comentarios": 4444,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
   }
 ]
