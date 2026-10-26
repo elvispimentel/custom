@@ -46,9 +46,15 @@
     "formato": "short",
     "publicado_em": "2022-06-02T18:02:26Z",
     "titulo_ou_legenda": "Dr Joe on “How do you get happy?” - Retreat Rewind",
-    "views": 336677,
-    "curtidas": 18715,
+    "views": 337435,
+    "curtidas": 18720,
     "comentarios": 321,
-    "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    "coletado_em": "2026-10-26T15:32:32.498645+00:00",
+    "anterior": {
+      "views": 336677,
+      "curtidas": 18715,
+      "comentarios": 321,
+      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+    }
   }
 ]

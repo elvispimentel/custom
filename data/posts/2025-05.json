@@ -46,10 +46,16 @@
     "formato": "short",
     "publicado_em": "2025-05-01T15:50:24Z",
     "titulo_ou_legenda": "Não faça dívidas!",
-    "views": 439981,
-    "curtidas": 44512,
-    "comentarios": 790,
-    "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    "views": 447112,
+    "curtidas": 44786,
+    "comentarios": 793,
+    "coletado_em": "2026-10-26T15:32:31.391422+00:00",
+    "anterior": {
+      "views": 439981,
+      "curtidas": 44512,
+      "comentarios": 790,
+      "coletado_em": "2026-10-12T18:16:26.821635+00:00"
+    }
   },
   {
     "id": "yt:Sbb1iOyPGa4",
@@ -59,15 +65,15 @@
     "formato": "video",
     "publicado_em": "2025-05-06T17:48:54Z",
     "titulo_ou_legenda": "\"A Heart in Full Bloom” Meditation – Live With Mei-lan in Cancún (Official Video)",
-    "views": 1680697,
-    "curtidas": 20681,
-    "comentarios": 1028,
-    "coletado_em": "2026-10-19T15:55:07.847228+00:00",
+    "views": 1707145,
+    "curtidas": 20823,
+    "comentarios": 1030,
+    "coletado_em": "2026-10-26T15:32:32.498645+00:00",
     "anterior": {
-      "views": 1654821,
-      "curtidas": 20524,
-      "comentarios": 1026,
-      "coletado_em": "2026-10-12T18:16:27.777244+00:00"
+      "views": 1680697,
+      "curtidas": 20681,
+      "comentarios": 1028,
+      "coletado_em": "2026-10-19T15:55:07.847228+00:00"
     }
   },
   {
@@ -78,9 +84,15 @@
     "formato": "video",
     "publicado_em": "2025-05-12T14:00:51Z",
     "titulo_ou_legenda": "#1 Body Language Expert: “Men Find This IRRESISTIBLE & Most Women Never Do It” - Try This ASAP",
-    "views": 2925825,
-    "curtidas": 56873,
-    "comentarios": 1839,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "views": 2962828,
+    "curtidas": 57106,
+    "comentarios": 1847,
+    "coletado_em": "2026-10-26T15:32:36.288002+00:00",
+    "anterior": {
+      "views": 2925825,
+      "curtidas": 56873,
+      "comentarios": 1839,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
   }
 ]

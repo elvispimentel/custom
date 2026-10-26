@@ -33,10 +33,16 @@
     "formato": "video",
     "publicado_em": "2022-10-24T11:00:29Z",
     "titulo_ou_legenda": "Feeling LOST in Life? The ROOT CAUSE No One Talks About | #1 Trauma Expert Dr. Gabor Maté",
-    "views": 7040427,
-    "curtidas": 154458,
-    "comentarios": 3896,
-    "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    "views": 7287245,
+    "curtidas": 157142,
+    "comentarios": 3947,
+    "coletado_em": "2026-10-26T15:32:36.288002+00:00",
+    "anterior": {
+      "views": 7040427,
+      "curtidas": 154458,
+      "comentarios": 3896,
+      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+    }
   },
   {
     "id": "yt:-d1dvrj_fMk",
@@ -46,15 +52,15 @@
     "formato": "video",
     "publicado_em": "2022-10-10T10:57:53Z",
     "titulo_ou_legenda": "You're 54 Minutes Away From Never Being Broke & Lost Again | Vishen Lakhiani",
-    "views": 4651360,
-    "curtidas": 90750,
-    "comentarios": 2162,
-    "coletado_em": "2026-10-19T15:55:10.989632+00:00",
+    "views": 4679505,
+    "curtidas": 90995,
+    "comentarios": 2163,
+    "coletado_em": "2026-10-26T15:32:36.288002+00:00",
     "anterior": {
-      "views": 4622100,
-      "curtidas": 90528,
-      "comentarios": 2143,
-      "coletado_em": "2026-10-12T18:16:30.391947+00:00"
+      "views": 4651360,
+      "curtidas": 90750,
+      "comentarios": 2162,
+      "coletado_em": "2026-10-19T15:55:10.989632+00:00"
     }
   }
 ]

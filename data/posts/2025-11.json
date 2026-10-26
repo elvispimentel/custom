@@ -20,15 +20,15 @@
     "formato": "video",
     "publicado_em": "2025-11-27T23:08:21Z",
     "titulo_ou_legenda": "MAIS ESPERTO QUE O DIABO | COMO SE LIBERTAR DA PRISÃO MENTAL?",
-    "views": 784170,
-    "curtidas": 50083,
-    "comentarios": 2211,
-    "coletado_em": "2026-10-19T15:55:08.673025+00:00",
+    "views": 788641,
+    "curtidas": 50242,
+    "comentarios": 2222,
+    "coletado_em": "2026-10-26T15:32:33.565096+00:00",
     "anterior": {
-      "views": 779685,
-      "curtidas": 49906,
-      "comentarios": 2207,
-      "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+      "views": 784170,
+      "curtidas": 50083,
+      "comentarios": 2211,
+      "coletado_em": "2026-10-19T15:55:08.673025+00:00"
     }
   },
   {
@@ -39,15 +39,15 @@
     "formato": "video",
     "publicado_em": "2025-11-12T22:50:49Z",
     "titulo_ou_legenda": "Após Isso O Seu Cérebro Será Resetado!  Dra. Mabel Cristina Dias",
-    "views": 628374,
-    "curtidas": 62966,
+    "views": 631870,
+    "curtidas": 63166,
     "comentarios": 1704,
-    "coletado_em": "2026-10-19T15:55:08.673025+00:00",
+    "coletado_em": "2026-10-26T15:32:33.565096+00:00",
     "anterior": {
-      "views": 624647,
-      "curtidas": 62787,
-      "comentarios": 1696,
-      "coletado_em": "2026-10-12T18:16:28.792872+00:00"
+      "views": 628374,
+      "curtidas": 62966,
+      "comentarios": 1704,
+      "coletado_em": "2026-10-19T15:55:08.673025+00:00"
     }
   },
   {
@@ -58,10 +58,16 @@
     "formato": "video",
     "publicado_em": "2025-11-04T18:03:57Z",
     "titulo_ou_legenda": "Believe in Yourself — And Watch What Happens | Dr Joe Dispenza",
-    "views": 479267,
-    "curtidas": 14003,
-    "comentarios": 508,
-    "coletado_em": "2026-10-19T15:55:07.847228+00:00"
+    "views": 492236,
+    "curtidas": 14181,
+    "comentarios": 514,
+    "coletado_em": "2026-10-26T15:32:32.498645+00:00",
+    "anterior": {
+      "views": 479267,
+      "curtidas": 14003,
+      "comentarios": 508,
+      "coletado_em": "2026-10-19T15:55:07.847228+00:00"
+    }
   },
   {
     "id": "yt:cUbe6HbFncE",
@@ -71,9 +77,28 @@
     "formato": "video",
     "publicado_em": "2025-11-03T14:01:07Z",
     "titulo_ou_legenda": "#1 Brain Neuroscientist: \"This Will DELETE Your Old Self!\" - How To Manifest Anything You Want",
-    "views": 3779798,
-    "curtidas": 75388,
-    "comentarios": 2144,
-    "coletado_em": "2026-10-19T15:55:10.989632+00:00"
+    "views": 4030151,
+    "curtidas": 79426,
+    "comentarios": 2217,
+    "coletado_em": "2026-10-26T15:32:36.288002+00:00",
+    "anterior": {
+      "views": 3779798,
+      "curtidas": 75388,
+      "comentarios": 2144,
+      "coletado_em": "2026-10-19T15:55:10.989632+00:00"
+    }
+  },
+  {
+    "id": "yt:O-jhXeDyje8",
+    "concorrente_id": "yt-UCSTTPGPS-lm0YVb4DMJ3lTA",
+    "plataforma": "youtube",
+    "url": "https://www.youtube.com/watch?v=O-jhXeDyje8",
+    "formato": "video",
+    "publicado_em": "2025-11-18T14:30:19Z",
+    "titulo_ou_legenda": "How Gratitude Changes Your Life | Dr Joe Dispenza",
+    "views": 265397,
+    "curtidas": 8733,
+    "comentarios": 426,
+    "coletado_em": "2026-10-26T15:32:32.498645+00:00"
   }
 ]
