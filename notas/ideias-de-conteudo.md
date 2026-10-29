@@ -29,3 +29,11 @@ Registro rápido de ideias que surgem fora da hora. Uma ideia por bloco, com dat
 - Decidido: o Idioma **alimenta** a Base (Fala → "Linguagem e Tom"; Raiz → "Posicionamento"), como rascunho que a pessoa aprova.
 - Decidido: matéria-prima em 2 vias. **Escuta** (transcrições de lives, áudios, posts e legendas que ela já tem) revela a Fala; **entrevista guiada**, uma pergunta por vez, aprofunda a Raiz.
 - Decidido: **Fala para todos; Raiz profunda paga.** Liberação da Raiz começa **manual** (botão por projeto, só Elvis liga); automação via Cakto só quando houver volume.
+
+## 2026-10-29 · Radar do Algoritmo dentro do Project OS (decisões de Elvis)
+
+- **A**: tudo no Project OS. Elvis vê e aprova no painel; depois os clientes recebem.
+- Abas Instagram, TikTok e YouTube; em cada uma, **"O que vale hoje" por formato** (IG: Reels, Carrossel, Post estático, Stories, Live; TikTok: Vídeo, Carrossel de fotos, Live; YouTube: Vídeo longo, Shorts, Live) + **"Novidades da semana"**.
+- **B**: duas camadas: **Oficial** (fonte citada) e **Da prática** (não oficial, aprovada por Elvis antes de aparecer).
+- A camada "da prática" vem da IA, não de Elvis: pesquisa semanal em analistas internacionais que acompanham o algoritmo, com link de cada fonte.
+- "Post estático" entra como formato novo no Instagram.
