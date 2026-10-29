@@ -37,3 +37,4 @@ Registro rápido de ideias que surgem fora da hora. Uma ideia por bloco, com dat
 - **B**: duas camadas: **Oficial** (fonte citada) e **Da prática** (não oficial, aprovada por Elvis antes de aparecer).
 - A camada "da prática" vem da IA, não de Elvis: pesquisa semanal em analistas internacionais que acompanham o algoritmo, com link de cada fonte.
 - "Post estático" entra como formato novo no Instagram.
+- Lugar: app próprio "Radar do Algoritmo" na central de soluções + atalho na etapa 4 (Planejamento) da Jornada.
