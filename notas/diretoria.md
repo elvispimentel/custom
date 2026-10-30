@@ -39,3 +39,7 @@ Uma frente por vez: **destravar → testar → só então a próxima ideia.**
 
 ## Próximo passo (16/10)
 Recarregar a OpenAI → Jornada de Conteúdo → Idioma da Marca → enviar o dossiê Voz Única (.md) → "Escutar meu idioma" → ver se soa como você.
+
+## Radar no Project OS (30/10)
+- Entrega 1 pronta: PR #84 (v0.34.0). Falta Elvis colar a migration e o seed no Supabase, mesclar e aprovar os itens em /admin/radar.
+- Entregas 2 (robô entrega no painel, sai do GitHub) e 3 (pesquisa semanal da prática + Mosseri) depois.
