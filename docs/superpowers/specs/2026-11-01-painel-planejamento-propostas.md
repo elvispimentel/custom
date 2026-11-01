@@ -53,3 +53,9 @@ Casal de Ijuí. **Pergunta em aberto:** trabalham só os dois, ou há uma 3ª pe
 1. Responder a pergunta do casal.
 2. Liberar o acesso aos repos `rpgojc` e `galifrael-project-os` na sessão.
 3. Ler a lógica das cartas do RPG e escrever o plano (`writing-plans`).
+
+## Atualização — decisões confirmadas
+- Elvis é filho do casal, estrutura o negócio e cuida da tecnologia de forma permanente, então o Penta dos três é válido.
+- O cálculo deve continuar idêntico ao do RPG (motor copiado, não reescrito).
+- Prioridade: a transcrição completa e detalhada do mapa de cada pessoa.
+- Painel criado em `elvispimentel/galifrael-project-os`, branch `claude/painel-planejamento-propostas` (v0.35.0). Estado e pendências em `docs/PAINEL-PLANEJAMENTO-PROPOSTAS.md` desse repositório.
