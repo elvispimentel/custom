@@ -59,3 +59,6 @@ Casal de Ijuí. **Pergunta em aberto:** trabalham só os dois, ou há uma 3ª pe
 - O cálculo deve continuar idêntico ao do RPG (motor copiado, não reescrito).
 - Prioridade: a transcrição completa e detalhada do mapa de cada pessoa.
 - Painel criado em `elvispimentel/galifrael-project-os`, branch `claude/painel-planejamento-propostas` (v0.35.0). Estado e pendências em `docs/PAINEL-PLANEJAMENTO-PROPOSTAS.md` desse repositório.
+
+## Estado atual
+Este briefing é histórico. O documento vivo é `docs/PAINEL-PLANEJAMENTO-PROPOSTAS.md` no repositório `elvispimentel/galifrael-project-os` (branch `claude/painel-planejamento-propostas`). A pergunta sobre o casal já foi respondida: Penta com pai, mãe e Elvis.
