@@ -7,10 +7,16 @@
     "formato": "video",
     "publicado_em": "2026-11-01T15:00:28Z",
     "titulo_ou_legenda": "She Created Her Abundant Life",
-    "views": 50997,
-    "curtidas": 2347,
+    "views": 51285,
+    "curtidas": 2349,
     "comentarios": 114,
-    "coletado_em": "2026-11-02T18:53:28.430713+00:00"
+    "coletado_em": "2026-11-02T19:04:09.719203+00:00",
+    "anterior": {
+      "views": 50997,
+      "curtidas": 2347,
+      "comentarios": 114,
+      "coletado_em": "2026-11-02T18:53:28.430713+00:00"
+    }
   },
   {
     "id": "yt:-xe0lnrcesw",
@@ -20,10 +26,16 @@
     "formato": "short",
     "publicado_em": "2026-11-02T17:00:15Z",
     "titulo_ou_legenda": "Kim Kardashian: I packed shoes, not photos",
-    "views": 3633,
-    "curtidas": 152,
+    "views": 3989,
+    "curtidas": 165,
     "comentarios": 7,
-    "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    "coletado_em": "2026-11-02T19:04:12.624370+00:00",
+    "anterior": {
+      "views": 3633,
+      "curtidas": 152,
+      "comentarios": 7,
+      "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    }
   },
   {
     "id": "yt:r5LF5kp8wLI",
@@ -33,10 +45,16 @@
     "formato": "video",
     "publicado_em": "2026-11-02T16:30:35Z",
     "titulo_ou_legenda": "Money Expert: Passive Income Is a Lie, Do THIS Instead | Nischa Shah",
-    "views": 5871,
-    "curtidas": 234,
-    "comentarios": 14,
-    "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    "views": 7145,
+    "curtidas": 247,
+    "comentarios": 24,
+    "coletado_em": "2026-11-02T19:04:12.624370+00:00",
+    "anterior": {
+      "views": 5871,
+      "curtidas": 234,
+      "comentarios": 14,
+      "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    }
   },
   {
     "id": "yt:yxR6oslMqyg",
@@ -46,10 +64,16 @@
     "formato": "short",
     "publicado_em": "2026-11-02T09:00:34Z",
     "titulo_ou_legenda": "You're dating everyone they've ever dated",
-    "views": 21425,
-    "curtidas": 821,
+    "views": 21859,
+    "curtidas": 832,
     "comentarios": 15,
-    "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    "coletado_em": "2026-11-02T19:04:12.624370+00:00",
+    "anterior": {
+      "views": 21425,
+      "curtidas": 821,
+      "comentarios": 15,
+      "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    }
   },
   {
     "id": "yt:TnkYgER65Fk",
@@ -59,10 +83,16 @@
     "formato": "short",
     "publicado_em": "2026-11-01T17:00:05Z",
     "titulo_ou_legenda": "Forgive yourself for giving them your best",
-    "views": 64492,
-    "curtidas": 3706,
+    "views": 64922,
+    "curtidas": 3718,
     "comentarios": 77,
-    "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    "coletado_em": "2026-11-02T19:04:12.624370+00:00",
+    "anterior": {
+      "views": 64492,
+      "curtidas": 3706,
+      "comentarios": 77,
+      "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    }
   },
   {
     "id": "yt:JEahH9Too7s",
@@ -72,9 +102,15 @@
     "formato": "short",
     "publicado_em": "2026-11-01T09:00:10Z",
     "titulo_ou_legenda": "Priyanka: Nick wrote my roast jokes",
-    "views": 226484,
-    "curtidas": 6750,
+    "views": 228603,
+    "curtidas": 6780,
     "comentarios": 26,
-    "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    "coletado_em": "2026-11-02T19:04:12.624370+00:00",
+    "anterior": {
+      "views": 226484,
+      "curtidas": 6750,
+      "comentarios": 26,
+      "coletado_em": "2026-11-02T18:53:32.146402+00:00"
+    }
   }
 ]
